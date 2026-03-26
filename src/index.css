@@ -1,0 +1,112 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', 'IBM Plex Sans', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #0a0e1a;
+  color: #e2e8f0;
+  overflow: hidden;
+}
+
+code {
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0a0e1a;
+}
+::-webkit-scrollbar-thumb {
+  background: #2a3154;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #3b82f6;
+}
+
+/* Gradient text */
+.nexus-gradient-text {
+  background: linear-gradient(135deg, #00f0ff, #00ff88);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.genesis-gradient-text {
+  background: linear-gradient(135deg, #22c55e, #06b6d4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Glow effects */
+.glow-green {
+  box-shadow: 0 0 15px rgba(34, 197, 94, 0.3), 0 0 30px rgba(34, 197, 94, 0.1);
+}
+.glow-cyan {
+  box-shadow: 0 0 15px rgba(0, 240, 255, 0.3), 0 0 30px rgba(0, 240, 255, 0.1);
+}
+.glow-red {
+  box-shadow: 0 0 15px rgba(255, 68, 102, 0.3), 0 0 30px rgba(255, 68, 102, 0.1);
+}
+.glow-orange {
+  box-shadow: 0 0 15px rgba(255, 136, 0, 0.3), 0 0 30px rgba(255, 136, 0, 0.1);
+}
+
+/* SVG flow animation */
+.flow-line {
+  stroke-dasharray: 8 16;
+  animation: flow 3s linear infinite;
+}
+
+@keyframes flow {
+  0% { stroke-dashoffset: 24; }
+  100% { stroke-dashoffset: 0; }
+}
+
+.flow-line-reverse {
+  stroke-dasharray: 8 16;
+  animation: flow-reverse 3s linear infinite;
+}
+
+@keyframes flow-reverse {
+  0% { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: 24; }
+}
+
+/* Custom scrollbar for panels */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #2a3154;
+  border-radius: 2px;
+}
+
+/* Card hover glow */
+.card-glow:hover {
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.08);
+}
+
+/* Smooth transitions for all interactive elements */
+button, [role="button"] {
+  transition: all 0.15s ease;
+}

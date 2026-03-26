@@ -130,7 +130,7 @@ Her kaynak dogrulanmis ve proje sabitleriyle carpismadigi teyit edilmistir.
 
 ## 5. Spirulina Bilimsel Veriler
 
-### 5.1 Spirulina Besin Bilesimi
+
 - **URL:** https://www.researchgate.net/figure/Nutritional-composition-of-Spirulina-powder-per-100g-reported-by-various-companies_tbl1_370650621
 - **Kullanim:** 57g protein/100g dogrulamasi, 290 kcal/100g
 - **GENESIS sabiti:** `SPIRULINA.proteinPer100g = 57` (DOGRULANDI)

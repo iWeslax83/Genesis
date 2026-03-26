@@ -1,8 +1,38 @@
 {
-  "hash": "49d0bba6",
+  "hash": "0799770c",
   "configHash": "dfcf0921",
-  "lockfileHash": "7cad1eae",
-  "browserHash": "4f465e39",
-  "optimized": {},
-  "chunks": {}
+  "lockfileHash": "8252120a",
+  "browserHash": "7d38639d",
+  "optimized": {
+    "react-dom/client": {
+      "src": "../../node_modules/react-dom/client.js",
+      "file": "react-dom_client.js",
+      "fileHash": "a5b176cb",
+      "needsInterop": true
+    },
+    "react-icons/fi": {
+      "src": "../../node_modules/react-icons/fi/index.mjs",
+      "file": "react-icons_fi.js",
+      "fileHash": "85af8f3c",
+      "needsInterop": false
+    },
+    "react": {
+      "src": "../../node_modules/react/index.js",
+      "file": "react.js",
+      "fileHash": "97776b3a",
+      "needsInterop": true
+    },
+    "react/jsx-dev-runtime": {
+      "src": "../../node_modules/react/jsx-dev-runtime.js",
+      "file": "react_jsx-dev-runtime.js",
+      "fileHash": "4d061652",
+      "needsInterop": true
+    }
+  },
+  "chunks": {
+    "react-TUYU05Ph": {
+      "file": "react-TUYU05Ph.js",
+      "isDynamicEntry": false
+    }
+  }
 }
