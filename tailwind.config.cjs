@@ -42,6 +42,9 @@ module.exports = {
         'slide-up': 'slide-up 0.5s ease-out both',
         'spin-slow': 'spin 8s linear infinite',
         'blink': 'blink 1s ease-in-out infinite',
+        'shimmer': 'shimmer 2s linear infinite',
+        'breathe': 'breathe 4s ease-in-out infinite',
+        'data-pulse': 'data-pulse 1.5s ease-in-out infinite',
       },
       keyframes: {
         'pulse-glow': {
@@ -83,6 +86,18 @@ module.exports = {
         'blink': {
           '0%, 100%': { opacity: '1' },
           '50%': { opacity: '0.3' },
+        },
+        'shimmer': {
+          '0%': { backgroundPosition: '-200% 0' },
+          '100%': { backgroundPosition: '200% 0' },
+        },
+        'breathe': {
+          '0%, 100%': { opacity: '0.6', transform: 'scale(1)' },
+          '50%': { opacity: '1', transform: 'scale(1.02)' },
+        },
+        'data-pulse': {
+          '0%, 100%': { opacity: '1' },
+          '50%': { opacity: '0.7' },
         },
       },
     },

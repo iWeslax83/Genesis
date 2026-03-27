@@ -2,8 +2,12 @@ import React from 'react';
 import Sidebar from './Sidebar';
 import TopBar from './TopBar';
 import ErrorBoundary from '../ui/ErrorBoundary';
+import EventLog from '../ui/EventLog';
+import KeyboardHelp from '../ui/KeyboardHelp';
 import { useGenesis } from '../../context/GenesisContext';
 import useSimulation from '../../hooks/useSimulation';
+import useKeyboardShortcuts from '../../hooks/useKeyboardShortcuts';
+import useNotificationWatcher from '../../hooks/useNotificationWatcher';
 
 // Lazy load sayfalar
 const OverviewPage = React.lazy(() => import('../overview/OverviewPage'));
@@ -38,7 +42,7 @@ function PageContent() {
         <div className="flex-1 flex items-center justify-center">
           <div className="flex flex-col items-center gap-3">
             <div className="w-10 h-10 border-4 border-nexus-accent/20 border-t-nexus-accent rounded-full animate-spin" />
-            <span className="text-xs text-nexus-text-dim">Modül yükleniyor...</span>
+            <span className="text-xs text-nexus-text-dim">Modul yukleniyor...</span>
           </div>
         </div>
       }>
@@ -50,16 +54,20 @@ function PageContent() {
 
 export default function AppLayout() {
   useSimulation();
+  useNotificationWatcher();
+  const { showHelp, setShowHelp } = useKeyboardShortcuts();
 
   return (
     <div className="h-screen w-screen flex bg-nexus-bg overflow-hidden">
       <Sidebar />
       <div className="flex-1 flex flex-col min-w-0 min-h-0">
         <TopBar />
-        <main className="flex-1 min-h-0 overflow-auto p-4">
+        <main className="flex-1 min-h-0 overflow-auto p-4 pb-10">
           <PageContent />
         </main>
       </div>
+      <EventLog />
+      {showHelp && <KeyboardHelp onClose={() => setShowHelp(false)} />}
     </div>
   );
 }

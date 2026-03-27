@@ -220,6 +220,33 @@ function QuickGauge({ value, max, label, unit, color }) {
   );
 }
 
+function SimTicker({ state }) {
+  const items = [
+    { label: 'Bitki Turu', value: '12', color: '#22c55e' },
+    { label: 'Ekim Alani', value: '22 m²', color: '#06b6d4' },
+    { label: 'Murettebat', value: '6 kisi', color: '#3b82f6' },
+    { label: 'Gorev Suresi', value: '980 gun', color: '#a855f7' },
+    { label: 'Su Dongusu', value: '%98.7', color: '#06b6d4' },
+    { label: 'Aktif Sensor', value: '180+', color: '#00f0ff' },
+    { label: 'Hasat Sayisi', value: `${state.compartments?.growth?.harvestLog?.length || 0}`, color: '#22c55e' },
+    { label: 'AI Anomali', value: `${state.ai?.anomalies?.length || 0}`, color: '#f59e0b' },
+  ];
+
+  return (
+    <div className="flex items-center gap-4 overflow-hidden">
+      <div className="flex items-center gap-4 animate-[shimmer_20s_linear_infinite]">
+        {items.map((item, i) => (
+          <div key={i} className="flex items-center gap-1.5 whitespace-nowrap">
+            <div className="w-1 h-1 rounded-full" style={{ backgroundColor: item.color }} />
+            <span className="text-[10px] text-nexus-text-dim">{item.label}:</span>
+            <span className="text-[10px] font-mono font-bold" style={{ color: item.color }}>{item.value}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function OverviewPage() {
   const { state } = useGenesis();
   const { resources, ai, time, power, degradation, mission } = state;
@@ -234,6 +261,11 @@ export default function OverviewPage() {
 
   return (
     <div className="h-full flex flex-col gap-3 animate-fade-in">
+      {/* Ticker bar */}
+      <div className="bg-nexus-card/50 rounded-lg border border-nexus-border/30 px-3 py-1.5">
+        <SimTicker state={state} />
+      </div>
+
       {/* Top row: Key metric cards */}
       <div className="grid grid-cols-5 gap-3">
         <StatCard

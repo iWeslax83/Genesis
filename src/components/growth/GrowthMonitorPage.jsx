@@ -1,6 +1,7 @@
 import React from 'react';
 import { useGenesis } from '../../context/GenesisContext';
 import GaugeCircle from '../ui/GaugeCircle';
+import NDVIHeatmap from './NDVIHeatmap';
 import { PLANTS, INITIAL_PLANTS } from '../../simulation/constants';
 import { calculatePlantGrowth, calculateDLI, getCurrentGrowthPhase } from '../../simulation/plantGrowthModel';
 import { NUTRIENT_RECIPES } from '../../simulation/constants';
@@ -341,6 +342,11 @@ export default function GrowthMonitorPage() {
               color="#ff8800"
             />
           </div>
+
+          {/* NDVI Health heatmap */}
+          {(selectedModule === 'aeroponic' || selectedModule === 'nft') && (
+            <NDVIHeatmap />
+          )}
 
           {/* Ortam grafikleri */}
           <div className="bg-nexus-card rounded-xl border border-nexus-border p-4 grid grid-cols-2 gap-4">

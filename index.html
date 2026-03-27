@@ -5,12 +5,81 @@
     <link rel="icon" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#0a0e1a" />
-    <meta name="description" content="GENESIS - Kapalı Döngü Uzay Tarımı Yaşam Destek Sistemi" />
-    <title>GENESIS | Uzay Tarımı Yaşam Destek</title>
+    <meta name="description" content="GENESIS - Kapali Dongu Uzay Tarimi Yasam Destek Sistemi Simulatoru. MELiSSA protokolune dayali biyorejeneratif yasam destek sistemi." />
+    <meta name="keywords" content="uzay tarimi, BLSS, MELiSSA, yaşam destek, simulasyon, aeroponik, hidroponik, spirulina, space agriculture" />
+    <meta name="author" content="GENESIS Team" />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="GENESIS | Uzay Tarimi Yasam Destek Simulatoru" />
+    <meta property="og:description" content="Kapali dongu biyorejeneratif yasam destek sistemi simulatoru — 12 bitki turu, spirulina, mantar, bocek proteini" />
+    <meta property="og:type" content="website" />
+
+    <title>GENESIS | Uzay Tarimi Yasam Destek</title>
+
+    <!-- Preload fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <style>
+      /* Initial loading styles before React mounts */
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: #0a0e1a;
+        color: #e2e8f0;
+        font-family: 'Inter', sans-serif;
+        overflow: hidden;
+      }
+      #root {
+        width: 100vw;
+        height: 100vh;
+      }
+      /* Pre-React loading indicator */
+      .genesis-preloader {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background: #0a0e1a;
+        z-index: 9999;
+      }
+      .genesis-preloader .logo {
+        width: 64px;
+        height: 64px;
+        border-radius: 16px;
+        background: linear-gradient(135deg, #22c55e, #06b6d4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 32px;
+        font-weight: bold;
+        color: white;
+        margin-bottom: 16px;
+        animation: pulse-preload 2s ease-in-out infinite;
+      }
+      .genesis-preloader .text {
+        font-size: 12px;
+        color: #94a3b8;
+        letter-spacing: 4px;
+        text-transform: uppercase;
+      }
+      @keyframes pulse-preload {
+        0%, 100% { box-shadow: 0 0 10px rgba(34, 197, 94, 0.3); }
+        50% { box-shadow: 0 0 30px rgba(34, 197, 94, 0.5); }
+      }
+    </style>
   </head>
   <body>
-    <noscript>Bu uygulamayı çalıştırmak için JavaScript'i etkinleştirmeniz gerekiyor.</noscript>
-    <div id="root"></div>
+    <noscript>Bu uygulamayi calistirmak icin JavaScript'i etkinlestirmeniz gerekiyor.</noscript>
+    <div id="root">
+      <!-- Pre-React loading indicator (replaced when React mounts) -->
+      <div class="genesis-preloader">
+        <div class="logo">G</div>
+        <div class="text">Genesis</div>
+      </div>
+    </div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

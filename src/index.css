@@ -110,3 +110,112 @@ code {
 button, [role="button"] {
   transition: all 0.15s ease;
 }
+
+/* Glassmorphism panels */
+.glass-panel {
+  background: rgba(26, 31, 54, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(42, 49, 84, 0.5);
+}
+
+/* Animated gradient border */
+.gradient-border {
+  position: relative;
+}
+.gradient-border::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, #22c55e40, #00f0ff40, #a855f740);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* Scanning line effect */
+.scan-line {
+  position: relative;
+  overflow: hidden;
+}
+.scan-line::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0, 240, 255, 0.3), transparent);
+  animation: scan 4s linear infinite;
+}
+@keyframes scan {
+  0% { top: 0; }
+  100% { top: 100%; }
+}
+
+/* Status indicator pulsing ring */
+.status-ring {
+  position: relative;
+}
+.status-ring::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  border: 1px solid currentColor;
+  opacity: 0;
+  animation: ring-pulse 2s ease-out infinite;
+}
+
+/* Numeric value counter animation */
+.counter-value {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Data grid lines */
+.data-grid {
+  background-image:
+    linear-gradient(to right, rgba(42, 49, 84, 0.2) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(42, 49, 84, 0.2) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* Hover lift effect for cards */
+.hover-lift {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+/* Keyboard shortcut badge */
+kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 6px;
+  min-width: 20px;
+  height: 20px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  background: #0a0e1a;
+  border: 1px solid #2a3154;
+  border-radius: 4px;
+  color: #94a3b8;
+}
+
+/* Tooltip */
+.tooltip-trigger:hover .tooltip-content {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+.tooltip-content {
+  opacity: 0;
+  transform: translateY(4px);
+  pointer-events: none;
+  transition: all 0.15s ease;
+}

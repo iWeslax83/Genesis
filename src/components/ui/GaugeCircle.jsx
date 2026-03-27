@@ -2,25 +2,37 @@ export default function GaugeCircle({ value, min, max, label, unit, size = 120, 
   const radius = (size - 16) / 2;
   const circumference = 2 * Math.PI * radius;
   const normalizedValue = Math.min(1, Math.max(0, (value - min) / (max - min)));
-  const strokeDashoffset = circumference * (1 - normalizedValue * 0.75); // 270° arc
+  const strokeDashoffset = circumference * (1 - normalizedValue * 0.75); // 270 deg arc
 
-  // Renk belirleme
-  let color = '#00ff88'; // yeşil
+  // Color determination
+  let color = '#00ff88';
   if (warningThresholds) {
     if (value < warningThresholds.critical?.[0] || value > warningThresholds.critical?.[1]) {
-      color = '#ff4466'; // kırmızı
+      color = '#ff4466';
     } else if (value < warningThresholds.warning?.[0] || value > warningThresholds.warning?.[1]) {
-      color = '#ff8800'; // turuncu
+      color = '#ff8800';
     }
   } else {
     if (normalizedValue > 0.85 || normalizedValue < 0.15) color = '#ff4466';
     else if (normalizedValue > 0.7 || normalizedValue < 0.25) color = '#ff8800';
   }
 
+  const glowId = `glow-${label?.replace(/\s/g, '')}-${size}`;
+
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center group">
       <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
-        {/* Arka plan çember */}
+        <defs>
+          <filter id={glowId}>
+            <feGaussianBlur stdDeviation="2" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </defs>
+
+        {/* Background arc */}
         <circle
           cx={size / 2} cy={size / 2} r={radius}
           fill="none" stroke="#1a1f36" strokeWidth="8"
@@ -29,7 +41,19 @@ export default function GaugeCircle({ value, min, max, label, unit, size = 120, 
           strokeLinecap="round"
           transform={`rotate(135 ${size / 2} ${size / 2})`}
         />
-        {/* Değer çemberi */}
+
+        {/* Glow layer */}
+        <circle
+          cx={size / 2} cy={size / 2} r={radius}
+          fill="none" stroke={color} strokeWidth="12" opacity="0.08"
+          strokeDasharray={`${circumference * 0.75} ${circumference * 0.25}`}
+          strokeDashoffset={strokeDashoffset}
+          strokeLinecap="round"
+          transform={`rotate(135 ${size / 2} ${size / 2})`}
+          style={{ transition: 'stroke-dashoffset 0.8s ease, stroke 0.3s ease' }}
+        />
+
+        {/* Value arc */}
         <circle
           cx={size / 2} cy={size / 2} r={radius}
           fill="none" stroke={color} strokeWidth="8"
@@ -38,8 +62,23 @@ export default function GaugeCircle({ value, min, max, label, unit, size = 120, 
           strokeLinecap="round"
           transform={`rotate(135 ${size / 2} ${size / 2})`}
           style={{ transition: 'stroke-dashoffset 0.8s ease, stroke 0.3s ease' }}
+          filter={`url(#${glowId})`}
         />
-        {/* Değer text */}
+
+        {/* Tick marks */}
+        {[0, 0.25, 0.5, 0.75, 1].map((t, i) => {
+          const angle = 135 + t * 270;
+          const rad = (angle * Math.PI) / 180;
+          const x1 = size / 2 + (radius + 4) * Math.cos(rad);
+          const y1 = size / 2 + (radius + 4) * Math.sin(rad);
+          const x2 = size / 2 + (radius + 7) * Math.cos(rad);
+          const y2 = size / 2 + (radius + 7) * Math.sin(rad);
+          return (
+            <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} stroke="#2a3154" strokeWidth="1" />
+          );
+        })}
+
+        {/* Value text */}
         <text
           x={size / 2} y={size / 2 - 4}
           textAnchor="middle"

@@ -4,29 +4,44 @@ import { COMPARTMENTS } from '../../simulation/constants';
 import { formatNumber } from '../../utils/formatters';
 
 const POSITIONS = {
-  waste:    { x: 190, y: 30,  w: 170, h: 65 },
-  nutrient: { x: 360, y: 155, w: 170, h: 65 },
-  growth:   { x: 190, y: 280, w: 170, h: 65 },
-  habitat:  { x: 20,  y: 155, w: 170, h: 65 },
+  waste:    { x: 190, y: 20,  w: 170, h: 70 },
+  nutrient: { x: 370, y: 155, w: 170, h: 70 },
+  growth:   { x: 190, y: 290, w: 170, h: 70 },
+  habitat:  { x: 10,  y: 155, w: 170, h: 70 },
 };
 
-function AnimatedPath({ d, color, speed = '3s' }) {
+/* Animated dashed flow path with glowing trail */
+function AnimatedFlow({ d, color, speed = '3s', width = 2, label, labelPos }) {
+  const id = `flow-${color.replace('#', '')}-${speed}`;
   return (
     <g>
-      <path d={d} fill="none" stroke={color} strokeWidth="1.5" opacity="0.12" />
-      <path d={d} fill="none" stroke={color} strokeWidth="2" strokeDasharray="6 10" opacity="0.7">
-        <animate attributeName="stroke-dashoffset" from="16" to="0" dur={speed} repeatCount="indefinite" />
+      {/* Glow background */}
+      <path d={d} fill="none" stroke={color} strokeWidth={width + 4} opacity="0.04" />
+      {/* Base path */}
+      <path d={d} fill="none" stroke={color} strokeWidth={width * 0.5} opacity="0.1" />
+      {/* Animated dash */}
+      <path d={d} fill="none" stroke={color} strokeWidth={width} strokeDasharray="8 14" opacity="0.65" strokeLinecap="round">
+        <animate attributeName="stroke-dashoffset" from="22" to="0" dur={speed} repeatCount="indefinite" />
       </path>
+      {/* Bright particle dots traveling along path */}
+      <circle r="2.5" fill={color} opacity="0.8">
+        <animateMotion dur={speed} repeatCount="indefinite" path={d} />
+      </circle>
+      <circle r="1.5" fill="white" opacity="0.6">
+        <animateMotion dur={speed} repeatCount="indefinite" path={d} begin="0.3s" />
+      </circle>
     </g>
   );
 }
 
-function FlowLabel({ x, y, text, value, color }) {
+function FlowLabel({ x, y, text, value, color, icon }) {
   return (
     <g>
-      <rect x={x - 42} y={y - 14} width="84" height="26" rx="6" fill="#0a0e1a" stroke={color} strokeWidth="0.7" opacity="0.9" />
-      <text x={x} y={y - 2} textAnchor="middle" fill={color} fontSize="8" fontWeight="600">{text}</text>
-      <text x={x} y={y + 9} textAnchor="middle" fill="#94a3b8" fontSize="7" fontFamily="monospace">{value}</text>
+      <rect x={x - 50} y={y - 15} width="100" height="28" rx="6" fill="#0a0e1a" stroke={color} strokeWidth="0.8" opacity="0.92" />
+      <text x={x} y={y - 2} textAnchor="middle" fill={color} fontSize="8" fontWeight="700">
+        {icon && <tspan>{icon} </tspan>}{text}
+      </text>
+      <text x={x} y={y + 10} textAnchor="middle" fill="#94a3b8" fontSize="7" fontFamily="monospace">{value}</text>
     </g>
   );
 }
@@ -34,45 +49,66 @@ function FlowLabel({ x, y, text, value, color }) {
 function CompartmentNode({ id, data, pos, isActive, onClick }) {
   const comp = COMPARTMENTS[id];
   const statusColor = data.status === 'nominal' ? '#22c55e' : data.status === 'warning' ? '#f59e0b' : '#ef4444';
+  const glowColor = comp.color || '#22c55e';
 
   return (
     <g onClick={() => onClick(id)} style={{ cursor: 'pointer' }}>
-      {/* Outer glow */}
+      {/* Ambient glow ring */}
+      <rect x={pos.x - 1} y={pos.y - 1} width={pos.w + 2} height={pos.h + 2} rx={14} fill="none" stroke={glowColor} strokeWidth="0.5" opacity="0.15">
+        <animate attributeName="opacity" values="0.1;0.2;0.1" dur="3s" repeatCount="indefinite" />
+      </rect>
+
+      {/* Active selection glow */}
       {isActive && (
-        <rect x={pos.x - 3} y={pos.y - 3} width={pos.w + 6} height={pos.h + 6} rx={14} fill="none" stroke={comp.color} strokeWidth="1.5" opacity="0.3">
-          <animate attributeName="opacity" values="0.2;0.4;0.2" dur="2s" repeatCount="indefinite" />
+        <rect x={pos.x - 4} y={pos.y - 4} width={pos.w + 8} height={pos.h + 8} rx={16} fill="none" stroke={glowColor} strokeWidth="2" opacity="0.4">
+          <animate attributeName="opacity" values="0.2;0.5;0.2" dur="1.5s" repeatCount="indefinite" />
         </rect>
       )}
 
-      {/* Background */}
+      {/* Card background with gradient */}
+      <defs>
+        <linearGradient id={`grad-${id}`} x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stopColor={`${glowColor}`} stopOpacity="0.08" />
+          <stop offset="100%" stopColor="#111827" stopOpacity="1" />
+        </linearGradient>
+      </defs>
       <rect x={pos.x} y={pos.y} width={pos.w} height={pos.h} rx={12}
-        fill={isActive ? `${comp.color}12` : '#111827'}
-        stroke={comp.color}
+        fill={`url(#grad-${id})`}
+        stroke={isActive ? glowColor : `${glowColor}60`}
         strokeWidth={isActive ? 1.8 : 1}
-        opacity={isActive ? 1 : 0.75}
       />
 
-      {/* Icon + Name */}
-      <text x={pos.x + 16} y={pos.y + 24} fontSize="16">{comp.icon}</text>
-      <text x={pos.x + 38} y={pos.y + 22} fill="#e2e8f0" fontSize="11" fontWeight="700">{comp.shortName}</text>
-      <text x={pos.x + 38} y={pos.y + 35} fill="#94a3b8" fontSize="8">{comp.name}</text>
+      {/* Icon */}
+      <text x={pos.x + 16} y={pos.y + 28} fontSize="18">{comp.icon}</text>
 
-      {/* Status indicator */}
-      <circle cx={pos.x + pos.w - 16} cy={pos.y + 18} r={4} fill={statusColor}>
+      {/* Name and subtitle */}
+      <text x={pos.x + 40} y={pos.y + 24} fill="#e2e8f0" fontSize="11" fontWeight="700">{comp.shortName}</text>
+      <text x={pos.x + 40} y={pos.y + 37} fill="#94a3b8" fontSize="7.5">{comp.name}</text>
+
+      {/* Status dot with pulse */}
+      <circle cx={pos.x + pos.w - 18} cy={pos.y + 18} r={4.5} fill={statusColor}>
         {data.status !== 'nominal' && (
-          <animate attributeName="r" values="4;5;4" dur="1.5s" repeatCount="indefinite" />
+          <animate attributeName="r" values="4.5;6;4.5" dur="1.5s" repeatCount="indefinite" />
         )}
       </circle>
-      <text x={pos.x + pos.w - 16} y={pos.y + 35} textAnchor="middle" fill={statusColor} fontSize="7" fontWeight="600">
-        {data.status === 'nominal' ? 'OK' : data.status === 'warning' ? 'UYARI' : 'KRiTiK'}
+      {data.status !== 'nominal' && (
+        <circle cx={pos.x + pos.w - 18} cy={pos.y + 18} r={4.5} fill="none" stroke={statusColor} strokeWidth="1" opacity="0.3">
+          <animate attributeName="r" values="5;10;5" dur="1.5s" repeatCount="indefinite" />
+          <animate attributeName="opacity" values="0.4;0;0.4" dur="1.5s" repeatCount="indefinite" />
+        </circle>
+      )}
+
+      {/* Status text */}
+      <text x={pos.x + pos.w - 18} y={pos.y + 37} textAnchor="middle" fill={statusColor} fontSize="6.5" fontWeight="600">
+        {data.status === 'nominal' ? 'NORMAL' : data.status === 'warning' ? 'UYARI' : 'KRITIK'}
       </text>
 
-      {/* Temperature/pH mini data */}
-      {data.temperature !== undefined && (
-        <text x={pos.x + 16} y={pos.y + 52} fill="#94a3b8" fontSize="7" fontFamily="monospace">
-          {data.temperature?.toFixed?.(1)}°C {data.pH !== undefined ? `| pH ${data.pH?.toFixed?.(1)}` : ''}
-        </text>
-      )}
+      {/* Data row */}
+      <text x={pos.x + 16} y={pos.y + 56} fill="#64748b" fontSize="7" fontFamily="monospace">
+        {data.temperature !== undefined && `${data.temperature?.toFixed?.(1)}°C`}
+        {data.pH !== undefined && ` | pH ${data.pH?.toFixed?.(1)}`}
+        {data.o2Level !== undefined && ` | O2 ${data.o2Level?.toFixed?.(1)}%`}
+      </text>
     </g>
   );
 }
@@ -94,82 +130,104 @@ export default function ClosedLoopDiagram() {
       temperature: compartments.growth?.modules?.aeroponic?.temperature,
       pH: compartments.growth?.modules?.aeroponic?.pH,
     },
-    habitat: compartments.habitat,
+    habitat: {
+      ...compartments.habitat,
+    },
   };
 
-  // Flow paths
   const hW = POSITIONS.habitat;
   const wW = POSITIONS.waste;
   const nW = POSITIONS.nutrient;
   const gW = POSITIONS.growth;
 
+  // Calculate center points
+  const cx = 275, cy = 190;
+
   return (
-    <svg viewBox="0 0 550 380" className="w-full h-full" style={{ maxHeight: '100%' }}>
+    <svg viewBox="0 0 550 390" className="w-full h-full" style={{ maxHeight: '100%' }}>
       <defs>
-        <pattern id="cld-grid" width="20" height="20" patternUnits="userSpaceOnUse">
-          <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#1e293b" strokeWidth="0.3" />
+        <pattern id="cld-grid" width="24" height="24" patternUnits="userSpaceOnUse">
+          <path d="M 24 0 L 0 0 0 24" fill="none" stroke="#1e293b" strokeWidth="0.2" />
         </pattern>
-        <filter id="cld-glow">
-          <feGaussianBlur stdDeviation="2" result="blur" />
+        <radialGradient id="cld-center-glow" cx="50%" cy="50%">
+          <stop offset="0%" stopColor="#00f0ff" stopOpacity="0.06" />
+          <stop offset="100%" stopColor="#00f0ff" stopOpacity="0" />
+        </radialGradient>
+        <filter id="glow-sm">
+          <feGaussianBlur stdDeviation="1.5" result="blur" />
           <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
         </filter>
       </defs>
 
-      <rect width="550" height="380" fill="url(#cld-grid)" />
+      <rect width="550" height="390" fill="url(#cld-grid)" />
+
+      {/* Central glow */}
+      <ellipse cx={cx} cy={cy} rx="120" ry="100" fill="url(#cld-center-glow)" />
 
       {/* Center label */}
-      <text x="275" y="170" textAnchor="middle" fill="#00f0ff" fontSize="10" fontWeight="800" opacity="0.4">
+      <text x={cx} y={cy - 8} textAnchor="middle" fill="#00f0ff" fontSize="11" fontWeight="800" opacity="0.35" letterSpacing="3">
         MELiSSA DONGUSU
       </text>
-      <text x="275" y="182" textAnchor="middle" fill="#94a3b8" fontSize="7" opacity="0.3">
+      <text x={cx} y={cy + 6} textAnchor="middle" fill="#94a3b8" fontSize="7" opacity="0.25" letterSpacing="1">
         Kapali Dongu Yasam Destek
       </text>
 
-      {/* FLOW: Habitat -> Waste (top-left to top-right) */}
-      <AnimatedPath
-        d={`M ${hW.x + hW.w} ${hW.y + 30} Q ${275} ${hW.y - 10} ${wW.x} ${wW.y + 30}`}
+      {/* Subtle circular orbit lines */}
+      <ellipse cx={cx} cy={cy} rx="160" ry="135" fill="none" stroke="#1e293b" strokeWidth="0.5" strokeDasharray="2 6" />
+      <ellipse cx={cx} cy={cy} rx="100" ry="80" fill="none" stroke="#1e293b" strokeWidth="0.3" strokeDasharray="1 8" />
+
+      {/* ── FLOW PATHS ── */}
+
+      {/* Habitat -> Waste: Organic waste */}
+      <AnimatedFlow
+        d={`M ${hW.x + hW.w} ${hW.y + 35} Q ${cx} ${hW.y - 20} ${wW.x} ${wW.y + 35}`}
         color="#ff8800"
+        speed="3s"
       />
-      <FlowLabel x={275} y={50} text="Organik Atik" value={`${formatNumber(10.8)} kg/gun`} color="#ff8800" />
+      <FlowLabel x={cx} y={45} text="Organik Atik" value={`${formatNumber(10.8)} kg/gun`} color="#ff8800" />
 
-      {/* FLOW: Waste -> Nutrient (top-right to mid-right) */}
-      <AnimatedPath
-        d={`M ${wW.x + wW.w / 2} ${wW.y + wW.h} Q ${wW.x + wW.w + 10} ${160} ${nW.x + nW.w / 2} ${nW.y}`}
+      {/* Waste -> Nutrient: Nitrification */}
+      <AnimatedFlow
+        d={`M ${wW.x + wW.w / 2} ${wW.y + wW.h} Q ${wW.x + wW.w + 15} ${155} ${nW.x + nW.w / 2} ${nW.y}`}
         color="#c084fc"
+        speed="3.5s"
       />
-      <FlowLabel x={430} y={110} text="NH4+ -> NO3-" value="Nitrifikasyon" color="#c084fc" />
+      <FlowLabel x={440} y={105} text="NH4+ → NO3-" value="Nitrifikasyon" color="#c084fc" />
 
-      {/* FLOW: Nutrient -> Growth (mid-right to bottom) */}
-      <AnimatedPath
-        d={`M ${nW.x + nW.w / 2} ${nW.y + nW.h} Q ${nW.x + nW.w + 10} ${280} ${gW.x + gW.w / 2} ${gW.y}`}
+      {/* Nutrient -> Growth: NPK Solution */}
+      <AnimatedFlow
+        d={`M ${nW.x + nW.w / 2} ${nW.y + nW.h} Q ${nW.x + nW.w + 15} ${290} ${gW.x + gW.w / 2} ${gW.y}`}
         color="#22c55e"
+        speed="3s"
       />
-      <FlowLabel x={430} y={260} text="Besin Cozeltisi" value="NPK Dongüsü" color="#22c55e" />
+      <FlowLabel x={440} y={265} text="Besin Cozeltisi" value="NPK Dongusu" color="#22c55e" />
 
-      {/* FLOW: Growth -> Habitat (bottom to mid-left) — O₂ + Food */}
-      <AnimatedPath
-        d={`M ${gW.x} ${gW.y + 20} Q ${30} ${280} ${hW.x + hW.w / 2} ${hW.y + hW.h}`}
+      {/* Growth -> Habitat: O₂ + Food */}
+      <AnimatedFlow
+        d={`M ${gW.x} ${gW.y + 25} Q ${20} ${290} ${hW.x + hW.w / 2 - 20} ${hW.y + hW.h}`}
         color="#34d399"
+        speed="2.5s"
+        width={2.5}
       />
-      <FlowLabel x={80} y={260} text="O2 + Gida" value={`${formatNumber(resources.oxygen.production)} L/gun`} color="#34d399" />
+      <FlowLabel x={70} y={270} text="O2 + Gida" value={`${formatNumber(resources.oxygen.production)} L/gun`} color="#34d399" />
 
-      {/* FLOW: Habitat -> Growth (mid-left to bottom) — CO₂ */}
-      <AnimatedPath
-        d={`M ${hW.x + hW.w / 2 + 40} ${hW.y + hW.h} Q ${120} ${290} ${gW.x + 40} ${gW.y}`}
+      {/* Habitat -> Growth: CO₂ */}
+      <AnimatedFlow
+        d={`M ${hW.x + hW.w / 2 + 30} ${hW.y + hW.h} Q ${130} ${300} ${gW.x + 50} ${gW.y}`}
         color="#f97316"
         speed="4s"
       />
-      <FlowLabel x={130} y={300} text="CO2" value={`${formatNumber(resources.co2.production)} L/gun`} color="#f97316" />
+      <FlowLabel x={140} y={310} text="CO2" value={`${formatNumber(resources.co2.production)} L/gun`} color="#f97316" />
 
-      {/* FLOW: Growth -> Habitat — H₂O */}
-      <AnimatedPath
-        d={`M ${gW.x} ${gW.y + 50} Q ${-10} ${230} ${hW.x} ${hW.y + 50}`}
+      {/* Growth -> Habitat: H₂O */}
+      <AnimatedFlow
+        d={`M ${gW.x - 5} ${gW.y + 50} Q ${-15} ${235} ${hW.x - 5} ${hW.y + 55}`}
         color="#3b82f6"
         speed="5s"
       />
-      <FlowLabel x={30} y={185} text="H2O" value={`Geri kaz. %${(resources.water.recycleRate * 100).toFixed(1)}`} color="#3b82f6" />
+      <FlowLabel x={20} y={190} text="H2O Dongusu" value={`Geri kaz. %${(resources.water.recycleRate * 100).toFixed(1)}`} color="#3b82f6" />
 
-      {/* Compartment nodes */}
+      {/* ── COMPARTMENT NODES ── */}
       {Object.entries(POSITIONS).map(([id, pos]) => (
         <CompartmentNode
           key={id}
@@ -181,35 +239,53 @@ export default function ClosedLoopDiagram() {
         />
       ))}
 
-      {/* Selected info popup */}
+      {/* ── SELECTED INFO POPUP ── */}
       {selected && (
         <g>
-          <rect x={195} y={195} width={160} height={70} rx={8} fill="#0a0e1a" stroke="#2a3154" strokeWidth="1.2">
-            <animate attributeName="opacity" from="0" to="1" dur="0.3s" fill="freeze" />
+          <rect x={cx - 90} y={cy + 20} width={180} height={80} rx={10} fill="#0a0e1aee" stroke="#2a3154" strokeWidth="1.2">
+            <animate attributeName="opacity" from="0" to="1" dur="0.2s" fill="freeze" />
           </rect>
-          <text x={205} y={213} fill="#e2e8f0" fontSize="10" fontWeight="700">
+          <text x={cx - 75} y={cy + 40} fill="#e2e8f0" fontSize="11" fontWeight="700">
             {COMPARTMENTS[selected]?.icon} {COMPARTMENTS[selected]?.name}
           </text>
-          <text x={205} y={228} fill="#94a3b8" fontSize="8" fontFamily="monospace">
+          <line x1={cx - 75} y1={cy + 46} x2={cx + 75} y2={cy + 46} stroke="#2a3154" strokeWidth="0.5" />
+          <text x={cx - 75} y={cy + 60} fill="#94a3b8" fontSize="8" fontFamily="monospace">
             Sicaklik: {compData[selected]?.temperature?.toFixed?.(1) || '—'}°C
           </text>
-          <text x={205} y={241} fill="#94a3b8" fontSize="8" fontFamily="monospace">
+          <text x={cx - 75} y={cy + 73} fill="#94a3b8" fontSize="8" fontFamily="monospace">
             pH: {compData[selected]?.pH?.toFixed?.(2) || '—'}
           </text>
-          <text x={205} y={254} fill="#94a3b8" fontSize="8" fontFamily="monospace">
-            Durum: {compData[selected]?.status}
+          <text x={cx - 75} y={cy + 86} fill="#94a3b8" fontSize="8" fontFamily="monospace">
+            Durum: <tspan fill={compData[selected]?.status === 'nominal' ? '#22c55e' : '#f59e0b'}>{compData[selected]?.status}</tspan>
           </text>
         </g>
       )}
 
-      {/* Closure target indicator */}
-      <g transform="translate(425, 330)">
-        <rect width="115" height="40" rx="6" fill="#0a0e1a" stroke="#2a315440" strokeWidth="0.7" />
-        <text x="10" y="14" fill="#94a3b8" fontSize="7">Malzeme Kapaliligi</text>
-        <text x="10" y="28" fill="#00f0ff" fontSize="11" fontWeight="bold" fontFamily="monospace">
-          %{(resources.closure?.material || 0).toFixed(1)}
+      {/* ── BOTTOM STATS ── */}
+      <g transform="translate(10, 365)">
+        <rect width="530" height="22" rx="6" fill="#0a0e1a" stroke="#2a315430" strokeWidth="0.5" />
+        <text x="15" y="14" fill="#00f0ff" fontSize="7.5" fontWeight="bold" fontFamily="monospace">
+          CLOSURE:
         </text>
-        <text x="75" y="28" fill="#94a3b8" fontSize="7">/ 98%</text>
+        <text x="72" y="14" fill="#34d399" fontSize="7" fontFamily="monospace">
+          O2 %{(resources.closure?.o2 || 0).toFixed(1)}
+        </text>
+        <text x="135" y="14" fill="#22c55e" fontSize="7" fontFamily="monospace">
+          CO2 %{(resources.closure?.co2 || 0).toFixed(1)}
+        </text>
+        <text x="200" y="14" fill="#3b82f6" fontSize="7" fontFamily="monospace">
+          H2O %{(resources.closure?.water || 0).toFixed(1)}
+        </text>
+        <text x="265" y="14" fill="#ff8800" fontSize="7" fontFamily="monospace">
+          Gida %{(resources.closure?.food || 0).toFixed(1)}
+        </text>
+        <text x="340" y="14" fill="#94a3b8" fontSize="6" opacity="0.5">|</text>
+        <text x="355" y="14" fill="#00f0ff" fontSize="7.5" fontWeight="bold" fontFamily="monospace">
+          GENEL: %{(resources.closure?.material || 0).toFixed(1)}
+        </text>
+        <text x="460" y="14" fill="#94a3b8" fontSize="6.5" opacity="0.4" fontFamily="monospace">
+          Ref: Yuegong-1 %98.2
+        </text>
       </g>
     </svg>
   );
