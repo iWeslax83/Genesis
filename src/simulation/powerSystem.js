@@ -142,7 +142,8 @@ function calcLedFactor(lightingFactor, compartments, degradation) {
   const moduleFraction = totalModules > 0 ? 0.30 + 0.70 * (activeModules / totalModules) : 1.0;
 
   // LED panel sağlığı — bozulmuş paneller daha fazla enerji çeker (verimsizlik)
-  const ledHealth = degradation?.components?.led?.health ?? 1;
+  // health 0-100 aralığında, 0-1'e dönüştür
+  const ledHealth = (degradation?.components?.led?.health ?? 100) / 100;
   const efficiencyPenalty = 1 + (1 - ledHealth) * 0.3; // %100 sağlık → 1.0x, %50 → 1.15x
 
   return lightingFactor * moduleFraction * efficiencyPenalty;
@@ -199,7 +200,8 @@ function calcAtmoFactor(compartments, degradation, traceContaminants) {
   const co2Factor = 0.7 + Math.min((co2Pct / 0.12), 1.0) * 0.8;
 
   // Scrubber sağlığı: bozulmuş scrubber verimsiz → daha çok enerji
-  const scrubberHealth = degradation?.components?.co2Scrubber?.health ?? 1;
+  // health 0-100 aralığında, 0-1'e dönüştür
+  const scrubberHealth = (degradation?.components?.co2Scrubber?.health ?? 100) / 100;
   const scrubberPenalty = 1 + (1 - scrubberHealth) * 0.5; // %0 sağlık → 1.5x
 
   // TCCS eser kirletici sistemi aktifse ek yük
