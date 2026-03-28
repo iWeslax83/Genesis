@@ -1,54 +1,54 @@
 import { useState, useEffect } from 'react';
-import { FiChevronRight, FiChevronLeft, FiX, FiPlay } from 'react-icons/fi';
+import { FiChevronRight, FiChevronLeft, FiX, FiPlay, FiNavigation, FiHome, FiSun, FiRefreshCw, FiBarChart2, FiClock, FiHelpCircle, FiCheck, FiBookOpen } from 'react-icons/fi';
 
 const TOUR_STEPS = [
   {
-    icon: '🚀',
+    icon: FiNavigation,
     title: 'GENESIS\'e Hoş Geldiniz!',
     body: 'Bu simülasyon, 6 kişilik bir mürettebatın 980 günlük uzay görevinde hayatta kalmasını sağlayan kapalı döngü yaşam destek sistemini modeller.',
     hint: 'Gerçek NASA ve ESA verilerine dayanır.',
   },
   {
-    icon: '🏠',
+    icon: FiHome,
     title: 'Habitat — Yaşam Alanı',
-    body: '350 m³\'lük bir alan. Mürettebat burada yaşar, nefes alır ve yemek yer. Oksijen, CO₂, sıcaklık ve nem sürekli izlenir.',
+    body: '350 m3\'luk bir alan. Mürettebat burada yaşar, nefes alır ve yemek yer. Oksijen, CO2, sıcaklık ve nem sürekli izlenir.',
     hint: 'Sol paneldeki "Genel Bakış" sayfasında habitat durumunu görebilirsiniz.',
   },
   {
-    icon: '🌱',
+    icon: FiSun,
     title: 'Bitkiler — Hayat Kaynağı',
     body: '12 farklı bitki türü 4 farklı sistemde yetişir: Aeroponik (kökler havada), NFT (ince su tabakası), Spirulina (alg tankı) ve Mantar odası.',
     hint: 'Bitkiler hem oksijen üretir hem gıda sağlar — görev başarısının anahtarı.',
   },
   {
-    icon: '♻️',
+    icon: FiRefreshCw,
     title: 'Kapalı Döngü — Her Şey Geri Dönüşür',
-    body: 'Mürettebat CO₂ üretir → bitkiler emer, O₂ üretir. Atık su arıtılır → bitkileri sular. Bitki atıkları → kompost → besin. Hiçbir şey boşa gitmez.',
+    body: 'Mürettebat CO2 üretir, bitkiler emer, O2 üretir. Atık su arıtılır, bitkileri sular. Bitki atıkları kompost olur, besin sağlar. Hiçbir şey boşa gitmez.',
     hint: 'Kapalılık oranı ne kadar yüksekse, dışarıdan o kadar az malzeme gerekir.',
   },
   {
-    icon: '📊',
+    icon: FiBarChart2,
     title: 'Gösterge Paneli',
-    body: '8 farklı sayfa var: Genel Bakış, Tesis Haritası, Bitki İzleme, Beslenme, Güç, Görev Planlama, Dijital İkiz ve AI Tahmin.',
-    hint: 'Sayfalar arası gezinmek için sol menüyü veya 1-8 tuşlarına basın.',
+    body: '7 farklı sayfa var: Genel Bakış, Bitki İzleme, Beslenme, Güç & Enerji, Görev Planlama, Dijital İkiz ve AI Tahmin.',
+    hint: 'Sayfalar arası gezinmek için sol menüyü veya 1-7 tuşlarına basın.',
   },
   {
-    icon: '⏱️',
+    icon: FiClock,
     title: 'Simülasyon Kontrolü',
     body: 'Simülasyon gerçek zamanlı çalışır. Üst bardaki kontrollerle hızlandırabilir (1x-50x), durdurup devam ettirebilirsiniz.',
     hint: 'Space = Başlat/Durdur | +/- = Hız ayarı | ? = Tüm kısayollar',
   },
   {
-    icon: '🔍',
+    icon: FiHelpCircle,
     title: 'Bilgi Simgeleri',
-    body: 'Anlamadığınız bir terim gördüğünüzde yanındaki (i) simgesine tıklayın. NDVI, PAR, EC gibi teknik terimlerin ne anlama geldiğini açıklar.',
+    body: 'Anlamadığınız bir terim gördüğünde yanındaki (i) simgesine tıklayın. NDVI, PAR, EC gibi teknik terimlerin ne anlama geldiğini açıklar.',
     hint: 'Simgeler sayfalar boyunca metriklerin yanında yer alır.',
   },
   {
-    icon: '✨',
+    icon: FiCheck,
     title: 'Hazırsınız!',
     body: 'Şimdi simülasyonu keşfetmeye başlayabilirsiniz. "Neler Oluyor?" paneli size sürekli olarak sistemin durumunu anlatacak.',
-    hint: 'İyi görevler, komutan! 🫡',
+    hint: 'İyi görevler, komutan!',
   },
 ];
 
@@ -83,14 +83,15 @@ export default function OnboardingTour({ onComplete }) {
   const isLast = step === TOUR_STEPS.length - 1;
   const isFirst = step === 0;
   const progress = ((step + 1) / TOUR_STEPS.length) * 100;
+  const IconComponent = current.icon;
 
   return (
-    <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/70 backdrop-blur-sm animate-fade-in">
+    <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/70 animate-fade-in">
       <div className="bg-nexus-card border border-nexus-border rounded-2xl shadow-2xl shadow-black/60 w-[460px] max-w-[95vw] overflow-hidden">
         {/* Progress bar */}
         <div className="h-1 bg-nexus-bg">
           <div
-            className="h-full bg-gradient-to-r from-emerald-500 to-cyan-500 transition-all duration-500"
+            className="h-full bg-[#4ead5b] transition-all duration-500"
             style={{ width: `${progress}%` }}
           />
         </div>
@@ -111,8 +112,10 @@ export default function OnboardingTour({ onComplete }) {
 
         {/* Content */}
         <div className="px-6 py-4">
-          <div className="text-4xl mb-3">{current.icon}</div>
-          <h2 className="text-lg font-bold text-nexus-text mb-2">{current.title}</h2>
+          <div className="mb-3 text-[#5b8def]">
+            <IconComponent size={28} />
+          </div>
+          <h2 className="text-lg font-semibold text-nexus-text mb-2">{current.title}</h2>
           <p className="text-sm text-nexus-text-dim leading-relaxed mb-3">{current.body}</p>
           <div className="flex items-start gap-2 bg-nexus-accent/5 border border-nexus-accent/20 rounded-lg px-3 py-2">
             <span className="text-nexus-accent text-xs mt-0.5">*</span>
@@ -145,7 +148,7 @@ export default function OnboardingTour({ onComplete }) {
                   i === step
                     ? 'bg-nexus-accent scale-125'
                     : i < step
-                      ? 'bg-emerald-500/60'
+                      ? 'bg-[#4ead5b]/60'
                       : 'bg-nexus-border'
                 }`}
               />
@@ -155,7 +158,7 @@ export default function OnboardingTour({ onComplete }) {
           {isLast ? (
             <button
               onClick={handleFinish}
-              className="flex items-center gap-1.5 px-4 py-1.5 rounded-lg text-xs font-bold bg-gradient-to-r from-emerald-500 to-cyan-500 text-nexus-bg hover:opacity-90 transition-all"
+              className="flex items-center gap-1.5 px-4 py-1.5 rounded-lg text-xs font-semibold bg-[#4ead5b] text-nexus-bg hover:opacity-90 transition-all"
             >
               <FiPlay size={12} />
               Başla!
@@ -175,21 +178,26 @@ export default function OnboardingTour({ onComplete }) {
   );
 }
 
-// Export a button to re-trigger the tour
+// Export a button to re-trigger the tour without page reload
 export function TourResetButton() {
+  const [showTour, setShowTour] = useState(false);
+
   const handleReset = () => {
     localStorage.removeItem(STORAGE_KEY);
-    window.location.reload();
+    setShowTour(true);
   };
 
   return (
-    <button
-      onClick={handleReset}
-      className="flex items-center gap-1.5 px-2 py-1 rounded-lg text-[10px] text-nexus-text-dim hover:text-nexus-accent hover:bg-nexus-bg/50 transition-all"
-      title="Tanıtım turunu tekrar göster"
-    >
-      <span>📖</span>
-      <span>Tur</span>
-    </button>
+    <>
+      <button
+        onClick={handleReset}
+        className="flex items-center gap-1.5 px-2 py-1 rounded-lg text-[10px] text-nexus-text-dim hover:text-nexus-accent hover:bg-nexus-bg/50 transition-all"
+        title="Tanıtım turunu tekrar göster"
+      >
+        <FiBookOpen size={12} />
+        <span>Tur</span>
+      </button>
+      {showTour && <OnboardingTour onComplete={() => setShowTour(false)} />}
+    </>
   );
 }

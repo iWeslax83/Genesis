@@ -175,6 +175,12 @@ export function calculatePlantGrowth(plantType, daysSincePlanting, conditions = 
 
 /**
  * Bir modüldeki tüm bitkilerin toplam kalori üretimini hesapla
+ *
+ * Referans bazlı model: edibleYieldPerM2Day (NASA CELSS BPC / Eden ISS gerçek ölçüm)
+ * değerlerini temel alır. Bitki büyüme ilerlemesi ve çevresel koşullar çarpan olarak uygulanır.
+ *
+ * Eski model: sigmoid türevi (günlük artış) → çok küçük değerler üretiyordu
+ * Yeni model: referans verim × alan × ilerleme × çevre → gerçekçi üretim
  */
 export function calculateModuleCalories(plants, conditions, currentDay) {
   let totalCalories = 0;
@@ -192,10 +198,25 @@ export function calculateModuleCalories(plants, conditions, currentDay) {
     const daysSincePlanting = currentDay - plantGroup.plantedDay;
     const growth = calculatePlantGrowth(plantGroup.type, daysSincePlanting, conditions);
 
-    // Günlük verim (büyüme eğrisinin türevi yaklaşımı)
-    const growthYesterday = calculatePlantGrowth(plantGroup.type, daysSincePlanting - 1, conditions);
-    const dailyYieldPerPlant = Math.max(0, growth.yield - growthYesterday.yield);
-    const dailyYield = dailyYieldPerPlant * plantGroup.count; // gram
+    // Referans bazlı günlük verim hesabı:
+    // edibleYieldPerM2Day → birim alan başına günlük verim (g/m²/gün) — gerçek deney verisi
+    // area → bitki başına alan (m²)
+    // count → bitki sayısı
+    // progressFactor → büyüme aşamasına bağlı üretim çarpanı
+    //   - Çimlenme (0-15%): 0 (henüz hasat yok)
+    //   - Fide (15-30%): lineer ramp 0→0.3
+    //   - Vejetatif (30-60%): lineer ramp 0.3→0.8
+    //   - Üretim/Olgunluk (60-100%): 0.8→1.0
+    const p = growth.progress;
+    let progressFactor;
+    if (p < 0.15) progressFactor = 0;
+    else if (p < 0.30) progressFactor = ((p - 0.15) / 0.15) * 0.3;
+    else if (p < 0.60) progressFactor = 0.3 + ((p - 0.30) / 0.30) * 0.5;
+    else progressFactor = 0.8 + ((p - 0.60) / 0.40) * 0.2;
+
+    const cropArea = plantDef.area * plantGroup.count; // toplam alan (m²)
+    const refYield = plantDef.edibleYieldPerM2Day || 10; // g/m²/gün referans
+    const dailyYield = refYield * cropArea * progressFactor * growth.envMultiplier; // gram/gün
 
     totalCalories += (dailyYield / 100) * plantDef.caloriesPer100g;
     totalProtein += (dailyYield / 100) * plantDef.proteinPer100g;

@@ -19,7 +19,6 @@ import { calculateWaterProcessing } from '../simulation/waterProcessing';
 import { calculateTraceContaminants } from '../simulation/traceContaminants';
 import { calculateRadiation } from '../simulation/radiationModel';
 import { calculateMissionStatus } from '../simulation/missionPlanner';
-import { calculateMorale } from '../simulation/moraleSystem';
 import { calculateCrewMetabolics } from '../simulation/crewActivityModel';
 
 const TICK_FRACTION = 1 / 288; // Her tick = 5 dakika = 1/288 gün
@@ -340,9 +339,6 @@ export default function useSimulation() {
         const missionData = calculateMissionStatus(s);
         dispatch({ type: 'UPDATE_MISSION', payload: missionData });
 
-        // Moral hesaplama
-        const moraleData = calculateMorale(s);
-        dispatch({ type: 'UPDATE_MORALE', payload: moraleData });
       }
     }, 1000);
 

@@ -39,7 +39,6 @@ export function exportSimulationJSON(state) {
     power: { generation: state.power.generation, consumption: state.power.totalConsumption, utilization: state.power.utilizationPercent },
     thermal: { currentTemp: state.thermal.currentTemp, status: state.thermal.thermalStatus },
     mission: { day: state.mission.missionDay, progress: state.mission.missionProgress, totalDays: state.mission.totalMissionDays },
-    morale: { score: state.morale.score, status: state.morale.status },
     anomalies: state.ai.anomalies,
     harvestLog: state.compartments.growth.harvestLog,
   };
@@ -78,7 +77,7 @@ export function exportSensorHistoryCSV(state) {
 }
 
 export function generateReport(state) {
-  const { resources, compartments, power, thermal, mission, morale, ai } = state;
+  const { resources, compartments, power, thermal, mission, ai } = state;
   const cal = resources.calories;
 
   const lines = [
@@ -115,17 +114,16 @@ export function generateReport(state) {
     `Kabin Sıcaklığı: ${thermal.currentTemp.toFixed(1)}°C`,
     '',
     '─── MÜRETTEBAT ───',
-    `Moral Skoru: ${morale.score?.toFixed(0)}/100 (${morale.status})`,
     `Mürettebat: ${compartments.habitat.crewCount} kişi`,
     '',
     '─── AI ANOMALILERI ───',
     ...(ai.anomalies.length > 0
       ? ai.anomalies.map(a => `[${a.severity.toUpperCase()}] ${a.message}`)
-      : ['Aktif anomali yok — Tum sistemler nominal']),
+      : ['Aktif anomali yok — Tüm sistemler nominal']),
     '',
-    '─── HASAT GUNLUGU (Son 10) ───',
+    '─── HASAT GÜNLÜĞÜ (Son 10) ───',
     ...(compartments.growth.harvestLog.slice(-10).map(h =>
-      `Gun ${h.day}: ${h.type} x${h.count} — ${h.yieldKg} kg`
+      `Gün ${h.day}: ${h.type} x${h.count} — ${h.yieldKg} kg`
     )),
     '',
     `Rapor oluşturma: ${new Date().toLocaleTimeString('tr-TR')}`,
@@ -133,7 +131,7 @@ export function generateReport(state) {
   ];
 
   const blob = new Blob([lines.join('\n')], { type: 'text/plain' });
-  downloadBlob(blob, `genesis-rapor-gun${state.time.day}.txt`);
+  downloadBlob(blob, `genesis-rapor-gün${state.time.day}.txt`);
 }
 
 function downloadBlob(blob, filename) {

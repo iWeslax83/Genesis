@@ -3,20 +3,20 @@ import { useGenesis } from '../../context/GenesisContext';
 import { FiChevronUp, FiChevronDown, FiTerminal, FiTrash2 } from 'react-icons/fi';
 
 const EVENT_TYPES = {
-  harvest: { color: '#22c55e', icon: '🌾', label: 'HASAT' },
-  anomaly: { color: '#f59e0b', icon: '⚠', label: 'ANOMALI' },
-  critical: { color: '#ef4444', icon: '!!', label: 'KRİTİK' },
-  scenario: { color: '#a855f7', icon: '🎬', label: 'SENARYO' },
-  system: { color: '#00f0ff', icon: '⚙', label: 'SISTEM' },
-  power: { color: '#3b82f6', icon: '⚡', label: 'GÜÇ' },
-  info: { color: '#94a3b8', icon: 'i', label: 'BİLGİ' },
+  harvest: { color: '#4ead5b', label: 'HASAT' },
+  anomaly: { color: '#d4903a', label: 'ANOMALİ' },
+  critical: { color: '#d45555', label: 'KRİTİK' },
+  scenario: { color: '#8b7fc7', label: 'SENARYO' },
+  system: { color: '#5b8def', label: 'SİSTEM' },
+  power: { color: '#5b8def', label: 'GÜÇ' },
+  info: { color: '#6c6e78', label: 'BİLGİ' },
 };
 
 export default function EventLog() {
   const { state } = useGenesis();
   const [isOpen, setIsOpen] = useState(false);
   const [events, setEvents] = useState([
-    { id: 0, type: 'system', message: 'GENESIS simülasyonu başlatıldı', time: { day: 47, hour: 8, minute: 0 } },
+    { id: 0, type: 'system', message: 'GENESIS simülasyonu başlatıldı', time: { day: 1, hour: 8, minute: 0 } },
   ]);
   const scrollRef = useRef(null);
   const prevAnomaliesRef = useRef([]);
@@ -27,7 +27,6 @@ export default function EventLog() {
   useEffect(() => {
     const newEvents = [];
 
-    // Check for new anomalies
     const currentAnomalies = state.ai?.anomalies || [];
     if (currentAnomalies.length > prevAnomaliesRef.current.length) {
       const newAnomalies = currentAnomalies.slice(prevAnomaliesRef.current.length);
@@ -42,7 +41,6 @@ export default function EventLog() {
     }
     prevAnomaliesRef.current = currentAnomalies;
 
-    // Check for new harvests
     const currentHarvestLog = state.compartments?.growth?.harvestLog || [];
     if (currentHarvestLog.length > prevHarvestLogRef.current.length) {
       const newHarvests = currentHarvestLog.slice(prevHarvestLogRef.current.length);
@@ -57,7 +55,6 @@ export default function EventLog() {
     }
     prevHarvestLogRef.current = currentHarvestLog;
 
-    // Check for scenario changes
     if (state.scenario.active !== prevScenarioRef.current) {
       if (state.scenario.active) {
         newEvents.push({
@@ -77,25 +74,30 @@ export default function EventLog() {
     }
     prevScenarioRef.current = state.scenario.active;
 
-    // Power deficit
     if (state.power?.powerDeficit) {
-      const lastPowerEvent = events.filter(e => e.type === 'power').slice(-1)[0];
-      if (!lastPowerEvent || state.time.day !== lastPowerEvent.time?.day) {
-        newEvents.push({
-          id: Date.now() + Math.random(),
-          type: 'power',
-          message: `Güç açığı tespit edildi: ${(state.power.generation - state.power.totalConsumption).toFixed(1)} kW`,
-          time: { day: state.time.day, hour: state.time.hour, minute: state.time.minute },
-        });
-      }
+      setEvents(prev => {
+        const lastPowerEvent = prev.filter(e => e.type === 'power').slice(-1)[0];
+        if (!lastPowerEvent || state.time.day !== lastPowerEvent.time?.day) {
+          newEvents.push({
+            id: Date.now() + Math.random(),
+            type: 'power',
+            message: `Güç açığı tespit edildi: ${(state.power.generation - state.power.totalConsumption).toFixed(1)} kW`,
+            time: { day: state.time.day, hour: state.time.hour, minute: state.time.minute },
+          });
+        }
+        if (newEvents.length > 0) {
+          return [...prev, ...newEvents].slice(-100);
+        }
+        return prev;
+      });
+      return;
     }
 
     if (newEvents.length > 0) {
       setEvents(prev => [...prev, ...newEvents].slice(-100));
     }
-  }, [state.ai?.anomalies, state.compartments?.growth?.harvestLog, state.scenario.active, state.power?.powerDeficit, state.time.day, state.time.hour, state.time.minute]);
+  }, [state.ai?.anomalies, state.compartments?.growth?.harvestLog, state.scenario.active, state.power?.powerDeficit, state.time.day, state.time.hour]);
 
-  // Auto-scroll to bottom
   useEffect(() => {
     if (scrollRef.current && isOpen) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
@@ -108,7 +110,7 @@ export default function EventLog() {
   };
 
   return (
-    <div className={`fixed bottom-0 left-0 right-0 z-40 transition-all duration-300 ${
+    <div className={`fixed bottom-0 left-0 right-0 z-40 transition-all duration-200 ${
       isOpen ? 'h-48' : 'h-7'
     }`}>
       {/* Toggle bar */}
@@ -117,9 +119,9 @@ export default function EventLog() {
         className="absolute top-0 left-0 right-0 h-7 bg-nexus-card border-t border-nexus-border flex items-center justify-between px-4 hover:bg-nexus-card-hover transition-colors"
       >
         <div className="flex items-center gap-2">
-          <FiTerminal size={11} className="text-nexus-accent" />
+          <FiTerminal size={11} className="text-nexus-text-dim" />
           <span className="text-[10px] text-nexus-text-dim uppercase tracking-wider font-medium">Olay Günlüğü</span>
-          <span className="text-[10px] text-nexus-accent font-mono">({events.length})</span>
+          <span className="text-[10px] text-nexus-text-dim font-mono">({events.length})</span>
         </div>
         <div className="flex items-center gap-2">
           {!isOpen && events.length > 0 && (
@@ -133,7 +135,7 @@ export default function EventLog() {
 
       {/* Log content */}
       {isOpen && (
-        <div className="mt-7 h-[calc(100%-28px)] bg-nexus-bg/95 backdrop-blur-sm border-t border-nexus-border">
+        <div className="mt-7 h-[calc(100%-28px)] bg-nexus-bg border-t border-nexus-border">
           <div className="flex items-center justify-end px-3 py-1 border-b border-nexus-border/50">
             <button
               onClick={() => setEvents([])}
@@ -147,8 +149,8 @@ export default function EventLog() {
               const evType = EVENT_TYPES[event.type] || EVENT_TYPES.info;
               return (
                 <div key={event.id} className="flex items-start gap-2 hover:bg-nexus-card/30 px-1 rounded">
-                  <span className="text-nexus-text-dim/50 flex-shrink-0 w-16">{formatTime(event.time)}</span>
-                  <span className="flex-shrink-0 w-14 font-bold" style={{ color: evType.color }}>
+                  <span className="text-nexus-text-dim/40 flex-shrink-0 w-16">{formatTime(event.time)}</span>
+                  <span className="flex-shrink-0 w-14 font-semibold" style={{ color: evType.color }}>
                     [{evType.label}]
                   </span>
                   <span className="text-nexus-text-dim">{event.message}</span>

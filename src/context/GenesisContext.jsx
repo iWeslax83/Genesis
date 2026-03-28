@@ -1,13 +1,30 @@
-import React, { createContext, useContext, useReducer, useCallback } from 'react';
+import React, { createContext, useContext, useReducer, useCallback, useEffect, useRef } from 'react';
 import { INITIAL_PLANTS, CREW, SCENARIOS } from '../simulation/constants';
 
 const GenesisContext = createContext(null);
+
+const STORAGE_KEY = 'genesis_simulation_state';
+const SAVE_DEBOUNCE_MS = 2000;
+
+/** Try to load previously saved state from localStorage */
+function loadSavedState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) {
+      return JSON.parse(raw);
+    }
+  } catch (_err) {
+    // Corrupted or unreadable data — fall back to default
+    localStorage.removeItem(STORAGE_KEY);
+  }
+  return null;
+}
 
 const MAX_HISTORY = 288; // 24 saat × 12 tick/saat (5 dk aralık)
 
 const initialState = {
   time: {
-    day: 47,
+    day: 1,
     hour: 8,
     minute: 0,
     speed: 1,
@@ -76,9 +93,9 @@ const initialState = {
       recycledFromWaste: 78,
     },
     calories: {
-      dailyTarget: 12000, dailyProduction: 11200,
-      bySource: { aeroponic: 5500, nft: 800, spirulina: 1200, mushroom: 1500 },
-      protein: 320, carbs: 1100, fat: 140,
+      dailyTarget: 15000, dailyProduction: 13500,
+      bySource: { aeroponic: 7200, nft: 1600, spirulina: 2100, mushroom: 1500, mealworm: 1100 },
+      protein: 420, carbs: 1350, fat: 190,
     },
     vitaminStatus: {},
     biodiversityScore: 0,
@@ -148,9 +165,15 @@ const initialState = {
     status: 'nominal',
   },
 
-  // Eser kirleticiler
+  // Eser kirleticiler — ISS nominal seviyeleri ile başlat (SMAC-180 limitlerinin ~%10-20'si)
   traceContaminants: {
-    levels: {},
+    levels: {
+      ammonia:      { name: 'Amonyak',        level: 0.8,  unit: 'mg/m\u00B3', smac: 7.0,  smacRatio: 0.11, source: 'M\u00FCrettebat metabolizmas\u0131', status: 'nominal' },
+      formaldehyde: { name: 'Formaldehit',    level: 0.005, unit: 'mg/m\u00B3', smac: 0.05, smacRatio: 0.10, source: 'Polimer gaz sal\u0131m\u0131',       status: 'nominal' },
+      co:           { name: 'Karbon Monoksit', level: 1.2,  unit: 'mg/m\u00B3', smac: 17.0, smacRatio: 0.07, source: 'Ekipman, metabolizma',          status: 'nominal' },
+      methane:      { name: 'Metan',          level: 250,  unit: 'mg/m\u00B3', smac: 3800, smacRatio: 0.07, source: 'M\u00FCrettebat, malzeme',       status: 'nominal' },
+      voc:          { name: 'Toplam VOC',     level: 2.5,  unit: 'mg/m\u00B3', smac: 25.0, smacRatio: 0.10, source: 'Yap\u0131\u015Ft\u0131r\u0131c\u0131lar, contalar',    status: 'nominal' },
+    },
     alarmCount: 0,
     scrubberHealth: 100,
     tccsPower: 0.12,
@@ -178,15 +201,6 @@ const initialState = {
     blss: { rampUpProgress: 39, operational: false, closurePercent: 0, contribution: 0 },
     growingArea: { total: 22, perPerson: 3.7, targetPerPerson: 8, adequate: false },
     status: 'nominal',
-  },
-
-  // Mürettebat morali
-  morale: {
-    score: 72,
-    factors: {},
-    isLow: false,
-    efficiencyMultiplier: 1.0,
-    status: 'good',
   },
 
   // Mürettebat aktivite
@@ -526,9 +540,6 @@ function genesisReducer(state, action) {
     case 'UPDATE_MISSION':
       return { ...state, mission: { ...state.mission, ...action.payload } };
 
-    case 'UPDATE_MORALE':
-      return { ...state, morale: { ...state.morale, ...action.payload } };
-
     case 'UPDATE_CREW_ACTIVITY':
       return { ...state, crewActivity: { ...state.crewActivity, ...action.payload } };
 
@@ -560,18 +571,62 @@ function genesisReducer(state, action) {
     case 'TOGGLE_SIDEBAR':
       return { ...state, ui: { ...state.ui, sidebarCollapsed: !state.ui.sidebarCollapsed } };
 
+    case 'RESET_SIMULATION':
+      return { ...initialState };
+
     default:
       return state;
   }
 }
 
 export function GenesisProvider({ children }) {
-  const [state, dispatch] = useReducer(genesisReducer, initialState);
+  const [state, dispatch] = useReducer(
+    genesisReducer,
+    initialState,
+    // Lazy initializer: use saved state if available, otherwise initialState
+    () => loadSavedState() || initialState,
+  );
 
   const stableDispatch = useCallback((action) => dispatch(action), []);
 
+  // --- Debounced auto-save to localStorage ---
+  const saveTimerRef = useRef(null);
+
+  useEffect(() => {
+    // Clear any pending save timer
+    if (saveTimerRef.current) {
+      clearTimeout(saveTimerRef.current);
+    }
+
+    // Schedule a save after the debounce period
+    saveTimerRef.current = setTimeout(() => {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      } catch (_err) {
+        // localStorage full or unavailable — silently ignore
+      }
+    }, SAVE_DEBOUNCE_MS);
+
+    // Cleanup on unmount or before next effect run
+    return () => {
+      if (saveTimerRef.current) {
+        clearTimeout(saveTimerRef.current);
+      }
+    };
+  }, [state]);
+
+  // Reset simulation: clear saved state and dispatch reset action
+  const resetSimulation = useCallback(() => {
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+    } catch (_err) {
+      // ignore
+    }
+    dispatch({ type: 'RESET_SIMULATION' });
+  }, []);
+
   return (
-    <GenesisContext.Provider value={{ state, dispatch: stableDispatch }}>
+    <GenesisContext.Provider value={{ state, dispatch: stableDispatch, resetSimulation }}>
       {children}
     </GenesisContext.Provider>
   );

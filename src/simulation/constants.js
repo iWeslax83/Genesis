@@ -548,22 +548,31 @@ export const SCENARIOS = [
 
 // Başlangıçta ekili bitkiler (karma strateji — CELSS seçim kriterlerine dayalı)
 // Seçim: kısa boy, yüksek hasat indeksi, yüksek verim/m², besleyici değer
+//
+// Alan hesabı:
+//   Aeroponik 15 m²: patates 4.5m²(50×0.09) + tatlıPatates 2.0m²(22×0.09) +
+//     buğday 4.8m²(120×0.04) + soya 2.0m²(50×0.04) + fıstık 1.6m²(40×0.04) ≈ 14.9 m²
+//   NFT 7 m²: marul 1.8m²(30×0.06) + mizuna 1.0m²(25×0.04) + domates 1.28m²(8×0.16) +
+//     ıspanak 0.8m²(20×0.04) + biber 0.72m²(8×0.09) + turp 0.4m²(20×0.02) +
+//     çilek 0.9m²(15×0.06) ≈ 6.9 m²
+//
+// Ardışık ekim: farklı plantedDay değerleri ile sürekli hasat garantisi
 export const INITIAL_PLANTS = {
   aeroponic: [
-    { type: 'potato', plantedDay: -45, count: 40 },
-    { type: 'sweetPotato', plantedDay: -30, count: 20 },
-    { type: 'wheat', plantedDay: -60, count: 80 },
-    { type: 'soybean', plantedDay: -20, count: 50 },
-    { type: 'peanut', plantedDay: -40, count: 30 },
+    { type: 'potato', plantedDay: -55, count: 50 },
+    { type: 'sweetPotato', plantedDay: -40, count: 22 },
+    { type: 'wheat', plantedDay: -70, count: 120 },
+    { type: 'soybean', plantedDay: -30, count: 50 },
+    { type: 'peanut', plantedDay: -50, count: 40 },
   ],
   nft: [
-    { type: 'lettuce', plantedDay: -15, count: 24 },
-    { type: 'mizuna', plantedDay: -10, count: 20 },   // Eden ISS en verimli yapraklı
-    { type: 'tomato', plantedDay: -25, count: 10 },
-    { type: 'spinach', plantedDay: -10, count: 20 },
-    { type: 'pepper', plantedDay: -60, count: 8 },     // 137 gün döngü — erken ekildi
-    { type: 'radish', plantedDay: -12, count: 18 },
-    { type: 'strawberry', plantedDay: -30, count: 12 }, // Yuegong-1 tek meyve
+    { type: 'lettuce', plantedDay: -18, count: 30 },
+    { type: 'mizuna', plantedDay: -12, count: 25 },    // Eden ISS en verimli yapraklı
+    { type: 'tomato', plantedDay: -35, count: 8 },
+    { type: 'spinach', plantedDay: -14, count: 20 },
+    { type: 'pepper', plantedDay: -80, count: 8 },      // 137 gün döngü — erken ekildi
+    { type: 'radish', plantedDay: -16, count: 20 },
+    { type: 'strawberry', plantedDay: -35, count: 15 },  // Yuegong-1 tek meyve
   ],
 };
 
@@ -822,7 +831,7 @@ export const NDVI = {
   warning:       { min: 0.50, max: 0.70 },
   critical:      { min: 0.00, max: 0.50 },
   alertDropRate: 0.10,       // 48 saatte >0.10 düşüş → uyarı
-  growthCurve: 'sigmoid',    // Cimlenme → hasat sigmoid NDVI eğrisi
+  growthCurve: 'sigmoid',    // Çimlenme → hasat sigmoid NDVI eğrisi
 };
 
 // ============================================================
@@ -976,3 +985,20 @@ export const REFERENCE_PROJECTS = [
   { id: 'edeniss',  name: 'Eden ISS',       year: '2018',  desc: 'Antarktika serası — 268 kg hasat, 12.5 m², 286 gün' },
   { id: 'celss',    name: 'NASA CELSS BPC', year: '1988-', desc: '20 m², 481 kg biyokütle, 540 kg O₂ üretimi — 1200+ gün' },
 ];
+
+// Besin kaynağı renkleri (NutritionPage ve diğer bileşenler için)
+export const SOURCE_COLORS = {
+  aeroponic: '#4ead5b',
+  nft: '#4a9caa',
+  spirulina: '#5b8def',
+  mushroom: '#8b7fc7',
+  mealworm: '#d4903a',
+};
+
+export const SOURCE_LABELS = {
+  aeroponic: 'Aeroponik',
+  nft: 'NFT Sebze',
+  spirulina: 'Spirulina',
+  mushroom: 'Mantar',
+  mealworm: 'Böcek Protein',
+};

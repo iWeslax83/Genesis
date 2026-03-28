@@ -14,9 +14,16 @@ body {
   font-family: 'Inter', 'IBM Plex Sans', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #0a0e1a;
-  color: #e2e8f0;
+  background-color: #111318;
+  color: #c5c6cc;
   overflow: hidden;
+}
+
+/* Accessibility: enforce minimum readable text size */
+@media (pointer: fine) {
+  .text-\[7px\], .text-\[8px\] {
+    font-size: 10px !important;
+  }
 }
 
 code {
@@ -25,47 +32,18 @@ code {
 
 /* Scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 ::-webkit-scrollbar-track {
-  background: #0a0e1a;
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #2a3154;
+  background: #2a2c35;
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #3b82f6;
-}
-
-/* Gradient text */
-.nexus-gradient-text {
-  background: linear-gradient(135deg, #00f0ff, #00ff88);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.genesis-gradient-text {
-  background: linear-gradient(135deg, #22c55e, #06b6d4);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-/* Glow effects */
-.glow-green {
-  box-shadow: 0 0 15px rgba(34, 197, 94, 0.3), 0 0 30px rgba(34, 197, 94, 0.1);
-}
-.glow-cyan {
-  box-shadow: 0 0 15px rgba(0, 240, 255, 0.3), 0 0 30px rgba(0, 240, 255, 0.1);
-}
-.glow-red {
-  box-shadow: 0 0 15px rgba(255, 68, 102, 0.3), 0 0 30px rgba(255, 68, 102, 0.1);
-}
-.glow-orange {
-  box-shadow: 0 0 15px rgba(255, 136, 0, 0.3), 0 0 30px rgba(255, 136, 0, 0.1);
+  background: #3a3c45;
 }
 
 /* SVG flow animation */
@@ -97,98 +75,18 @@ code {
   background: transparent;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #2a3154;
+  background: #2a2c35;
   border-radius: 2px;
 }
 
-/* Card hover glow */
-.card-glow:hover {
-  box-shadow: 0 0 20px rgba(0, 240, 255, 0.08);
-}
-
-/* Smooth transitions for all interactive elements */
+/* Smooth transitions for interactive elements */
 button, [role="button"] {
   transition: all 0.15s ease;
 }
 
-/* Glassmorphism panels */
-.glass-panel {
-  background: rgba(26, 31, 54, 0.7);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(42, 49, 84, 0.5);
-}
-
-/* Animated gradient border */
-.gradient-border {
-  position: relative;
-}
-.gradient-border::before {
-  content: '';
-  position: absolute;
-  inset: -1px;
-  border-radius: inherit;
-  padding: 1px;
-  background: linear-gradient(135deg, #22c55e40, #00f0ff40, #a855f740);
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  pointer-events: none;
-}
-
-/* Scanning line effect */
-.scan-line {
-  position: relative;
-  overflow: hidden;
-}
-.scan-line::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(0, 240, 255, 0.3), transparent);
-  animation: scan 4s linear infinite;
-}
-@keyframes scan {
-  0% { top: 0; }
-  100% { top: 100%; }
-}
-
-/* Status indicator pulsing ring */
-.status-ring {
-  position: relative;
-}
-.status-ring::after {
-  content: '';
-  position: absolute;
-  inset: -3px;
-  border-radius: 50%;
-  border: 1px solid currentColor;
-  opacity: 0;
-  animation: ring-pulse 2s ease-out infinite;
-}
-
-/* Numeric value counter animation */
+/* Numeric value counter */
 .counter-value {
   font-variant-numeric: tabular-nums;
-}
-
-/* Data grid lines */
-.data-grid {
-  background-image:
-    linear-gradient(to right, rgba(42, 49, 84, 0.2) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(42, 49, 84, 0.2) 1px, transparent 1px);
-  background-size: 20px 20px;
-}
-
-/* Hover lift effect for cards */
-.hover-lift {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-.hover-lift:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
 }
 
 /* Keyboard shortcut badge */
@@ -201,10 +99,10 @@ kbd {
   height: 20px;
   font-family: 'JetBrains Mono', monospace;
   font-size: 10px;
-  background: #0a0e1a;
-  border: 1px solid #2a3154;
+  background: #111318;
+  border: 1px solid #2a2c35;
   border-radius: 4px;
-  color: #94a3b8;
+  color: #6c6e78;
 }
 
 /* Tooltip */

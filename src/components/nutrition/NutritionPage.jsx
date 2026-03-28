@@ -1,35 +1,20 @@
 import React from 'react';
 import { useGenesis } from '../../context/GenesisContext';
-import { CREW } from '../../simulation/constants';
+import { CREW, SOURCE_COLORS, SOURCE_LABELS } from '../../simulation/constants';
 import { formatNumber } from '../../utils/formatters';
 import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
-
-const SOURCE_COLORS = {
-  aeroponic: '#22c55e',
-  nft: '#06b6d4',
-  spirulina: '#00f0ff',
-  mushroom: '#a855f7',
-  mealworm: '#ff8800',
-};
-
-const SOURCE_LABELS = {
-  aeroponic: 'Aeroponik',
-  nft: 'NFT Sebze',
-  spirulina: 'Spirulina',
-  mushroom: 'Mantar',
-  mealworm: 'Böcek Protein',
-};
+import { FiHeart, FiAlertTriangle, FiUser } from 'react-icons/fi';
 
 function CalorieGauge({ produced, target }) {
   const ratio = Math.min(1, produced / target);
   const circumference = 2 * Math.PI * 70;
   const offset = circumference * (1 - ratio);
-  const color = ratio >= 0.95 ? '#00ff88' : ratio >= 0.7 ? '#ff8800' : '#ff4466';
+  const color = ratio >= 0.95 ? '#4ead5b' : ratio >= 0.7 ? '#d4903a' : '#d45555';
 
   return (
     <div className="flex flex-col items-center">
-      <svg width={180} height={180} viewBox="0 0 180 180">
-        <circle cx="90" cy="90" r="70" fill="none" stroke="#1a1f36" strokeWidth="12" />
+      <svg width={180} height={180} viewBox="0 0 180 180" role="img" aria-label={`Günlük Kalori Üretimi: ${formatNumber(produced)} / ${formatNumber(target)} kcal`}>
+        <circle cx="90" cy="90" r="70" fill="none" stroke="#1a1c23" strokeWidth="12" />
         <circle
           cx="90" cy="90" r="70" fill="none" stroke={color} strokeWidth="12"
           strokeDasharray={circumference} strokeDashoffset={offset}
@@ -37,13 +22,13 @@ function CalorieGauge({ produced, target }) {
           transform="rotate(-90 90 90)"
           style={{ transition: 'stroke-dashoffset 1s ease' }}
         />
-        <text x="90" y="80" textAnchor="middle" fill="#e2e8f0" fontSize="28" fontWeight="bold" fontFamily="monospace">
+        <text x="90" y="80" textAnchor="middle" fill="#c5c6cc" fontSize="28" fontWeight="600" fontFamily="monospace">
           {formatNumber(produced)}
         </text>
-        <text x="90" y="100" textAnchor="middle" fill="#94a3b8" fontSize="12">
+        <text x="90" y="100" textAnchor="middle" fill="#6c6e78" fontSize="12">
           / {formatNumber(target)} kcal
         </text>
-        <text x="90" y="120" textAnchor="middle" fill={color} fontSize="16" fontWeight="bold">
+        <text x="90" y="120" textAnchor="middle" fill={color} fontSize="16" fontWeight="600">
           %{(ratio * 100).toFixed(1)}
         </text>
       </svg>
@@ -55,13 +40,13 @@ function CalorieGauge({ produced, target }) {
 function MacroBreakdown({ protein, carbs, fat }) {
   const total = protein * 4 + carbs * 4 + fat * 9;
   const data = [
-    { name: 'Protein', value: protein, kcal: protein * 4, color: '#06b6d4' },
-    { name: 'Karbonhidrat', value: carbs, kcal: carbs * 4, color: '#ff8800' },
-    { name: 'Yağ', value: fat, kcal: fat * 9, color: '#a855f7' },
+    { name: 'Protein', value: protein, kcal: protein * 4, color: '#4a9caa' },
+    { name: 'Karbonhidrat', value: carbs, kcal: carbs * 4, color: '#d4903a' },
+    { name: 'Yağ', value: fat, kcal: fat * 9, color: '#8b7fc7' },
   ];
 
   return (
-    <div className="bg-nexus-card rounded-xl border border-nexus-border p-4">
+    <div className="bg-nexus-card rounded-lg border border-nexus-border p-4">
       <h3 className="text-xs text-nexus-text-dim uppercase tracking-wider mb-3">Makro Besin Dağılımı</h3>
       <div className="flex items-center gap-4">
         <ResponsiveContainer width={120} height={120}>
@@ -101,18 +86,18 @@ function SourceBreakdown({ bySource }) {
   const data = Object.entries(bySource).map(([key, val]) => ({
     name: SOURCE_LABELS[key] || key,
     value: Math.round(val),
-    color: SOURCE_COLORS[key] || '#94a3b8',
+    color: SOURCE_COLORS[key] || '#6c6e78',
   }));
 
   return (
-    <div className="bg-nexus-card rounded-xl border border-nexus-border p-4">
+    <div className="bg-nexus-card rounded-lg border border-nexus-border p-4">
       <h3 className="text-xs text-nexus-text-dim uppercase tracking-wider mb-3">Kaynak Bazında Üretim</h3>
       <ResponsiveContainer width="100%" height={160}>
         <BarChart data={data} layout="vertical">
-          <CartesianGrid strokeDasharray="3 3" stroke="#1a1f36" />
-          <XAxis type="number" tick={{ fill: '#94a3b8', fontSize: 10 }} />
-          <YAxis dataKey="name" type="category" width={80} tick={{ fill: '#94a3b8', fontSize: 10 }} />
-          <Tooltip contentStyle={{ background: '#1a1f36', border: '1px solid #2a3154', borderRadius: 8 }} />
+          <CartesianGrid strokeDasharray="3 3" stroke="#2a2c35" />
+          <XAxis type="number" tick={{ fill: '#6c6e78', fontSize: 10 }} />
+          <YAxis dataKey="name" type="category" width={80} tick={{ fill: '#6c6e78', fontSize: 10 }} />
+          <Tooltip contentStyle={{ background: '#1a1c23', border: '1px solid #2a2c35', borderRadius: 8 }} />
           <Bar dataKey="value" name="kcal">
             {data.map((entry, i) => (
               <Cell key={i} fill={entry.color} />
@@ -128,21 +113,21 @@ function CrewAllocation({ totalCalories }) {
   const perPerson = totalCalories / CREW.count;
 
   return (
-    <div className="bg-nexus-card rounded-xl border border-nexus-border p-4">
+    <div className="bg-nexus-card rounded-lg border border-nexus-border p-4">
       <h3 className="text-xs text-nexus-text-dim uppercase tracking-wider mb-3">Mürettebat Beslenme Dağılımı</h3>
       <div className="space-y-2">
         {CREW.members.map((member) => {
           const ratio = Math.min(1, perPerson / member.calorie);
           return (
             <div key={member.id} className="flex items-center gap-3">
-              <span className="text-sm">👨‍🚀</span>
+              <FiUser className="w-3.5 h-3.5 text-nexus-text-dim" />
               <span className="text-xs text-nexus-text w-16">{member.name}</span>
               <div className="flex-1 h-2 bg-nexus-bg rounded-full overflow-hidden">
                 <div
                   className="h-full rounded-full transition-all duration-1000"
                   style={{
                     width: `${ratio * 100}%`,
-                    backgroundColor: ratio >= 0.95 ? '#00ff88' : ratio >= 0.7 ? '#ff8800' : '#ff4466',
+                    backgroundColor: ratio >= 0.95 ? '#4ead5b' : ratio >= 0.7 ? '#d4903a' : '#d45555',
                   }}
                 />
               </div>
@@ -160,7 +145,7 @@ function CrewAllocation({ totalCalories }) {
 function VitaminPanel({ vitaminStatus }) {
   if (!vitaminStatus || Object.keys(vitaminStatus).length === 0) {
     return (
-      <div className="bg-nexus-card rounded-xl border border-nexus-border p-4">
+      <div className="bg-nexus-card rounded-lg border border-nexus-border p-4">
         <h3 className="text-xs text-nexus-text-dim uppercase tracking-wider mb-3">Vitamin / Mineral Durumu</h3>
         <div className="text-xs text-nexus-text-dim">Veri toplanıyor...</div>
       </div>
@@ -168,9 +153,9 @@ function VitaminPanel({ vitaminStatus }) {
   }
 
   const statusColors = {
-    sufficient: '#00ff88',
-    low: '#ff8800',
-    deficient: '#ff4466',
+    sufficient: '#4ead5b',
+    low: '#d4903a',
+    deficient: '#d45555',
   };
 
   const statusLabels = {
@@ -180,7 +165,7 @@ function VitaminPanel({ vitaminStatus }) {
   };
 
   return (
-    <div className="bg-nexus-card rounded-xl border border-nexus-border p-4">
+    <div className="bg-nexus-card rounded-lg border border-nexus-border p-4">
       <h3 className="text-xs text-nexus-text-dim uppercase tracking-wider mb-3">
         Vitamin / Mineral Durumu <span className="text-nexus-text-dim">(kişi başı / gün)</span>
       </h3>
@@ -220,7 +205,7 @@ function VitaminPanel({ vitaminStatus }) {
       {Object.values(vitaminStatus).some(v => v.status === 'deficient') && (
         <div className="mt-3 p-2 rounded-lg bg-nexus-red/10 border border-nexus-red/20">
           <div className="flex items-start gap-1.5 text-xs text-nexus-red">
-            <span>⚠</span>
+            <FiAlertTriangle className="w-3.5 h-3.5 mt-0.5 flex-shrink-0" />
             <span>
               Mikro besin eksiklikleri tespit edildi. Uzun süreli eksiklik mürettebat sağlığını ciddi şekilde etkiler.
               {Object.entries(vitaminStatus)
@@ -236,18 +221,18 @@ function VitaminPanel({ vitaminStatus }) {
 }
 
 function BiodiversityScore({ score }) {
-  const color = score >= 70 ? '#00ff88' : score >= 40 ? '#ff8800' : '#ff4466';
+  const color = score >= 70 ? '#4ead5b' : score >= 40 ? '#d4903a' : '#d45555';
   const label = score >= 70 ? 'İyi Çeşitlilik' : score >= 40 ? 'Orta' : 'Düşük Çeşitlilik';
   const circumference = 2 * Math.PI * 35;
   const offset = circumference * (1 - score / 100);
 
   return (
-    <div className="bg-nexus-card rounded-xl border border-nexus-border p-4 flex flex-col items-center">
+    <div className="bg-nexus-card rounded-lg border border-nexus-border p-4 flex flex-col items-center">
       <h3 className="text-xs text-nexus-text-dim uppercase tracking-wider mb-3">
         Beslenme Çeşitliliği
       </h3>
-      <svg width={90} height={90} viewBox="0 0 90 90">
-        <circle cx="45" cy="45" r="35" fill="none" stroke="#1a1f36" strokeWidth="6" />
+      <svg width={90} height={90} viewBox="0 0 90 90" role="img" aria-label={`Beslenme Çeşitliliği: ${score} / 100`}>
+        <circle cx="45" cy="45" r="35" fill="none" stroke="#1a1c23" strokeWidth="6" />
         <circle
           cx="45" cy="45" r="35" fill="none" stroke={color} strokeWidth="6"
           strokeDasharray={circumference} strokeDashoffset={offset}
@@ -255,10 +240,10 @@ function BiodiversityScore({ score }) {
           transform="rotate(-90 45 45)"
           style={{ transition: 'stroke-dashoffset 1s ease' }}
         />
-        <text x="45" y="42" textAnchor="middle" fill={color} fontSize="18" fontWeight="bold" fontFamily="monospace">
+        <text x="45" y="42" textAnchor="middle" fill={color} fontSize="18" fontWeight="600" fontFamily="monospace">
           {score}
         </text>
-        <text x="45" y="56" textAnchor="middle" fill="#94a3b8" fontSize="8">
+        <text x="45" y="56" textAnchor="middle" fill="#6c6e78" fontSize="8">
           / 100
         </text>
       </svg>
@@ -270,21 +255,21 @@ function BiodiversityScore({ score }) {
   );
 }
 
-function MenuSuggestion({ bySource, harvestLog }) {
+function MenuSuggestion({ bySource, harvestLog, day }) {
   // Dinamik menü oluşturma — mevcut üretim verilerine göre
   const RECIPES = {
-    potato:      { icon: '🥔', meals: ['Patates haşlama', 'Patates çorbası', 'Fırın patates'] },
-    sweetPotato: { icon: '🍠', meals: ['Tatlı patates püresi', 'Tatlı patates cipsi', 'Karamel tatlı patates'] },
-    wheat:       { icon: '🌾', meals: ['Buğday lapası', 'Ekmek', 'Makarna'] },
-    soybean:     { icon: '🫘', meals: ['Soya fasulyesi sote', 'Tofu', 'Soya sütü'] },
-    peanut:      { icon: '🥜', meals: ['Fıstık ezmesi', 'Fıstıklı sos', 'Enerji bar'] },
-    lettuce:     { icon: '🥬', meals: ['Marul salatası', 'Wrap', 'Taze garnitür'] },
-    mizuna:      { icon: '🌿', meals: ['Mizuna salatası', 'Yeşil smoothie', 'Çiğ garnitür'] },
-    tomato:      { icon: '🍅', meals: ['Domates çorbası', 'Bruschetta', 'Domates sos'] },
-    spinach:     { icon: '🍃', meals: ['Ispanak sote', 'Ispanaklı börek', 'Yeşil smoothie'] },
-    pepper:      { icon: '🌶️', meals: ['Biberli pilav', 'Dolma biber', 'Acılı sos'] },
-    radish:      { icon: '📍', meals: ['Turp salatası', 'Turp garnitür', 'Turşu'] },
-    strawberry:  { icon: '🍓', meals: ['Çilek tatlısı', 'Meyve tabağı', 'Smoothie'] },
+    potato:      { label: 'Patates', meals: ['Patates haşlama', 'Patates çorbası', 'Fırın patates'] },
+    sweetPotato: { label: 'T. Patates', meals: ['Tatlı patates püresi', 'Tatlı patates cipsi', 'Karamel tatlı patates'] },
+    wheat:       { label: 'Buğday', meals: ['Buğday lapası', 'Ekmek', 'Makarna'] },
+    soybean:     { label: 'Soya', meals: ['Soya fasulyesi sote', 'Tofu', 'Soya sütü'] },
+    peanut:      { label: 'Fıstık', meals: ['Fıstık ezmesi', 'Fıstıklı sos', 'Enerji bar'] },
+    lettuce:     { label: 'Marul', meals: ['Marul salatası', 'Wrap', 'Taze garnitür'] },
+    mizuna:      { label: 'Mizuna', meals: ['Mizuna salatası', 'Yeşil smoothie', 'Çiğ garnitür'] },
+    tomato:      { label: 'Domates', meals: ['Domates çorbası', 'Bruschetta', 'Domates sos'] },
+    spinach:     { label: 'Ispanak', meals: ['Ispanak sote', 'Ispanaklı börek', 'Yeşil smoothie'] },
+    pepper:      { label: 'Biber', meals: ['Biberli pilav', 'Dolma biber', 'Acılı sos'] },
+    radish:      { label: 'Turp', meals: ['Turp salatası', 'Turp garnitür', 'Turşu'] },
+    strawberry:  { label: 'Çilek', meals: ['Çilek tatlısı', 'Meyve tabağı', 'Smoothie'] },
   };
 
   // Son hasatlardan mevcut stok belirle
@@ -293,38 +278,38 @@ function MenuSuggestion({ bySource, harvestLog }) {
   const hasAeroponic = (bySource?.aeroponic || 0) > 500;
   const hasNFT = (bySource?.nft || 0) > 100;
 
-  // Mevcut üretime göre dinamik menü oluştur
-  const pickRandom = (arr) => arr[Math.floor(Math.random() * arr.length) % arr.length] || arr[0];
+  // Deterministic pick seeded by simulation day — stable per day, no flicker
+  const pickByDay = (arr, offset = 0) => arr[(day + offset) % arr.length] || arr[0];
 
-  const breakfastItems = ['🥤 Spirulina smoothie'];
+  const breakfastItems = ['Spirulina smoothie'];
   const lunchItems = [];
   const dinnerItems = [];
-  const snackItems = ['🥤 Spirulina bar'];
+  const snackItems = ['Spirulina bar'];
 
   if (hasAeroponic) {
-    breakfastItems.push(`${RECIPES.wheat?.icon || '🌾'} ${pickRandom(RECIPES.wheat?.meals || ['Buğday lapası'])}`);
-    lunchItems.push(`${RECIPES.potato?.icon || '🥔'} ${pickRandom(RECIPES.potato?.meals || ['Patates haşlama'])}`);
-    dinnerItems.push(`${RECIPES.soybean?.icon || '🫘'} ${pickRandom(RECIPES.soybean?.meals || ['Soya fasulyesi sote'])}`);
-    snackItems.push(`${RECIPES.peanut?.icon || '🥜'} ${pickRandom(RECIPES.peanut?.meals || ['Fıstık ezmesi'])}`);
+    breakfastItems.push(pickByDay(RECIPES.wheat?.meals || ['Buğday lapası'], 0));
+    lunchItems.push(pickByDay(RECIPES.potato?.meals || ['Patates haşlama'], 1));
+    dinnerItems.push(pickByDay(RECIPES.soybean?.meals || ['Soya fasulyesi sote'], 2));
+    snackItems.push(pickByDay(RECIPES.peanut?.meals || ['Fıstık ezmesi'], 3));
   }
 
   if (hasNFT) {
-    lunchItems.push(`${RECIPES.lettuce?.icon || '🥬'} ${pickRandom(RECIPES.lettuce?.meals || ['Marul salatası'])}`);
-    dinnerItems.push(`🍄 Mantar sote`);
+    lunchItems.push(pickByDay(RECIPES.lettuce?.meals || ['Marul salatası'], 4));
+    dinnerItems.push('Mantar sote');
     if (availableCrops.includes('tomato')) {
-      lunchItems.push(`${RECIPES.tomato?.icon || '🍅'} ${pickRandom(RECIPES.tomato?.meals || ['Domates çorbası'])}`);
+      lunchItems.push(pickByDay(RECIPES.tomato?.meals || ['Domates çorbası'], 5));
     }
     if (availableCrops.includes('pepper')) {
-      dinnerItems.push(`${RECIPES.pepper?.icon || '🌶️'} ${pickRandom(RECIPES.pepper?.meals || ['Biberli pilav'])}`);
+      dinnerItems.push(pickByDay(RECIPES.pepper?.meals || ['Biberli pilav'], 6));
     }
     if (availableCrops.includes('strawberry')) {
-      snackItems.push(`${RECIPES.strawberry?.icon || '🍓'} ${pickRandom(RECIPES.strawberry?.meals || ['Çilek tatlısı'])}`);
+      snackItems.push(pickByDay(RECIPES.strawberry?.meals || ['Çilek tatlısı'], 7));
     }
   }
 
   // Fallback
-  if (lunchItems.length === 0) lunchItems.push('🥔 Depo gıdası');
-  if (dinnerItems.length === 0) dinnerItems.push('🍄 Mantar sote');
+  if (lunchItems.length === 0) lunchItems.push('Depo gıdası');
+  if (dinnerItems.length === 0) dinnerItems.push('Mantar sote');
 
   const menu = [
     { meal: 'Kahvaltı', items: breakfastItems.join(' + ') },
@@ -334,14 +319,14 @@ function MenuSuggestion({ bySource, harvestLog }) {
   ];
 
   return (
-    <div className="bg-nexus-card rounded-xl border border-nexus-border p-4">
+    <div className="bg-nexus-card rounded-lg border border-nexus-border p-4">
       <h3 className="text-xs text-nexus-text-dim uppercase tracking-wider mb-3">
         Bugünün Menüsü <span className="text-nexus-accent">(dinamik)</span>
       </h3>
       <div className="space-y-2">
         {menu.map((m) => (
           <div key={m.meal} className="flex items-start gap-2">
-            <span className="text-xs font-bold text-nexus-accent w-14">{m.meal}</span>
+            <span className="text-xs font-semibold text-nexus-accent w-14">{m.meal}</span>
             <span className="text-xs text-nexus-text-dim">{m.items}</span>
           </div>
         ))}
@@ -359,20 +344,20 @@ function HarvestLog({ harvestLog }) {
   if (!harvestLog || harvestLog.length === 0) return null;
 
   const PLANT_NAMES = {
-    potato: '🥔 Patates', sweetPotato: '🍠 T. Patates', wheat: '🌾 Buğday',
-    soybean: '🫘 Soya', peanut: '🥜 Fıstık', lettuce: '🥬 Marul',
-    tomato: '🍅 Domates', spinach: '🍃 Ispanak', pepper: '🌶️ Biber', radish: '📍 Turp',
+    potato: 'Patates', sweetPotato: 'T. Patates', wheat: 'Buğday',
+    soybean: 'Soya', peanut: 'Fıstık', lettuce: 'Marul',
+    tomato: 'Domates', spinach: 'Ispanak', pepper: 'Biber', radish: 'Turp',
   };
 
   const recent = harvestLog.slice(-8).reverse();
 
   return (
-    <div className="bg-nexus-card rounded-xl border border-nexus-border p-4">
+    <div className="bg-nexus-card rounded-lg border border-nexus-border p-4">
       <h3 className="text-xs text-nexus-text-dim uppercase tracking-wider mb-3">Son Hasatlar</h3>
       <div className="space-y-1.5">
         {recent.map((h, i) => (
           <div key={i} className="flex items-center justify-between text-xs">
-            <span className="text-nexus-text">{PLANT_NAMES[h.type] || h.type} ×{h.count}</span>
+            <span className="text-nexus-text">{PLANT_NAMES[h.type] || h.type} x{h.count}</span>
             <div className="flex items-center gap-2">
               <span className="font-mono text-nexus-green">{h.yieldKg} kg</span>
               <span className="text-nexus-text-dim">Gün {h.day}</span>
@@ -392,42 +377,44 @@ export default function NutritionPage() {
     <div className="h-full flex flex-col gap-3 animate-fade-in overflow-y-auto">
       {/* Header */}
       <div className="flex items-center gap-3">
-        <div className="w-9 h-9 rounded-xl bg-red-500/10 flex items-center justify-center text-lg">🍽️</div>
+        <div className="w-9 h-9 rounded-lg flex items-center justify-center" style={{ backgroundColor: '#d455551a' }}>
+          <FiHeart className="w-4 h-4" style={{ color: '#d45555' }} />
+        </div>
         <div>
-          <h2 className="text-base font-bold text-nexus-text">Beslenme Analizi</h2>
+          <h2 className="text-base font-semibold text-nexus-text">Beslenme Analizi</h2>
           <p className="text-[10px] text-nexus-text-dim">Kalori üretimi, makro besinler, vitamin durumu ve mürettebat beslenme dağılımı</p>
         </div>
       </div>
 
       {/* Top: Calorie gauge + Macro + Source */}
-      <div className="grid grid-cols-12 gap-3">
-        <div className="col-span-3 bg-nexus-card rounded-xl border border-nexus-border p-4 flex justify-center">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-3">
+        <div className="col-span-12 lg:col-span-3 bg-nexus-card rounded-lg border border-nexus-border p-4 flex justify-center">
           <CalorieGauge produced={cal.dailyProduction} target={cal.dailyTarget} />
         </div>
-        <div className="col-span-4">
+        <div className="col-span-12 lg:col-span-4">
           <MacroBreakdown protein={cal.protein} carbs={cal.carbs} fat={cal.fat} />
         </div>
-        <div className="col-span-5">
+        <div className="col-span-12 lg:col-span-5">
           <SourceBreakdown bySource={cal.bySource} />
         </div>
       </div>
 
       {/* Orta: Vitamin + Biyoçeşitlilik + Mürettebat */}
-      <div className="grid grid-cols-12 gap-4">
-        <div className="col-span-5">
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
+        <div className="col-span-12 md:col-span-5">
           <VitaminPanel vitaminStatus={state.resources.vitaminStatus} />
         </div>
-        <div className="col-span-2">
+        <div className="col-span-12 md:col-span-2">
           <BiodiversityScore score={state.resources.biodiversityScore || 0} />
         </div>
-        <div className="col-span-5">
+        <div className="col-span-12 md:col-span-5">
           <CrewAllocation totalCalories={cal.dailyProduction} />
         </div>
       </div>
 
       {/* Alt: Menü + Hasat Günlüğü */}
-      <div className="grid grid-cols-2 gap-4">
-        <MenuSuggestion bySource={cal.bySource} harvestLog={state.compartments.growth.harvestLog} />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <MenuSuggestion bySource={cal.bySource} harvestLog={state.compartments.growth.harvestLog} day={state.time.day} />
         <HarvestLog harvestLog={state.compartments.growth.harvestLog} />
       </div>
     </div>

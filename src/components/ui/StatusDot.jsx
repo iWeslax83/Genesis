@@ -6,7 +6,7 @@ export default function StatusDot({ status, label, size = 'sm' }) {
 
   return (
     <div className="flex items-center gap-2">
-      <div className={`${dotSize} rounded-full ${status === 'critical' ? 'animate-blink' : ''}`}
+      <div className={`${dotSize} rounded-full`}
         style={{ backgroundColor: color }}
       />
       {label && <span className="text-xs text-nexus-text-dim">{label}</span>}

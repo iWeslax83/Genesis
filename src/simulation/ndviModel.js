@@ -15,25 +15,36 @@ export function calculateNDVI(plants, conditions, currentDay) {
     const progress = Math.min(1, daysSincePlanting / plantDef.growthDays);
 
     // Sigmoid büyüme eğrisi üzerinde beklenen NDVI
-    // Cimlenme: 0.15 → Olgunluk: 0.85 (sigmoid)
+    // Çimlenme: 0.18 → Olgunluk: 0.92 (sigmoid)
+    // Referans: Eden ISS olgun marul NDVI 0.82-0.90, ISS APH buğday 0.85-0.93
     const k = 8;
-    const midpoint = 0.4; // %40 ilerleme noktasında hızlı artış
-    const baseNDVI = 0.15 + 0.70 / (1 + Math.exp(-k * (progress - midpoint)));
+    const midpoint = 0.35; // %35 ilerleme noktasında hızlı artış
+    const baseNDVI = 0.18 + 0.75 / (1 + Math.exp(-k * (progress - midpoint)));
 
     // Çevresel stres faktörleri
     let stressFactor = 1.0;
 
-    // Sıcaklık stresi
+    // Sıcaklık stresi — hafifletildi (gerçek seralarda 4°C sapma tolere edilir)
     const tempDev = Math.abs(conditions.temperature - plantDef.optimalTemp);
-    if (tempDev > 8) stressFactor *= 0.6;
-    else if (tempDev > 4) stressFactor *= 0.85;
+    if (tempDev > 10) stressFactor *= 0.65;
+    else if (tempDev > 6) stressFactor *= 0.85;
+    else if (tempDev > 3) stressFactor *= 0.95;
 
-    // Işık stresi (düşük PAR)
-    if (conditions.lightPAR < 150) stressFactor *= 0.7;
-    else if (conditions.lightPAR < 300) stressFactor *= 0.9;
+    // Işık stresi — gece saatlerinde PAR=0 bitkiyi stresli yapmaz
+    // NDVI yapısal bir ölçümdür, anlık ışığa bağlı değildir
+    // Sadece kronik ışık eksikliği (gündüz PAR düşük) stres yapar
+    // Gece PAR=0 normaldir, stres faktörü uygulanmaz
+    const effectivePAR = conditions.lightPAR;
+    const isNightTime = effectivePAR < 10; // Gece modu tespiti
+    if (!isNightTime) {
+      if (effectivePAR < 100) stressFactor *= 0.75;
+      else if (effectivePAR < 200) stressFactor *= 0.92;
+    }
+    // Gece: stres faktörü değişmez (1.0 kalır)
 
     // CO₂ etkisi
-    if (conditions.co2 < 400) stressFactor *= 0.8;
+    if (conditions.co2 < 300) stressFactor *= 0.8;
+    else if (conditions.co2 < 400) stressFactor *= 0.92;
 
     const ndvi = Math.max(0, Math.min(1, baseNDVI * stressFactor));
 

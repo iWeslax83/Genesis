@@ -2,19 +2,19 @@ import { useGenesis } from '../../context/GenesisContext';
 import { PLANTS } from '../../simulation/constants';
 
 const NDVI_COLORS = [
-  { threshold: 0.2, color: '#ef4444', label: 'Kritik' },
-  { threshold: 0.4, color: '#f97316', label: 'Düşük' },
-  { threshold: 0.55, color: '#eab308', label: 'Zayıf' },
-  { threshold: 0.7, color: '#84cc16', label: 'Orta' },
-  { threshold: 0.85, color: '#22c55e', label: 'İyi' },
-  { threshold: 1.0, color: '#059669', label: 'Mükemmel' },
+  { threshold: 0.2, color: '#d45555', label: 'Kritik' },
+  { threshold: 0.4, color: '#d4903a', label: 'Düşük' },
+  { threshold: 0.55, color: '#c4a83a', label: 'Zayıf' },
+  { threshold: 0.7, color: '#7ba644', label: 'Orta' },
+  { threshold: 0.85, color: '#4ead5b', label: 'İyi' },
+  { threshold: 1.0, color: '#3a8a4a', label: 'Mükemmel' },
 ];
 
 function getNDVIColor(value) {
   for (const { threshold, color } of NDVI_COLORS) {
     if (value <= threshold) return color;
   }
-  return '#059669';
+  return '#3a8a4a';
 }
 
 function PlantHealthCell({ type, ndviValue, count, moduleKey }) {
@@ -41,7 +41,7 @@ function PlantHealthCell({ type, ndviValue, count, moduleKey }) {
               style={{ width: `${healthPct}%`, backgroundColor: color }}
             />
           </div>
-          <span className="text-[10px] font-mono font-bold w-8 text-right" style={{ color }}>
+          <span className="text-[10px] font-mono font-semibold w-8 text-right" style={{ color }}>
             {ndviValue.toFixed(2)}
           </span>
         </div>
@@ -52,7 +52,7 @@ function PlantHealthCell({ type, ndviValue, count, moduleKey }) {
 
       {/* Tooltip on hover */}
       <div className="tooltip-content absolute bottom-full left-1/2 -translate-x-1/2 mb-1 z-10 bg-nexus-card border border-nexus-border rounded-lg px-2 py-1.5 shadow-xl min-w-[140px]">
-        <div className="text-[10px] font-bold text-nexus-text mb-1">{plant.icon} {plant.name}</div>
+        <div className="text-[10px] font-semibold text-nexus-text mb-1">{plant.icon} {plant.name}</div>
         <div className="text-[9px] text-nexus-text-dim space-y-0.5">
           <div>NDVI: <span className="font-mono" style={{ color }}>{ndviValue.toFixed(3)}</span></div>
           <div>Modül: <span className="text-nexus-accent">{moduleKey === 'aeroponic' ? 'Aeroponik' : 'NFT'}</span></div>
@@ -74,7 +74,7 @@ export default function NDVIHeatmap() {
   const nftNDVI = ndvi?.nft || { average: 0.78, plants: {} };
 
   return (
-    <div className="bg-nexus-card rounded-xl border border-nexus-border p-4">
+    <div className="bg-nexus-card rounded-lg border border-nexus-border p-4">
       <div className="flex items-center justify-between mb-3">
         <h3 className="text-xs text-nexus-text-dim uppercase tracking-wider">NDVI Bitki Sağlık Haritası</h3>
         <div className="flex items-center gap-2">
@@ -88,7 +88,7 @@ export default function NDVIHeatmap() {
               </div>
             ))}
           </div>
-          <span className="text-[9px] text-nexus-text-dim">0.0 — 1.0</span>
+          <span className="text-[9px] text-nexus-text-dim">0.0 -- 1.0</span>
         </div>
       </div>
 
@@ -97,7 +97,7 @@ export default function NDVIHeatmap() {
         <div className="flex items-center gap-2 mb-2">
           <span className="text-[10px] text-nexus-text-dim uppercase tracking-wider">Aeroponik</span>
           <div className="flex-1 h-px bg-nexus-border" />
-          <span className="text-[10px] font-mono font-bold" style={{ color: getNDVIColor(aeroNDVI.average) }}>
+          <span className="text-[10px] font-mono font-semibold" style={{ color: getNDVIColor(aeroNDVI.average) }}>
             Ort: {aeroNDVI.average?.toFixed(2)}
           </span>
         </div>
@@ -122,7 +122,7 @@ export default function NDVIHeatmap() {
         <div className="flex items-center gap-2 mb-2">
           <span className="text-[10px] text-nexus-text-dim uppercase tracking-wider">NFT Hidroponik</span>
           <div className="flex-1 h-px bg-nexus-border" />
-          <span className="text-[10px] font-mono font-bold" style={{ color: getNDVIColor(nftNDVI.average) }}>
+          <span className="text-[10px] font-mono font-semibold" style={{ color: getNDVIColor(nftNDVI.average) }}>
             Ort: {nftNDVI.average?.toFixed(2)}
           </span>
         </div>

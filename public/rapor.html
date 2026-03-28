@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GENESIS — Teknik Sistem Dokümantasyonu</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+  :root {
+    --bg: #0a0e1a;
+    --bg2: #0f1424;
+    --bg3: #151b2e;
+    --card: #1a2038;
+    --border: #1e2a45;
+    --text: #e2e8f0;
+    --dim: #8892a8;
+    --accent: #00f0ff;
+    --green: #22c55e;
+    --amber: #f59e0b;
+    --red: #ef4444;
+    --purple: #a855f7;
+    --blue: #3b82f6;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ---- Hero ---- */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    overflow: hidden;
+    padding: 2rem;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 40%, rgba(0,240,255,0.06) 0%, transparent 70%),
+                radial-gradient(ellipse at 20% 80%, rgba(34,197,94,0.04) 0%, transparent 50%);
+  }
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 1.2rem;
+    border-radius: 999px;
+    background: rgba(0,240,255,0.08);
+    border: 1px solid rgba(0,240,255,0.2);
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 2rem;
+    position: relative;
+    z-index: 1;
+  }
+  .hero h1 {
+    font-size: clamp(3rem, 8vw, 6rem);
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    background: linear-gradient(135deg, #fff 0%, var(--accent) 50%, var(--green) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    position: relative;
+    z-index: 1;
+    line-height: 1.1;
+  }
+  .hero-sub {
+    font-size: clamp(0.95rem, 2vw, 1.25rem);
+    color: var(--dim);
+    max-width: 700px;
+    margin-top: 1.5rem;
+    position: relative;
+    z-index: 1;
+    font-weight: 300;
+  }
+  .hero-meta {
+    display: flex;
+    gap: 2rem;
+    margin-top: 3rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+  }
+  .hero-meta-item {
+    text-align: center;
+  }
+  .hero-meta-item .val {
+    font-size: 2rem;
+    font-weight: 800;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .hero-meta-item .lbl {
+    font-size: 0.7rem;
+    color: var(--dim);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+  .scroll-hint {
+    position: absolute;
+    bottom: 2rem;
+    animation: bounce 2s infinite;
+    color: var(--dim);
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(8px); }
+  }
+
+  /* ---- Stars (decorative) ---- */
+  .stars {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    z-index: 0;
+  }
+  .star {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: white;
+    border-radius: 50%;
+    animation: twinkle 3s infinite alternate;
+  }
+  @keyframes twinkle { 0% { opacity: 0.1; } 100% { opacity: 0.7; } }
+
+  /* ---- Layout ---- */
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+  section {
+    padding: 5rem 0;
+    border-top: 1px solid var(--border);
+  }
+  section:first-of-type { border-top: none; }
+
+  /* ---- TOC ---- */
+  .toc {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 2.5rem;
+    margin-bottom: 3rem;
+  }
+  .toc h2 {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    margin-bottom: 1.5rem;
+  }
+  .toc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 0.5rem;
+  }
+  .toc a {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.6rem 0.8rem;
+    border-radius: 8px;
+    color: var(--text);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: background 0.2s;
+  }
+  .toc a:hover { background: var(--bg3); }
+  .toc a .num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--accent);
+    min-width: 1.8rem;
+  }
+
+  /* ---- Section headers ---- */
+  .sec-header {
+    margin-bottom: 3rem;
+  }
+  .sec-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--accent);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+  .sec-header h2 {
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-top: 0.5rem;
+  }
+  .sec-header p {
+    color: var(--dim);
+    margin-top: 0.5rem;
+    font-size: 1rem;
+    max-width: 700px;
+  }
+
+  /* ---- Cards ---- */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  .card h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+  }
+  .card-sm {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.25rem;
+  }
+  .card-sm h4 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .card-sm p, .card-sm li {
+    font-size: 0.85rem;
+    color: var(--dim);
+    line-height: 1.6;
+  }
+  .card-sm ul {
+    padding-left: 1.2rem;
+    margin-top: 0.3rem;
+  }
+
+  /* ---- Tables ---- */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+    margin: 1rem 0;
+  }
+  th {
+    text-align: left;
+    padding: 0.6rem 0.8rem;
+    background: var(--bg2);
+    border-bottom: 2px solid var(--border);
+    font-weight: 600;
+    color: var(--accent);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  td {
+    padding: 0.5rem 0.8rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--dim);
+  }
+  tr:hover td {
+    background: rgba(0,240,255,0.02);
+    color: var(--text);
+  }
+
+  /* ---- Code ---- */
+  code, .mono {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.82rem;
+  }
+  .code-block {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.25rem;
+    overflow-x: auto;
+    margin: 1rem 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    line-height: 1.8;
+    color: var(--dim);
+  }
+  .code-block .kw { color: var(--purple); }
+  .code-block .fn { color: var(--accent); }
+  .code-block .cm { color: #4a5568; }
+  .code-block .st { color: var(--green); }
+  .code-block .nu { color: var(--amber); }
+
+  /* ---- Flow Diagram ---- */
+  .flow-diagram {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 2rem;
+    margin: 2rem 0;
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    line-height: 2;
+    color: var(--dim);
+    overflow-x: auto;
+    white-space: pre;
+  }
+
+  /* ---- Tags ---- */
+  .tag {
+    display: inline-block;
+    padding: 0.15rem 0.6rem;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .tag-green { background: rgba(34,197,94,0.15); color: var(--green); }
+  .tag-amber { background: rgba(245,158,11,0.15); color: var(--amber); }
+  .tag-red { background: rgba(239,68,68,0.15); color: var(--red); }
+  .tag-blue { background: rgba(59,130,246,0.15); color: var(--blue); }
+  .tag-purple { background: rgba(168,85,247,0.15); color: var(--purple); }
+  .tag-cyan { background: rgba(0,240,255,0.12); color: var(--accent); }
+
+  /* ---- Highlight boxes ---- */
+  .highlight {
+    border-left: 3px solid var(--accent);
+    background: rgba(0,240,255,0.04);
+    padding: 1rem 1.25rem;
+    border-radius: 0 8px 8px 0;
+    margin: 1.5rem 0;
+    font-size: 0.9rem;
+    color: var(--dim);
+  }
+  .highlight strong { color: var(--text); }
+  .highlight-green { border-color: var(--green); background: rgba(34,197,94,0.04); }
+  .highlight-amber { border-color: var(--amber); background: rgba(245,158,11,0.04); }
+
+  /* ---- Metric row ---- */
+  .metric-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+  .metric {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1rem;
+    text-align: center;
+  }
+  .metric .val {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+  .metric .lbl {
+    font-size: 0.7rem;
+    color: var(--dim);
+    margin-top: 0.25rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  /* ---- Footer ---- */
+  footer {
+    text-align: center;
+    padding: 4rem 2rem;
+    border-top: 1px solid var(--border);
+    color: var(--dim);
+    font-size: 0.8rem;
+  }
+  footer .logo {
+    font-size: 2rem;
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--accent), var(--green));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 1rem;
+  }
+
+  /* ---- Print ---- */
+  @media print {
+    body { background: white; color: #1a1a2e; }
+    .hero { min-height: auto; padding: 2rem 0; }
+    .stars { display: none; }
+    .card, .card-sm, .toc, .code-block, .flow-diagram, .metric {
+      background: #f8f9fa; border-color: #ddd;
+    }
+    th { background: #eee; }
+    td, p, li { color: #333; }
+    section { padding: 2rem 0; }
+  }
+
+  /* ---- Responsive ---- */
+  @media (max-width: 640px) {
+    .container { padding: 0 1rem; }
+    .hero-meta { gap: 1rem; }
+    .card-grid { grid-template-columns: 1fr; }
+    .metric-row { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<!-- ======== HERO ======== -->
+<div class="hero">
+  <div class="stars" id="stars"></div>
+  <div class="hero-badge">TUA Astro Hackathon Bursa 2026</div>
+  <h1>GENESIS</h1>
+  <p class="hero-sub">
+    Kapali Dongu Uzay Tarimi Yasam Destek Sistemi Simulatoru
+    <br>
+    <span style="font-size:0.85em; opacity:0.7;">MELiSSA Protokolu &bull; NASA CELSS &bull; Yuegong-1 &bull; BIOS-3 &bull; Eden ISS</span>
+  </p>
+  <div class="hero-meta">
+    <div class="hero-meta-item">
+      <div class="val" style="color:var(--accent)">6</div>
+      <div class="lbl">Murettebat</div>
+    </div>
+    <div class="hero-meta-item">
+      <div class="val" style="color:var(--green)">12</div>
+      <div class="lbl">Bitki Turu</div>
+    </div>
+    <div class="hero-meta-item">
+      <div class="val" style="color:var(--amber)">980</div>
+      <div class="lbl">Gun Gorev</div>
+    </div>
+    <div class="hero-meta-item">
+      <div class="val" style="color:var(--purple)">200m&sup3;</div>
+      <div class="lbl">Habitat Hacmi</div>
+    </div>
+    <div class="hero-meta-item">
+      <div class="val" style="color:var(--blue)">30+</div>
+      <div class="lbl">Sensor Noktasi</div>
+    </div>
+  </div>
+  <div class="scroll-hint">&darr; Asagi kaydir</div>
+</div>
+
+<div class="container">
+
+<!-- ======== TOC ======== -->
+<div class="toc">
+  <h2>Icerik</h2>
+  <div class="toc-grid">
+    <a href="#s1"><span class="num">01</span> Amac ve Kapsam</a>
+    <a href="#s2"><span class="num">02</span> Bilimsel Referanslar</a>
+    <a href="#s3"><span class="num">03</span> Fiziksel Mimari</a>
+    <a href="#s4"><span class="num">04</span> Simulasyon Motoru</a>
+    <a href="#s5"><span class="num">05</span> Bitki Buyume Modeli</a>
+    <a href="#s6"><span class="num">06</span> Kaynak Akis Motoru</a>
+    <a href="#s7"><span class="num">07</span> Guc ve Isil Denge</a>
+    <a href="#s8"><span class="num">08</span> Atmosfer ve TCCS</a>
+    <a href="#s9"><span class="num">09</span> Radyasyon ve Patojen</a>
+    <a href="#s10"><span class="num">10</span> Su Isleme ve Bozulma</a>
+    <a href="#s11"><span class="num">11</span> AI ve Anomali Tespiti</a>
+    <a href="#s12"><span class="num">12</span> Kullanici Arayuzu</a>
+    <a href="#s13"><span class="num">13</span> Senaryo Motoru</a>
+    <a href="#s14"><span class="num">14</span> Veri Akis Mimarisi</a>
+  </div>
+</div>
+
+<!-- ======== S1: AMAC ======== -->
+<section id="s1">
+  <div class="sec-header">
+    <div class="sec-num">Bolum 01</div>
+    <h2>Amac ve Kapsam</h2>
+    <p>Genesis ne yapiyor ve neden onemli?</p>
+  </div>
+
+  <div class="card">
+    <p>Genesis, uzun sureli uzay gorevlerinde (Mars yuzey operasyonu, 500+ gun) murettebatin hayatta kalmasi icin gereken <strong>Biyorejeneratif Yasam Destek Sistemi'ni (BLSS)</strong> gercek zamanli simule eden bir dijital ikiz platformudur.</p>
+
+    <div class="highlight" style="margin-top:1.5rem;">
+      <strong>Temel soru:</strong> 6 kisilik bir murettebat, Dunya'dan bagimsiz olarak, kapali bir modul icinde kendi gidasini uretebilir mi? Uretebiliyorsa, hangi kosullarda, ne kadar sure ve hangi risklerle?
+    </div>
+
+    <p style="margin-top:1rem; color:var(--dim);">Bu soru trivial degil. Kapali bir yasam destek sisteminde her sey birbirine bagli &mdash; bitkiler O&#8322; uretir ama CO&#8322; ve su tuketir, murettebat O&#8322; tuketir ama CO&#8322; ve organik atik uretir, atiklar besin cozeltisine donusur, besin cozeltisi bitkileri besler. Tek bir halka koparsa tum dongu coker. Genesis, bu dongununun her halkasini matematiksel olarak modelliyor.</p>
+  </div>
+</section>
+
+<!-- ======== S2: REFERANSLAR ======== -->
+<section id="s2">
+  <div class="sec-header">
+    <div class="sec-num">Bolum 02</div>
+    <h2>Bilimsel Referans Cercevesi</h2>
+    <p>Sistem sifirdan icat edilmedi. Gercek uzay programlarinin verilerine dayaniyor.</p>
+  </div>
+
+  <div class="card-grid">
+    <div class="card-sm">
+      <h4><span style="color:var(--blue)">&#9670;</span> ESA MELiSSA</h4>
+      <p>1989'dan beri gelistirilen 4+1 kompartmanli kapali dongu mimarisi. Genesis'in kompartman yapisi dogrudan MELiSSA'dan turetilmis.</p>
+      <div class="tag tag-blue" style="margin-top:0.5rem">1989 &mdash; Devam Ediyor</div>
+    </div>
+    <div class="card-sm">
+      <h4><span style="color:var(--green)">&#9670;</span> NASA CELSS BPC</h4>
+      <p>5 dongu boyunca 16 bitki turunun verim verilerini sagladi. Tum <code>edibleYieldPerM2Day</code> degerleri bu programdan geliyor.</p>
+      <div class="tag tag-green" style="margin-top:0.5rem">Kennedy Space Center</div>
+    </div>
+    <div class="card-sm">
+      <h4><span style="color:var(--red)">&#9670;</span> Yuegong-1 (Lunar Palace)</h4>
+      <p>370 gun boyunca 4 kisiyi kapali dongude yasatti. %98.2 malzeme geri donusum orani. Genesis'in hedef kapalilik oranlari buradan.</p>
+      <div class="tag tag-red" style="margin-top:0.5rem">370 Gun &bull; %98.2</div>
+    </div>
+    <div class="card-sm">
+      <h4><span style="color:var(--purple)">&#9670;</span> BIOS-3 (Rusya)</h4>
+      <p>63 m&sup2; ekim alaniyla 3 kisiyi 180 gun besledi. Kisi basi gerekli tarim alani hesabinin kaynagi.</p>
+      <div class="tag tag-purple" style="margin-top:0.5rem">1972&ndash;1985 &bull; 63 m&sup2;</div>
+    </div>
+    <div class="card-sm">
+      <h4><span style="color:var(--amber)">&#9670;</span> Eden ISS (Antarktika)</h4>
+      <p>Gercek izole kosullarda aeroponik sera. Mizuna'nin 194 g/m&sup2;/gun verimine kaynak. 9 ayda 268 kg biyokutle.</p>
+      <div class="tag tag-amber" style="margin-top:0.5rem">DLR/ESA &bull; 268 kg</div>
+    </div>
+    <div class="card-sm">
+      <h4><span style="color:var(--accent)">&#9670;</span> NASA VEGGIE / APH</h4>
+      <p>ISS'te yenen ilk bitki (marul, 10 Agustos 2015). APH 180+ sensorlu tam otomatik bitki yetistirme. Sensor modeli referansi.</p>
+      <div class="tag tag-cyan" style="margin-top:0.5rem">ISS &bull; 180+ Sensor</div>
+    </div>
+  </div>
+</section>
+
+<!-- ======== S3: FIZIKSEL MIMARI ======== -->
+<section id="s3">
+  <div class="sec-header">
+    <div class="sec-num">Bolum 03</div>
+    <h2>Fiziksel Mimari</h2>
+    <p>Silindirik habitat modulu: &Oslash;4m &times; 8m, ~200 m&sup3; hacim, 5 fonksiyonel bolge.</p>
+  </div>
+
+  <div class="flow-diagram">
+&#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;
+&#9474;                      GENESIS HABITAT MODULU                       &#9474;
+&#9474;                                                                   &#9474;
+&#9474;   &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;   &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;   &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;   &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;   &#9474;
+&#9474;   &#9474;AEROPONIK &#9474;&#9472;&#9472;&gt;&#9474;   NFT    &#9474;&#9472;&#9472;&gt;&#9474;SPIRULINA &#9474;&#9472;&#9472;&gt;&#9474; MANTAR  &#9474;   &#9474;
+&#9474;   &#9474;  15 m&sup2;   &#9474;   &#9474;  7 m&sup2;   &#9474;   &#9474; 10 m&sup2;   &#9474;   &#9474;  2 m&sup3;  &#9474;   &#9474;
+&#9474;   &#9492;&#9472;&#9472;&#9472;&#9472;&#9516;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;   &#9492;&#9472;&#9472;&#9472;&#9472;&#9516;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;   &#9492;&#9472;&#9472;&#9472;&#9472;&#9516;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;   &#9492;&#9472;&#9472;&#9472;&#9472;&#9516;&#9472;&#9472;&#9472;&#9472;&#9496;   &#9474;
+&#9474;        &#9474;               &#9474;               &#9474;              &#9474;        &#9474;
+&#9474;        &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9524;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9524;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;        &#9474;
+&#9474;                &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;                  &#9474;
+&#9474;                &#9474;  MURETTEBAT YASAM  &#9474;                  &#9474;
+&#9474;                &#9474;   6 kisi &bull; 200 m&sup3;   &#9474;                  &#9474;
+&#9474;                &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;                  &#9474;
+&#9474;                                                                   &#9474;
+&#9474;   &#9484;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9488;   &#9474;
+&#9474;   &#9474;          DIJITAL IKIZ &amp; AI KONTROL SISTEMI          &#9474;   &#9474;
+&#9474;   &#9474;      Sensor Agi &rarr; Dashboard &rarr; Otomasyon          &#9474;   &#9474;
+&#9474;   &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;   &#9474;
+&#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9496;</div>
+
+  <!-- Aeroponic -->
+  <div class="card">
+    <h3>&#127812; Aeroponik Modul &mdash; 15 m&sup2;</h3>
+    <p style="color:var(--dim);">Yuksek basincli aeroponik (80-100 PSI, 5-50 mikron damlacik). Topraksiz &mdash; kokler havada asili, besin cozeltisi sis halinde puskurtuluyor. %98 su tasarrufu, %60 gubre tasarrufu. Mikrogravitede pompa yerine basincli sprey calisir.</p>
+    <table>
+      <tr><th>Bitki</th><th>Kultivar</th><th>Dongu</th><th>kcal/100g</th><th>Protein</th><th>Verim (g/m&sup2;/gun)</th><th>Referans</th></tr>
+      <tr><td style="color:var(--text)">&#129364; Patates</td><td class="mono">Norland</td><td>105 gun</td><td>77</td><td>2.0g</td><td>20.8</td><td>CELSS BPC</td></tr>
+      <tr><td style="color:var(--text)">&#127840; Tatli Patates</td><td class="mono">Beauregard</td><td>120 gun</td><td>86</td><td>1.6g</td><td>15.0</td><td>Yuegong-1</td></tr>
+      <tr><td style="color:var(--text)">&#127806; Cuce Bugday</td><td class="mono">USU-Apogee</td><td>86 gun</td><td>340</td><td>13.2g</td><td>15.8</td><td>BIOS-3, APH PH-02</td></tr>
+      <tr><td style="color:var(--text)">&#129388; Soya Fasulyesi</td><td class="mono">Hoyt</td><td>97 gun</td><td>446</td><td>36.5g</td><td>6.9</td><td>Yuegong-1</td></tr>
+      <tr><td style="color:var(--text)">&#129372; Yer Fistigi</td><td class="mono">Pronto</td><td>100 gun</td><td>567</td><td>25.8g</td><td>5.5</td><td>CELSS aday</td></tr>
+    </table>
+  </div>
+
+  <!-- NFT -->
+  <div class="card">
+    <h3>&#129388; NFT Hidroponik Modul &mdash; 7 m&sup2;</h3>
+    <p style="color:var(--dim);">Nutrient Film Technique &mdash; ince bir besin cozeltisi filmi surekli kanallardan akiyor. Vitamin ve taze tuketim bitkileri.</p>
+    <table>
+      <tr><th>Bitki</th><th>Kultivar</th><th>Dongu</th><th>kcal/100g</th><th>Verim (g/m&sup2;/gun)</th><th>Uzay Gecmisi</th></tr>
+      <tr><td style="color:var(--text)">&#129388; Kirmizi Marul</td><td class="mono">Outredgeous</td><td>28 gun</td><td>15</td><td>11.8</td><td>ISS VEG-01 &mdash; ilk yenen bitki</td></tr>
+      <tr><td style="color:var(--text)">&#127807; Mizuna</td><td class="mono">Miz America</td><td>21 gun</td><td>21</td><td>194.0</td><td>Eden ISS en verimli</td></tr>
+      <tr><td style="color:var(--text)">&#127813; Cuce Domates</td><td class="mono">Red Robin</td><td>65 gun</td><td>18</td><td>11.4</td><td>VEGGIE VEG-05 (kayip domates!)</td></tr>
+      <tr><td style="color:var(--text)">&#127811; Ispanak</td><td class="mono">Space Spinach</td><td>25 gun</td><td>23</td><td>8.5</td><td>Yuegong-1</td></tr>
+      <tr><td style="color:var(--text)">&#127798;&#65039; Hatch Biber</td><td class="mono">NuMex Espanola</td><td>137 gun</td><td>20</td><td>4.5</td><td>APH PH-04 (space taco!)</td></tr>
+      <tr><td style="color:var(--text)">&#128205; Turp</td><td class="mono">Cherry Belle</td><td>27 gun</td><td>16</td><td>78.0</td><td>APH PH-02</td></tr>
+      <tr><td style="color:var(--text)">&#127827; Cilek</td><td class="mono">Albion</td><td>60 gun</td><td>32</td><td>3.5</td><td>Yuegong-1 tek meyve</td></tr>
+    </table>
+  </div>
+
+  <!-- Other modules -->
+  <div class="card-grid">
+    <div class="card-sm">
+      <h4 style="color:var(--accent)">&#129516; Spirulina Fotobiyoreaktor</h4>
+      <p>10 m&sup2; yuzey, 15 m&sup3; hacim. <em>Limnospira indica</em> PCC8005 (ESA MELiSSA C4a).</p>
+      <ul>
+        <li>6.0 g/m&sup2;/gun kuru biyokutle</li>
+        <li>%60-70 protein, 290 kcal/100g</li>
+        <li>1 kg biyokutle = 960 L O&#8322; uretimi</li>
+        <li>Alan basina 500x protein (sigira kiyasla)</li>
+      </ul>
+    </div>
+    <div class="card-sm">
+      <h4 style="color:var(--amber)">&#127812; Mantar Uretim Odasi</h4>
+      <p>2 m&sup3; hacim. Isik gerektirmez &mdash; enerji maliyeti sifir.</p>
+      <ul>
+        <li>714 g/gun verim, 22 kcal/100g</li>
+        <li>Bitki artiklarini substrat olarak kullanir</li>
+        <li>NASA Deep Space Food Challenge kazanani</li>
+      </ul>
+    </div>
+    <div class="card-sm">
+      <h4 style="color:var(--purple)">&#128027; Bocek Protein (Un Kurdu)</h4>
+      <p>Yuegong-1 referansi &mdash; <em>Tenebrio molitor</em>.</p>
+      <ul>
+        <li>206 kcal/100g, %25 protein</li>
+        <li>Yem donusum: 3.3:1</li>
+        <li>Yenilemeyen bitki kisimlarini donusturur</li>
+      </ul>
+    </div>
+    <div class="card-sm">
+      <h4 style="color:var(--blue)">&#128104;&zwj;&#128640; Murettebat Yasam Alani</h4>
+      <p>NASA BVAD Rev2 metabolik referanslari:</p>
+      <ul>
+        <li>O&#8322;: 630 L/kisi/gun</li>
+        <li>CO&#8322;: 550 L/kisi/gun</li>
+        <li>Su: 3.8 L/kisi/gun</li>
+        <li>Kalori: 2500 kcal/kisi/gun</li>
+        <li>Atik: 1.8 kg/kisi/gun</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ======== S4: SIMULASYON MOTORU ======== -->
+<section id="s4">
+  <div class="sec-header">
+    <div class="sec-num">Bolum 04</div>
+    <h2>Simulasyon Motoru</h2>
+    <p>5 dakikalik tick'lerle ilerleyen, 15+ alt sistemi entegre hesaplayan cekirdek motor.</p>
+  </div>
+
+  <div class="metric-row">
+    <div class="metric"><div class="val" style="color:var(--accent)">288</div><div class="lbl">Tick / Gun</div></div>
+    <div class="metric"><div class="val" style="color:var(--green)">5 dk</div><div class="lbl">Tick Suresi</div></div>
+    <div class="metric"><div class="val" style="color:var(--amber)">15+</div><div class="lbl">Alt Sistem</div></div>
+    <div class="metric"><div class="val" style="color:var(--purple)">50x</div><div class="lbl">Maks Hiz</div></div>
+  </div>
+
+  <div class="card">
+    <h3>Tick Dongusu Sirasi</h3>
+    <div class="flow-diagram" style="text-align:left; font-size:0.75rem; line-height:2.2;">
+<span style="color:var(--accent)">TICK</span> &rarr; Sensor Uretimi &rarr; Kompartman Degerlendirme &rarr; Kaynak Akisi
+  &rarr; Guc Sistemi &rarr; Isil Denge &rarr; Murettebat Metabolizmasi &rarr; Radyasyon
+  &rarr; Eser Kirleticiler (her 5 tick) &rarr; [Her 30dk: AI, Vitamin, NDVI,
+     Patojen, Su Isleme, Gorev, Moral, Bilesen Bozulma]</div>
+
+    <div class="highlight" style="margin-top:1rem;">
+      <strong>Sensor Simulatoru Formulu:</strong><br>
+      <code>deger = (baz + A&middot;sin(2&pi;&middot;saat/periyot) + Gaussian_gurultu + trend&middot;gun&middot;0.01) &times; senaryo_carpani</code><br>
+      Her sensorun kendi baz degeri, saliniim genisligi, periyodu ve gurultu seviyesi var. Gece LED PAR sifira dusuyor (<code>nightZero: true</code>).
+    </div>
+  </div>
+</section>
+
+<!-- ======== S5: BITKI BUYUME ======== -->
+<section id="s5">
+  <div class="sec-header">
+    <div class="sec-num">Bolum 05</div>
+    <h2>Bitki Buyume Modeli</h2>
+    <p>Sigmoid egri + 7 cevresel carpan + iklim recetesi + GDD + DLI entegrasyonu.</p>
+  </div>
+
+  <div class="card">
+    <h3>Sigmoid Buyume Egrisi</h3>
+    <div class="code-block">
+<span class="cm">// Lojistik buyume fonksiyonu</span>
+<span class="kw">rawYield</span> = yieldPerPlant / (<span class="nu">1</span> + e<sup>(-k &times; (gun - t_mid))</sup>)
+
+<span class="cm">// k = 8 / growthDays, t_mid = growthDays / 2</span>
+<span class="cm">// S-seklinde egri: basta yavas, ortada hizli, sona dogru yavaslar</span></div>
+
+    <h3 style="margin-top:1.5rem;">7 Cevresel Carpan</h3>
+    <table>
+      <tr><th>Carpan</th><th>Model</th><th>Agirlik</th><th>Referans</th></tr>
+      <tr><td style="color:var(--text)">Sicaklik</td><td><code>exp(-(T - T_opt)&sup2; / 2&sigma;&sup2;)</code></td><td>%25</td><td>Gaussian, &sigma;=5&deg;C</td></tr>
+      <tr><td style="color:var(--text)">Isik (PAR)</td><td><code>min(PAR/400, 1.2)</code></td><td>%15</td><td>400 &mu;mol/m&sup2;/s doyma</td></tr>
+      <tr><td style="color:var(--text)">DLI</td><td><code>actualDLI / optimalDLI</code></td><td>%15</td><td>MIT OpenAg</td></tr>
+      <tr><td style="color:var(--text)">Su</td><td>Ikili: 1.0 veya 0.3</td><td>%10</td><td>&mdash;</td></tr>
+      <tr><td style="color:var(--text)">CO&#8322;</td><td><code>min(CO2/600, 1.3)</code></td><td>%15</td><td>1000 ppm hedef</td></tr>
+      <tr><td style="color:var(--text)">Iklim Recetesi</td><td>Faz-bazli ideal kosullara yakinlik</td><td>%10</td><td>MIT OpenAg</td></tr>
+      <tr><td style="color:var(--text)">Cozunmus O&#8322;</td><td><code>DO_sat = 14.6 - 0.39T + 0.007T&sup2;</code></td><td>%10</td><td>Pythium riski &lt;4 mg/L</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>Ornek Iklim Recetesi: Patates (Norland)</h3>
+    <table>
+      <tr><th>Asama</th><th>Gun</th><th>Sicaklik</th><th>Nem</th><th>PPFD</th><th>CO&#8322;</th><th>pH</th><th>EC</th></tr>
+      <tr><td style="color:var(--text)">Cimlenme</td><td>0&ndash;10</td><td>22&deg;C</td><td>%80</td><td>0</td><td>400 ppm</td><td>5.8</td><td>0.5</td></tr>
+      <tr><td style="color:var(--text)">Fide</td><td>10&ndash;25</td><td>22&deg;C</td><td>%70</td><td>300</td><td>800</td><td>5.8</td><td>1.2</td></tr>
+      <tr><td style="color:var(--text)">Vejetatif</td><td>25&ndash;55</td><td>20&deg;C</td><td>%65</td><td>450</td><td>1000</td><td>5.8</td><td>2.0</td></tr>
+      <tr><td style="color:var(--text)">Yumru Olusumu</td><td>55&ndash;85</td><td>18&deg;C</td><td>%60</td><td>400</td><td>800</td><td>5.8</td><td>2.2</td></tr>
+      <tr><td style="color:var(--text)">Olgunlasma</td><td>85&ndash;105</td><td>16&deg;C</td><td>%55</td><td>300</td><td>600</td><td>5.8</td><td>1.8</td></tr>
+    </table>
+    <p style="margin-top:0.75rem; font-size:0.85rem; color:var(--dim);"><strong>GDD:</strong> T_taban = 7&deg;C, olgunluk GDD = 1800. <strong>DLI optimal:</strong> 18 mol/m&sup2;/gun</p>
+  </div>
+</section>
+
+<!-- ======== S6: KAYNAK AKIS ======== -->
+<section id="s6">
+  <div class="sec-header">
+    <div class="sec-num">Bolum 06</div>
+    <h2>Kaynak Akis Motoru (Kapali Dongu)</h2>
+    <p>Sistemin kalbi &mdash; O&#8322;, CO&#8322;, su, kalori, besin dongusu.</p>
+  </div>
+
+  <div class="flow-diagram" style="font-size:0.75rem;">
+<span style="color:var(--blue)">Murettebat</span> &rarr; CO&#8322; + Atik + Tuketilen O&#8322; + Tuketilen Su
+    &darr;
+<span style="color:var(--amber)">Atik Fermenter (C1)</span> &rarr; Organik asitler + NH&#8324;&#8314; + CO&#8322; + Isi
+    &darr;
+<span style="color:var(--purple)">Nitrifikasyon (C3)</span> &rarr; NO&#8323;&#8315; (bitki-hazir azot)
+    &darr;
+<span style="color:var(--green)">Bitkiler (C4b)</span> &rarr; O&#8322; + Gida + Transpire Su + Bitki Atigi
+<span style="color:var(--accent)">Spirulina (C4a)</span> &rarr; O&#8322; + Protein + CO&#8322; fiksasyonu
+<span style="color:var(--amber)">Mantar</span> &rarr; Protein (substrat: bitki atigi)
+<span style="color:var(--purple)">Un Kurdu</span> &rarr; Protein (yem: yenilemeyen bitki kisimlari)
+    &darr;
+Gida + O&#8322; &rarr; <span style="color:var(--blue)">Murettebat</span> <span style="color:var(--green)">(dongu kapandi)</span></div>
+
+  <div class="card">
+    <h3>Kapalilik Oranlari (BLSS Temel Metrigi)</h3>
+    <table>
+      <tr><th>Metrik</th><th>Hesaplama</th><th>Hedef</th><th>Referans</th></tr>
+      <tr><td style="color:var(--text)">O&#8322;</td><td><code>uretim / tuketim &times; 100</code></td><td>%100</td><td>Yuegong-1</td></tr>
+      <tr><td style="color:var(--text)">CO&#8322;</td><td><code>absorpsiyon / uretim &times; 100</code></td><td>%100</td><td>Yuegong-1</td></tr>
+      <tr><td style="color:var(--text)">Su</td><td><code>geriKazanimOrani &times; 100</code></td><td>%98</td><td>ISS ECLSS</td></tr>
+      <tr><td style="color:var(--text)">Gida</td><td><code>uretilenKcal / gerekenKcal &times; 100</code></td><td>%80</td><td>Yuegong-1</td></tr>
+      <tr><td style="color:var(--text)">Malzeme</td><td>4 oranin agirlikli ortalamasi</td><td>%98</td><td>Yuegong-1: %98.2</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ======== S7: GUC VE ISIL ======== -->
+<section id="s7">
+  <div class="sec-header">
+    <div class="sec-num">Bolum 07</div>
+    <h2>Guc Sistemi ve Isil Denge</h2>
+  </div>
+
+  <div class="card">
+    <h3>&#9889; Guc Tuketimi</h3>
+    <table>
+      <tr><th>Alt Sistem</th><th>Guc (kW)</th><th>Oncelik</th><th>Not</th></tr>
+      <tr><td style="color:var(--text)">LED Aydinlatma</td><td class="mono">18.0</td><td><span class="tag tag-amber">3</span></td><td>Kisilanabilir, toplam gucun %50'si</td></tr>
+      <tr><td style="color:var(--text)">Isil Kontrol / HVAC</td><td class="mono">6.0</td><td><span class="tag tag-red">1</span></td><td>Kritik</td></tr>
+      <tr><td style="color:var(--text)">Atmosfer Kontrolu</td><td class="mono">3.5</td><td><span class="tag tag-red">1</span></td><td>Kritik</td></tr>
+      <tr><td style="color:var(--text)">Su Isleme</td><td class="mono">2.5</td><td><span class="tag tag-amber">2</span></td><td></td></tr>
+      <tr><td style="color:var(--text)">Atik Isleme</td><td class="mono">1.5</td><td><span class="tag tag-amber">2</span></td><td></td></tr>
+      <tr><td style="color:var(--text)">Sensor / Aviyonik</td><td class="mono">1.2</td><td><span class="tag tag-red">1</span></td><td>Kritik</td></tr>
+      <tr><td style="color:var(--text)">Murettebat Destek</td><td class="mono">1.3</td><td><span class="tag tag-amber">2</span></td><td></td></tr>
+      <tr><td style="color:var(--text)"><strong>TOPLAM</strong></td><td class="mono"><strong>~34 kW</strong></td><td></td><td></td></tr>
+    </table>
+    <p style="margin-top:0.75rem; color:var(--dim); font-size:0.85rem;"><strong>LED verimlilik zinciri:</strong> %50 duvar prizi &rarr; %90 kanopi absorpsiyon &rarr; %8 fotosentez &rarr; %50 hasat indeksi = <strong>%1.8 toplam enerji&rarr;gida donusumu</strong></p>
+  </div>
+
+  <div class="card">
+    <h3>&#127777;&#65039; Isil Denge &mdash; Stefan-Boltzmann</h3>
+    <div class="code-block">
+<span class="cm">// Radyator sogutma kapasitesi</span>
+Q_rad = <span class="nu">&epsilon;</span> &times; <span class="nu">&sigma;</span> &times; A &times; (T_rad<sup>4</sup> - T_sink<sup>4</sup>) / <span class="nu">1000</span>
+
+<span class="cm">// &epsilon; = 0.88, &sigma; = 5.67&times;10&#8315;&sup8; W/(m&sup2;&middot;K&#8308;), A = 120 m&sup2;</span>
+<span class="cm">// T_sink = ~40 K (Mars gece)</span>
+<span class="cm">// Maks kapasite: 25 kW</span>
+
+<span class="cm">// Sicaklik degisimi</span>
+&Delta;T = (Q_net &times; &Delta;t) / C_thermal
+<span class="cm">// C_thermal = ~10&sup8; J/K (kabin termal kutlesi)</span></div>
+  </div>
+</section>
+
+<!-- ======== S8: ATMOSFER VE TCCS ======== -->
+<section id="s8">
+  <div class="sec-header">
+    <div class="sec-num">Bolum 08</div>
+    <h2>Atmosfer Kontrolu ve TCCS</h2>
+  </div>
+
+  <div class="card">
+    <h3>Gaz Dengesi</h3>
+    <div class="code-block">
+<span class="cm">// O&#8322; ve CO&#8322; seviyeleri hacim bazli birikim</span>
+&Delta;O&#8322;(%) = (O&#8322;_denge L/gun &times; TICK_FRACTION / <span class="nu">200000</span> L) &times; <span class="nu">100</span>
+&Delta;CO&#8322;(%) = (CO&#8322;_denge L/gun &times; TICK_FRACTION / <span class="nu">200000</span> L) &times; <span class="nu">100</span>
+
+<span class="cm">// 6 kisi: 3780 L/gun O&#8322; tuketimi &mdash; bitki+spirulina dengelemeli</span></div>
+  </div>
+
+  <div class="card">
+    <h3>Eser Kirletici Kontrol (ISS TCCS)</h3>
+    <table>
+      <tr><th>Kirletici</th><th>SMAC-180</th><th>Kaynak</th><th>Temizleme</th></tr>
+      <tr><td style="color:var(--text)">Amonyak</td><td class="mono">7.0 mg/m&sup3;</td><td>Metabolizma</td><td>%90</td></tr>
+      <tr><td style="color:var(--text)">Formaldehit</td><td class="mono">0.05 mg/m&sup3;</td><td>Polimer gaz salimi</td><td>%95</td></tr>
+      <tr><td style="color:var(--text)">Karbon Monoksit</td><td class="mono">17.0 mg/m&sup3;</td><td>Ekipman</td><td>%95</td></tr>
+      <tr><td style="color:var(--text)">Metan</td><td class="mono">3800 mg/m&sup3;</td><td>Murettebat, malzeme</td><td>%80</td></tr>
+      <tr><td style="color:var(--text)">Toplam VOC</td><td class="mono">25.0 mg/m&sup3;</td><td>Yapistiriciler, contalar</td><td>%85</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ======== S9: RADYASYON VE PATOJEN ======== -->
+<section id="s9">
+  <div class="sec-header">
+    <div class="sec-num">Bolum 09</div>
+    <h2>Radyasyon ve Patojen Modeli</h2>
+  </div>
+
+  <div class="card-grid">
+    <div class="card-sm">
+      <h4 style="color:var(--amber)">&#9762;&#65039; GCR (Kozmik Isinlar)</h4>
+      <p>Surekli, dusuk doz. Mars yuzeyinde kalkanlamayla 0.0001 Gy/gun. Suregen birikim &mdash; gorev sonunda toplam doz takibi.</p>
+    </div>
+    <div class="card-sm">
+      <h4 style="color:var(--red)">&#9889; SPE (Gunes Parcacik Olayi)</h4>
+      <p>Stokastik. Gunluk %0.3 olasilik (~yilda 1). Tetiklenince 0.05-0.5 Gy, 2-3 gun sure. Bitki buyumesi %30'a kadar yavaslayabilir.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>&#129440; Hastalik Modeli (3 Patojen)</h3>
+    <table>
+      <tr><th>Patojen</th><th>Optimum</th><th>Nem</th><th>Verim Kaybi</th><th>Tespit</th></tr>
+      <tr><td style="color:var(--text)">Kulleme</td><td>24&deg;C</td><td>%70</td><td>%30</td><td>3 gun</td></tr>
+      <tr><td style="color:var(--text)">Kok Curuklugu (Pythium)</td><td>26&deg;C</td><td>%95</td><td>%50</td><td>5 gun</td></tr>
+      <tr><td style="color:var(--text)">Kuf</td><td>22&deg;C</td><td>%85</td><td>%40</td><td>2 gun</td></tr>
+    </table>
+    <div class="highlight-amber highlight" style="margin-top:1rem;">
+      <strong>Durum Makinesi:</strong> Saglikli &rarr; Kulucka (2-5 gun) &rarr; Enfekte &rarr; Semptomatik &rarr; Agir. Moduller arasi capraz kontaminasyon modelleniyor.
+    </div>
+  </div>
+</section>
+
+<!-- ======== S10: SU VE BOZULMA ======== -->
+<section id="s10">
+  <div class="sec-header">
+    <div class="sec-num">Bolum 10</div>
+    <h2>Su Isleme ve Bilesen Bozulma</h2>
+  </div>
+
+  <div class="card">
+    <h3>&#128167; 3 Asamali Su Aritma</h3>
+    <table>
+      <tr><th>Asama</th><th>Verimlilik</th><th>Akis Payi</th><th>Yontem</th></tr>
+      <tr><td style="color:var(--text)">Kondensat Toplama</td><td class="mono">%95</td><td>%75</td><td>Transpire + nefes nemi</td></tr>
+      <tr><td style="color:var(--text)">Idrar Isleme (VCD)</td><td class="mono">%85</td><td>%20</td><td>Buhar sikistirmali damitma</td></tr>
+      <tr><td style="color:var(--text)">Son Islem</td><td class="mono">%99</td><td>%5</td><td>UV sterilizasyon + aktif karbon</td></tr>
+    </table>
+    <p style="margin-top:0.75rem; color:var(--dim); font-size:0.85rem;">Hedef: %98.7 geri kazanim (Yuegong-1). TOC &lt; 0.5 mg/L = icilebilir.</p>
+  </div>
+
+  <div class="card">
+    <h3>&#128295; Bilesen Yaslanma Modelleri</h3>
+    <table>
+      <tr><th>Bilesen</th><th>Model</th><th>Omur</th><th>Not</th></tr>
+      <tr><td style="color:var(--text)">HEPA Filtre</td><td>Lineer dusus</td><td>3 yil</td><td>Basinc dusumu artisi</td></tr>
+      <tr><td style="color:var(--text)">Karbon Yatak</td><td>Sigmoid doyma</td><td>1 yil</td><td>%70 omurde hizli dusus</td></tr>
+      <tr><td style="color:var(--text)">Su Pompasi</td><td>Weibull: R(t) = e<sup>-(t/&eta;)<sup>&beta;</sup></sup></td><td>15000 saat</td><td>&beta;=1.5 (asinma fazinda)</td></tr>
+      <tr><td style="color:var(--text)">LED Panel</td><td>Ustel: e<sup>-&alpha;t</sup></td><td>L70=35000 sa</td><td>Uzayda +%25 ceza</td></tr>
+      <tr><td style="color:var(--text)">CO&#8322; Scrubber</td><td>Lineer dusus</td><td>2 yil</td><td>Min verim %30</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ======== S11: AI ======== -->
+<section id="s11">
+  <div class="sec-header">
+    <div class="sec-num">Bolum 11</div>
+    <h2>AI Anomali Tespiti</h2>
+    <p>4 katmanli tespit + prediktif uyari + 10 tip AI oneri.</p>
+  </div>
+
+  <div class="card">
+    <h3>4 Tespit Katmani</h3>
+    <table>
+      <tr><th>Katman</th><th>Yontem</th><th>Pencere</th><th>Esik</th></tr>
+      <tr><td style="color:var(--text)">Limit Ihlali</td><td>Sabit esik kontrolu</td><td>Anlik</td><td>Uyari/Kritik sinir</td></tr>
+      <tr><td style="color:var(--text)">Spike Tespiti</td><td>Ortalamadan sapma</td><td>Son 30 olcum</td><td>&gt;%50 sapma</td></tr>
+      <tr><td style="color:var(--text)">Degisim Hizi</td><td>Normalize edilmis oran</td><td>Son 6 olcum</td><td>&gt;%30/tick</td></tr>
+      <tr><td style="color:var(--text)">Prediktif Uyari</td><td>Lineer regresyon &rarr; 6 saat ileri</td><td>Son 15 olcum</td><td>Kritik siniri asacak mi?</td></tr>
+    </table>
+    <div class="code-block" style="margin-top:1rem;">
+<span class="cm">// Lineer regresyon tahmin</span>
+slope = (n&middot;&Sigma;(i&middot;y[i]) - &Sigma;i&middot;&Sigma;y) / (n&middot;&Sigma;i&sup2; - (&Sigma;i)&sup2;)
+tahmin = intercept + slope &times; (mevcut + <span class="nu">72</span> tick)</div>
+  </div>
+</section>
+
+<!-- ======== S12: UI ======== -->
+<section id="s12">
+  <div class="sec-header">
+    <div class="sec-num">Bolum 12</div>
+    <h2>Kullanici Arayuzu</h2>
+    <p>8 sayfalik dashboard, Three.js dijital ikiz, gercek zamanli grafikler.</p>
+  </div>
+
+  <div class="card-grid">
+    <div class="card-sm"><h4>&#128202; Genel Bakis</h4><p>MELiSSA kapali dongu diyagrami (animasyonlu SVG), kapalilik oranlari, &ldquo;Ne oluyor?&rdquo; narratif panel.</p></div>
+    <div class="card-sm"><h4>&#127758; Ciftlik Gorunumu</h4><p>5 uretim bolgesinin grid haritasi, canli sensor verileri, NDVI ve patojen durumu.</p></div>
+    <div class="card-sm"><h4>&#127793; Buyume Monitoru</h4><p>Modul bazli detayli sensorler, iklim recetesi asamasi, NDVI heatmap, zaman serisi grafikleri.</p></div>
+    <div class="card-sm"><h4>&#129386; Beslenme</h4><p>Kalori gauge, makro dagilim, vitamin/mineral, murettebat bazinda dagilim, dinamik menu.</p></div>
+    <div class="card-sm"><h4>&#9889; Guc ve Enerji</h4><p>Guc dagilimi pie chart, alt sistem tuketimi, isil denge, bilesen sagligi.</p></div>
+    <div class="card-sm"><h4>&#128640; Gorev Kontrol</h4><p>Gorev zaman cizelgesi, murettebat aktiviteleri, moral, TCCS, radyasyon, su isleme.</p></div>
+    <div class="card-sm"><h4>&#128230; Dijital Ikiz</h4><p>Three.js 3D habitat modeli, SVG sistem semasi, what-if senaryolar.</p></div>
+    <div class="card-sm"><h4>&#129302; AI Tahmin</h4><p>Saglik skoru, hasat tahmini, anomali zaman cizelgesi, kaynak projeksiyonu.</p></div>
+  </div>
+</section>
+
+<!-- ======== S13: SENARYO ======== -->
+<section id="s13">
+  <div class="sec-header">
+    <div class="sec-num">Bolum 13</div>
+    <h2>What-If Senaryo Motoru</h2>
+    <p>Gercek uzay arizalarina dayanan 6 test senaryosu.</p>
+  </div>
+
+  <div class="card">
+    <table>
+      <tr><th>Senaryo</th><th>Referans</th><th>Etki</th><th>Sure</th></tr>
+      <tr><td style="color:var(--text)">&#128161; LED Panel Arizasi</td><td>Eden ISS LED sogutma</td><td>PAR %50 dusus</td><td>14 gun</td></tr>
+      <tr><td style="color:var(--text)">&#128167; Su Kacagi</td><td>ISS su geri kazanim</td><td>Geri kazanim %78</td><td>7 gun</td></tr>
+      <tr><td style="color:var(--text)">&#127787;&#65039; CO&#8322; Yukselisi</td><td>ISS scrubber arizasi</td><td>CO&#8322; 1.8x artis</td><td>3 gun</td></tr>
+      <tr><td style="color:var(--text)">&#129516; Spirulina Cokusu</td><td>MELiSSA kontaminasyon</td><td>Yogunluk %10</td><td>21 gun</td></tr>
+      <tr><td style="color:var(--text)">&#128104;&zwj;&#128640; Murettebat Artisi</td><td>Acil durum</td><td>8 kisiye cikar</td><td>30 gun</td></tr>
+      <tr><td style="color:var(--text)">&#9879;&#65039; Etilen Birikimi</td><td>APH scrubber</td><td>Etilen 3x</td><td>10 gun</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ======== S14: VERI AKIS ======== -->
+<section id="s14">
+  <div class="sec-header">
+    <div class="sec-num">Bolum 14</div>
+    <h2>Veri Akis Mimarisi</h2>
+  </div>
+
+  <div class="flow-diagram" style="font-size:0.72rem; text-align:left;">
+<span style="color:var(--amber)">constants.js</span> (tum bilimsel sabitler)
+      |
+<span style="color:var(--accent)">sensorSimulator.js</span> &rarr; sensor degerleri uretir
+      |
+<span style="color:var(--green)">useSimulation.js</span> (ana dongu) &rarr; her tick'te tum modulleri cagirir
+      |
+      +&rarr; <span style="color:var(--green)">plantGrowthModel.js</span>  &rarr; buyume + verim + kalori
+      +&rarr; <span style="color:var(--green)">resourceFlowEngine.js</span> &rarr; O&#8322;/CO&#8322;/su/kalori dengesi
+      +&rarr; <span style="color:var(--amber)">powerSystem.js</span>       &rarr; guc dengesi
+      +&rarr; <span style="color:var(--amber)">thermalSystem.js</span>     &rarr; isil denge
+      +&rarr; <span style="color:var(--red)">degradationModel.js</span>  &rarr; bilesen yaslanma
+      +&rarr; <span style="color:var(--green)">ndviModel.js</span>         &rarr; bitki sagligi
+      +&rarr; <span style="color:var(--red)">pathogenModel.js</span>     &rarr; hastalik yayilmasi
+      +&rarr; <span style="color:var(--purple)">traceContaminants.js</span> &rarr; eser kirletici birikim
+      +&rarr; <span style="color:var(--amber)">radiationModel.js</span>    &rarr; radyasyon dozu
+      +&rarr; <span style="color:var(--blue)">waterProcessing.js</span>   &rarr; su aritma
+      +&rarr; <span style="color:var(--blue)">crewActivityModel.js</span> &rarr; murettebat metabolizmasi
+      +&rarr; <span style="color:var(--purple)">moraleSystem.js</span>      &rarr; psikolojik durum
+      +&rarr; <span style="color:var(--blue)">missionPlanner.js</span>    &rarr; gorev fazi + stok gida
+      +&rarr; <span style="color:var(--accent)">anomalyDetector.js</span>   &rarr; AI tespit + oneriler
+      |
+<span style="color:var(--accent)">GenesisContext.jsx</span> (global state) &rarr; dispatch &rarr; React re-render
+      |
+<span style="color:var(--text)">8 sayfa bileseni</span> &rarr; kullanici arayuzu</div>
+
+  <div class="highlight-green highlight" style="margin-top:2rem;">
+    <strong>Sistemin en guclu yani:</strong> Tek bir parametre yerine, tum dongununun sagligini izliyor. Bir LED bozulmasi sadece isigi degil, buyumeyi, kalori uretimini, O&#8322; dengesini, morali ve sonucta gorev basarisini etkiliyor. Bu kaskat etki, gercek BLSS tasariminin en buyuk zorlugu &mdash; ve Genesis onu simule edebiliyor.
+  </div>
+</section>
+
+</div>
+
+<!-- ======== FOOTER ======== -->
+<footer>
+  <div class="logo">GENESIS</div>
+  <p>Kapali Dongu Uzay Tarimi Yasam Destek Sistemi Simulatoru</p>
+  <p style="margin-top:0.5rem;">TUA Astro Hackathon Bursa &bull; 28&ndash;29 Mart 2026</p>
+  <p style="margin-top:1rem; font-size:0.7rem;">
+    NASA VEGGIE/APH &bull; ESA MELiSSA &bull; BIOS-3 &bull; Yuegong-1 &bull; Eden ISS &bull; NASA CELSS BPC
+  </p>
+</footer>
+
+<script>
+// Generate decorative stars
+const starsEl = document.getElementById('stars');
+for (let i = 0; i < 120; i++) {
+  const star = document.createElement('div');
+  star.className = 'star';
+  star.style.left = Math.random() * 100 + '%';
+  star.style.top = Math.random() * 100 + '%';
+  star.style.animationDelay = Math.random() * 3 + 's';
+  star.style.animationDuration = (2 + Math.random() * 3) + 's';
+  if (Math.random() > 0.7) {
+    star.style.width = '3px';
+    star.style.height = '3px';
+  }
+  starsEl.appendChild(star);
+}
+</script>
+</body>
+</html>

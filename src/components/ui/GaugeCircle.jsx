@@ -1,68 +1,46 @@
-export default function GaugeCircle({ value, min, max, label, unit, size = 120, warningThresholds }) {
+import React from 'react';
+
+const GaugeCircle = React.memo(function GaugeCircle({ value, min, max, label, unit, size = 120, warningThresholds }) {
   const radius = (size - 16) / 2;
   const circumference = 2 * Math.PI * radius;
   const normalizedValue = Math.min(1, Math.max(0, (value - min) / (max - min)));
   const strokeDashoffset = circumference * (1 - normalizedValue * 0.75); // 270 deg arc
 
   // Color determination
-  let color = '#00ff88';
+  let color = '#4ead5b';
   if (warningThresholds) {
     if (value < warningThresholds.critical?.[0] || value > warningThresholds.critical?.[1]) {
-      color = '#ff4466';
+      color = '#d45555';
     } else if (value < warningThresholds.warning?.[0] || value > warningThresholds.warning?.[1]) {
-      color = '#ff8800';
+      color = '#d4903a';
     }
   } else {
-    if (normalizedValue > 0.85 || normalizedValue < 0.15) color = '#ff4466';
-    else if (normalizedValue > 0.7 || normalizedValue < 0.25) color = '#ff8800';
+    if (normalizedValue > 0.85 || normalizedValue < 0.15) color = '#d45555';
+    else if (normalizedValue > 0.7 || normalizedValue < 0.25) color = '#d4903a';
   }
 
-  const glowId = `glow-${label?.replace(/\s/g, '')}-${size}`;
-
   return (
-    <div className="flex flex-col items-center group">
-      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
-        <defs>
-          <filter id={glowId}>
-            <feGaussianBlur stdDeviation="2" result="blur" />
-            <feMerge>
-              <feMergeNode in="blur" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
-        </defs>
-
+    <div className="flex flex-col items-center">
+      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} role="img" aria-label={`${label}: ${value} ${unit}`}>
         {/* Background arc */}
         <circle
           cx={size / 2} cy={size / 2} r={radius}
-          fill="none" stroke="#1a1f36" strokeWidth="8"
+          fill="none" stroke="#22242c" strokeWidth="6"
           strokeDasharray={`${circumference * 0.75} ${circumference * 0.25}`}
           strokeDashoffset={0}
           strokeLinecap="round"
           transform={`rotate(135 ${size / 2} ${size / 2})`}
         />
 
-        {/* Glow layer */}
-        <circle
-          cx={size / 2} cy={size / 2} r={radius}
-          fill="none" stroke={color} strokeWidth="12" opacity="0.08"
-          strokeDasharray={`${circumference * 0.75} ${circumference * 0.25}`}
-          strokeDashoffset={strokeDashoffset}
-          strokeLinecap="round"
-          transform={`rotate(135 ${size / 2} ${size / 2})`}
-          style={{ transition: 'stroke-dashoffset 0.8s ease, stroke 0.3s ease' }}
-        />
-
         {/* Value arc */}
         <circle
           cx={size / 2} cy={size / 2} r={radius}
-          fill="none" stroke={color} strokeWidth="8"
+          fill="none" stroke={color} strokeWidth="6"
           strokeDasharray={`${circumference * 0.75} ${circumference * 0.25}`}
           strokeDashoffset={strokeDashoffset}
           strokeLinecap="round"
           transform={`rotate(135 ${size / 2} ${size / 2})`}
-          style={{ transition: 'stroke-dashoffset 0.8s ease, stroke 0.3s ease' }}
-          filter={`url(#${glowId})`}
+          style={{ transition: 'stroke-dashoffset 0.6s ease, stroke 0.3s ease' }}
         />
 
         {/* Tick marks */}
@@ -74,7 +52,7 @@ export default function GaugeCircle({ value, min, max, label, unit, size = 120, 
           const x2 = size / 2 + (radius + 7) * Math.cos(rad);
           const y2 = size / 2 + (radius + 7) * Math.sin(rad);
           return (
-            <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} stroke="#2a3154" strokeWidth="1" />
+            <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} stroke="#2a2c35" strokeWidth="1" />
           );
         })}
 
@@ -82,7 +60,7 @@ export default function GaugeCircle({ value, min, max, label, unit, size = 120, 
         <text
           x={size / 2} y={size / 2 - 4}
           textAnchor="middle"
-          className="font-mono font-bold"
+          className="font-mono font-semibold"
           style={{ fill: color, fontSize: size * 0.18 }}
         >
           {typeof value === 'number' ? value.toFixed(1) : value}
@@ -90,12 +68,14 @@ export default function GaugeCircle({ value, min, max, label, unit, size = 120, 
         <text
           x={size / 2} y={size / 2 + 14}
           textAnchor="middle"
-          style={{ fill: '#94a3b8', fontSize: size * 0.1 }}
+          style={{ fill: '#6c6e78', fontSize: size * 0.1 }}
         >
           {unit}
         </text>
       </svg>
-      <span className="text-xs text-nexus-text-dim mt-1">{label}</span>
+      <span className="text-[11px] text-nexus-text-dim mt-1">{label}</span>
     </div>
   );
-}
+});
+
+export default GaugeCircle;

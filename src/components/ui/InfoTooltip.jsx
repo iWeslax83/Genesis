@@ -1,20 +1,21 @@
 import { useState, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { FiInfo } from 'react-icons/fi';
 
 // Plain-language explanations for scientific metrics
 const METRIC_GLOSSARY = {
   // Environmental
   co2: {
-    title: 'CO₂ (Karbondioksit)',
-    desc: 'Mürettebat nefes aldığında CO₂ üretir. Bitkiler bu CO₂\'yi emerek oksijen üretir. Dengede olması hayati önem taşır.',
+    title: 'CO2 (Karbondioksit)',
+    desc: 'Mürettebat nefes aldığında CO2 üretir. Bitkiler bu CO2\'yi emerek oksijen üretir. Dengede olması hayati önem taşır.',
   },
   o2: {
-    title: 'O₂ (Oksijen)',
+    title: 'O2 (Oksijen)',
     desc: 'Mürettebatın nefes alması için gereken gaz. Bitkiler ve spirulina fotosentezle oksijen üretir.',
   },
   par: {
     title: 'PAR (Fotosentetik Aktif Işık)',
-    desc: 'Bitkilerin fotosentez için kullandığı ışık miktarı. LED paneller bu ışığı sağlar. Birimi: µmol/m²/s.',
+    desc: 'Bitkilerin fotosentez için kullandığı ışık miktarı. LED paneller bu ışığı sağlar. Birimi: µmol/m2/s.',
   },
   ndvi: {
     title: 'NDVI (Bitki Sağlık İndeksi)',
@@ -25,7 +26,7 @@ const METRIC_GLOSSARY = {
     desc: 'Suda çözünmüş besin miktarını ölçer. Çok düşükse bitkiler aç kalır, çok yüksekse kökleri yanar.',
   },
   ph: {
-    title: 'pH (Asitlik/Bazlık)',
+    title: 'pH (Asitlik/Bazlik)',
     desc: 'Besin çözeltisinin asitlik seviyesi. Çoğu bitki 5.5-6.5 aralığında en iyi besin alımını yapar.',
   },
   dli: {
@@ -37,7 +38,7 @@ const METRIC_GLOSSARY = {
     desc: 'Bitkinin ne kadar ısı biriktirdiğini ölçer. Her bitki olgunlaşmak için belirli bir GDD\'ye ulaşmalıdır.',
   },
   vpd: {
-    title: 'VPD (Buhar Basıncı Açığı)',
+    title: 'VPD (Buhar Basinci Acigi)',
     desc: 'Hava ile yaprak arasındaki nem farkı. Doğru VPD bitkinin su alımını ve büyümesini optimize eder.',
   },
 
@@ -58,7 +59,7 @@ const METRIC_GLOSSARY = {
   // Systems
   blss: {
     title: 'BLSS (Biyorejeneratif Yaşam Destek)',
-    desc: 'Bitki, alg ve mikroplarla hava, su ve gıda döngüsü sağlayan sistem. Uzun s��reli uzay görevleri için şart.',
+    desc: 'Bitki, alg ve mikroplarla hava, su ve gıda döngüsü sağlayan sistem. Uzun süreli uzay görevleri için şart.',
   },
   melissa: {
     title: 'MELiSSA Protokolü',
@@ -73,7 +74,7 @@ const METRIC_GLOSSARY = {
     desc: 'Bitki köklerini havada asılı tutup besin çözeltisi püskürten sistem. Toprak yok, %95 daha az su kullanır.',
   },
   nft: {
-    title: 'NFT (Besin Filmi Tekni��i)',
+    title: 'NFT (Besin Filmi Tekniği)',
     desc: 'İnce bir besin çözeltisi tabakası üzerinde bitki yetiştirme. Yapraklı sebzeler için ideal.',
   },
 
@@ -88,10 +89,6 @@ const METRIC_GLOSSARY = {
   },
 
   // Crew
-  morale: {
-    title: 'Mürettebat Morali',
-    desc: 'Ekibin psikolojik durumu. Taze gıda çeşitliliği, uyku düzeni ve iş yükü morali etkiler.',
-  },
   radiation: {
     title: 'Radyasyon',
     desc: 'Uzayda kozmik ışınlara maruz kalım. Yüksek dozlar bitki büyümesini yavaşlatır ve sağlık riski oluşturur.',
@@ -112,6 +109,42 @@ const METRIC_GLOSSARY = {
 
 export function getMetricInfo(key) {
   return METRIC_GLOSSARY[key] || null;
+}
+
+function TooltipPortal({ anchorRef, info, onClose }) {
+  const [pos, setPos] = useState(null);
+
+  useEffect(() => {
+    if (!anchorRef.current) return;
+    const rect = anchorRef.current.getBoundingClientRect();
+    setPos({
+      top: rect.top - 8,
+      left: rect.left + rect.width / 2,
+    });
+  }, [anchorRef]);
+
+  if (!pos) return null;
+
+  return createPortal(
+    <div
+      className="fixed animate-fade-in"
+      style={{
+        top: pos.top,
+        left: pos.left,
+        transform: 'translate(-50%, -100%)',
+        zIndex: 99999,
+      }}
+      onMouseEnter={(e) => e.stopPropagation()}
+      onMouseLeave={onClose}
+    >
+      <div className="bg-nexus-card border border-nexus-border rounded-lg px-3 py-2 shadow-xl shadow-black/50 w-56">
+        <div className="text-[11px] font-semibold text-nexus-accent mb-1">{info.title}</div>
+        <div className="text-[10px] text-nexus-text-dim leading-relaxed">{info.desc}</div>
+      </div>
+      <div className="w-2 h-2 bg-nexus-card border-b border-r border-nexus-border rotate-45 absolute left-1/2 -translate-x-1/2 -bottom-1" />
+    </div>,
+    document.body
+  );
 }
 
 export default function InfoTooltip({ metricKey, size = 12, className = '' }) {
@@ -141,15 +174,7 @@ export default function InfoTooltip({ metricKey, size = 12, className = '' }) {
       >
         <FiInfo size={size} />
       </button>
-      {open && (
-        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 z-[100] animate-fade-in pointer-events-none">
-          <div className="bg-nexus-card border border-nexus-accent/30 rounded-lg px-3 py-2 shadow-xl shadow-black/40 w-56">
-            <div className="text-[11px] font-bold text-nexus-accent mb-1">{info.title}</div>
-            <div className="text-[10px] text-nexus-text-dim leading-relaxed">{info.desc}</div>
-          </div>
-          <div className="w-2 h-2 bg-nexus-card border-b border-r border-nexus-accent/30 rotate-45 absolute left-1/2 -translate-x-1/2 -bottom-1" />
-        </div>
-      )}
+      {open && <TooltipPortal anchorRef={ref} info={info} onClose={() => setOpen(false)} />}
     </span>
   );
 }

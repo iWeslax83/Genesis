@@ -6,7 +6,7 @@ const SPEED_OPTIONS = [1, 5, 10, 50];
 
 export default function TopBar() {
   const { state, dispatch } = useGenesis();
-  const { time, resources, ai, scenario, power, compartments, morale } = state;
+  const { time, resources, ai, scenario, power, compartments } = state;
   const anomalyCount = ai.anomalies.filter(a => a.severity === 'critical').length;
   const healthScore = resources.healthScore ?? 94;
   const isDaytime = time.hour >= 6 && time.hour < 22;
@@ -14,36 +14,33 @@ export default function TopBar() {
   const co2 = compartments?.habitat?.co2Level || 0.04;
 
   return (
-    <header className="h-11 bg-nexus-card/80 backdrop-blur-sm border-b border-nexus-border flex items-center justify-between px-4 gap-3">
+    <header className="h-11 bg-nexus-card border-b border-nexus-border flex items-center justify-between px-4 gap-3">
       {/* Left: Health + Alerts */}
       <div className="flex items-center gap-3 min-w-0">
         <div className="flex items-center gap-1.5 tooltip-trigger relative">
           <div className={`w-2 h-2 rounded-full ${
             healthScore > 80 ? 'bg-emerald-500' : healthScore > 50 ? 'bg-amber-500' : 'bg-red-500'
-          } animate-pulse`} />
+          }`} />
           <span className="text-xs font-mono">
-            <span className={`font-bold ${
+            <span className={`font-semibold ${
               healthScore > 80 ? 'text-emerald-400' : healthScore > 50 ? 'text-amber-400' : 'text-red-400'
             }`}>{healthScore}</span>
             <span className="text-nexus-text-dim">/100</span>
           </span>
-          <div className="tooltip-content absolute top-full left-0 mt-1 z-50 bg-nexus-card border border-nexus-border rounded-lg px-2 py-1 text-[10px] text-nexus-text-dim whitespace-nowrap">
+          <div className="tooltip-content absolute top-full left-0 mt-1 z-50 bg-nexus-card border border-nexus-border rounded-md px-2 py-1 text-[10px] text-nexus-text-dim whitespace-nowrap">
             Sistem Sağlık Skoru
           </div>
         </div>
 
         {/* Quick resource pills */}
         <div className="hidden xl:flex items-center gap-2">
-          <QuickPill icon={<FiWind size={10} />} value={`${o2.toFixed(1)}%`} color={o2 > 19.5 ? '#22c55e' : '#ef4444'} label="O2" />
-          <QuickPill icon={<FiDroplet size={10} />} value={`${co2.toFixed(2)}%`} color={co2 < 0.08 ? '#22c55e' : '#f59e0b'} label="CO2" />
-          <QuickPill icon={<FiZap size={10} />} value={`${power?.utilizationPercent?.toFixed(0)}%`} color={power?.powerDeficit ? '#ef4444' : '#22c55e'} label="Güç" />
-          {morale && (
-            <QuickPill icon={<span className="text-[10px]">😊</span>} value={`${morale.score?.toFixed(0)}`} color={morale.score > 60 ? '#22c55e' : '#f59e0b'} label="Moral" />
-          )}
+          <QuickPill icon={<FiWind size={10} />} value={`${o2.toFixed(1)}%`} color={o2 > 19.5 ? '#4ead5b' : '#d45555'} label="O2" />
+          <QuickPill icon={<FiDroplet size={10} />} value={`${co2.toFixed(2)}%`} color={co2 < 0.08 ? '#4ead5b' : '#d4903a'} label="CO2" />
+          <QuickPill icon={<FiZap size={10} />} value={`${power?.utilizationPercent?.toFixed(0)}%`} color={power?.powerDeficit ? '#d45555' : '#4ead5b'} label="Güç" />
         </div>
 
         {anomalyCount > 0 && (
-          <div className="flex items-center gap-1 text-red-400 text-xs animate-blink">
+          <div className="flex items-center gap-1 text-red-400 text-xs">
             <FiAlertTriangle size={12} />
             <span className="font-medium">{anomalyCount} Kritik</span>
           </div>
@@ -54,11 +51,11 @@ export default function TopBar() {
       <div className="flex items-center gap-3">
         <div className="flex items-center gap-2 text-xs font-mono">
           <FiClock size={12} className="text-nexus-text-dim" />
-          <span className="text-nexus-accent font-bold">Gün {time.day}</span>
+          <span className="text-nexus-text font-semibold">Gün {time.day}</span>
           <span className="text-nexus-border">|</span>
-          <span className="text-nexus-text font-bold">{formatTime(time.hour, time.minute)}</span>
+          <span className="text-nexus-text">{formatTime(time.hour, time.minute)}</span>
           <div className={`flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] ${
-            isDaytime ? 'bg-yellow-500/10 text-yellow-400' : 'bg-indigo-500/10 text-indigo-400'
+            isDaytime ? 'bg-amber-500/15 text-amber-400' : 'bg-indigo-500/15 text-indigo-400'
           }`}>
             {isDaytime ? <FiSun size={10} /> : <FiMoon size={10} />}
             <span>{isDaytime ? 'LED' : 'Gece'}</span>
@@ -66,7 +63,7 @@ export default function TopBar() {
         </div>
         {scenario.active && (
           <div className="flex items-center gap-1 px-2 py-0.5 rounded bg-red-500/10 text-red-400 text-[10px] font-mono">
-            <span className="animate-blink">!</span>
+            <FiAlertTriangle size={9} />
             <span>Senaryo</span>
           </div>
         )}
@@ -75,14 +72,14 @@ export default function TopBar() {
       {/* Right: Speed + Play/Pause + Shortcuts */}
       <div className="flex items-center gap-2">
         {/* Speed controls */}
-        <div className="flex items-center gap-0.5 bg-nexus-bg rounded-lg p-0.5">
+        <div className="flex items-center gap-0.5 bg-nexus-bg rounded-md p-0.5">
           {SPEED_OPTIONS.map((spd) => (
             <button
               key={spd}
               onClick={() => dispatch({ type: 'SET_SPEED', payload: spd })}
-              className={`px-1.5 py-0.5 rounded text-[11px] font-mono transition-all ${
+              className={`px-1.5 py-0.5 rounded text-[11px] font-mono transition-colors ${
                 time.speed === spd
-                  ? 'bg-nexus-accent text-nexus-bg font-bold'
+                  ? 'bg-nexus-accent text-white font-semibold'
                   : 'text-nexus-text-dim hover:text-nexus-text'
               }`}
               title={`${spd}x hız (+ / - tuşları)`}
@@ -95,10 +92,10 @@ export default function TopBar() {
         {/* Play/Pause */}
         <button
           onClick={() => dispatch({ type: 'TOGGLE_SIMULATION' })}
-          className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all ${
+          className={`w-7 h-7 rounded-md flex items-center justify-center transition-colors ${
             time.isRunning
-              ? 'bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30'
-              : 'bg-amber-500/20 text-amber-400 hover:bg-amber-500/30'
+              ? 'bg-emerald-500/15 text-emerald-400 hover:bg-emerald-500/25'
+              : 'bg-amber-500/15 text-amber-400 hover:bg-amber-500/25'
           }`}
           title={`${time.isRunning ? 'Durdur' : 'Başlat'} (Space)`}
         >
@@ -114,7 +111,7 @@ export default function TopBar() {
               document.documentElement.requestFullscreen();
             }
           }}
-          className="w-7 h-7 rounded-lg flex items-center justify-center bg-nexus-bg text-nexus-text-dim hover:text-nexus-text transition-all"
+          className="w-7 h-7 rounded-md flex items-center justify-center bg-nexus-bg text-nexus-text-dim hover:text-nexus-text transition-colors"
           title="Tam ekran (F)"
         >
           <FiMaximize size={12} />
@@ -123,7 +120,7 @@ export default function TopBar() {
         {/* Keyboard shortcut hint */}
         <button
           onClick={() => window.dispatchEvent(new KeyboardEvent('keydown', { key: '?' }))}
-          className="hidden lg:flex items-center gap-1 px-1.5 py-0.5 rounded bg-nexus-bg text-nexus-text-dim hover:text-nexus-accent text-[10px] font-mono transition-all"
+          className="hidden lg:flex items-center gap-1 px-1.5 py-0.5 rounded bg-nexus-bg text-nexus-text-dim hover:text-nexus-text text-[10px] font-mono transition-colors"
           title="Klavye kısayolları"
         >
           <FiCommand size={10} />
