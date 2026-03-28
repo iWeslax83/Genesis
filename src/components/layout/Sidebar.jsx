@@ -1,22 +1,23 @@
 import { useGenesis } from '../../context/GenesisContext';
 import { FiGrid, FiActivity, FiBox, FiCpu, FiHeart, FiZap, FiMap, FiEye, FiChevronLeft, FiChevronRight, FiDownload } from 'react-icons/fi';
 import { exportSimulationJSON, exportSensorHistoryCSV, generateReport } from '../../utils/exportData';
+import { TourResetButton } from '../ui/OnboardingTour';
 import { useState } from 'react';
 
 const NAV_ITEMS = [
-  { id: 'overview', label: 'Genel Bakis', icon: FiGrid, group: 'ana', key: '1' },
-  { id: 'farm-view', label: 'Tesis Haritasi', icon: FiMap, group: 'ana', key: '2' },
-  { id: 'growth', label: 'Bitki Izleme', icon: FiActivity, group: 'izleme', key: '3' },
+  { id: 'overview', label: 'Genel Bakış', icon: FiGrid, group: 'ana', key: '1' },
+  { id: 'farm-view', label: 'Tesis Haritası', icon: FiMap, group: 'ana', key: '2' },
+  { id: 'growth', label: 'Bitki İzleme', icon: FiActivity, group: 'izleme', key: '3' },
   { id: 'nutrition', label: 'Beslenme', icon: FiHeart, group: 'izleme', key: '4' },
-  { id: 'power', label: 'Guc & Enerji', icon: FiZap, group: 'sistem', key: '5' },
-  { id: 'mission', label: 'Gorev Planlama', icon: FiEye, group: 'sistem', key: '6' },
-  { id: 'digital-twin', label: 'Dijital Ikiz', icon: FiBox, group: 'analiz', key: '7' },
+  { id: 'power', label: 'Güç & Enerji', icon: FiZap, group: 'sistem', key: '5' },
+  { id: 'mission', label: 'Görev Planlama', icon: FiEye, group: 'sistem', key: '6' },
+  { id: 'digital-twin', label: 'Dijital İkiz', icon: FiBox, group: 'analiz', key: '7' },
   { id: 'ai', label: 'AI Tahmin', icon: FiCpu, group: 'analiz', key: '8' },
 ];
 
 const GROUP_LABELS = {
   ana: 'Ana Panel',
-  izleme: 'Izleme',
+  izleme: 'İzleme',
   sistem: 'Sistem',
   analiz: 'Analiz',
 };
@@ -79,7 +80,7 @@ export default function Sidebar() {
           {!collapsed && (
             <div className="min-w-0">
               <h1 className="text-sm font-bold genesis-gradient-text leading-tight">GENESIS</h1>
-              <p className="text-[9px] text-nexus-text-dim truncate">Uzay Tarimi Yasam Destek</p>
+              <p className="text-[9px] text-nexus-text-dim truncate">Uzay Tarımı Yaşam Destek</p>
             </div>
           )}
         </div>
@@ -88,11 +89,11 @@ export default function Sidebar() {
         {!collapsed && (
           <div className="mt-3 grid grid-cols-2 gap-1.5">
             <div className="bg-nexus-bg rounded-md px-2 py-1">
-              <div className="text-[8px] text-nexus-text-dim uppercase">Gun</div>
+              <div className="text-[8px] text-nexus-text-dim uppercase">Gün</div>
               <div className="text-xs font-mono font-bold text-nexus-accent">{state.time.day}</div>
             </div>
             <div className="bg-nexus-bg rounded-md px-2 py-1">
-              <div className="text-[8px] text-nexus-text-dim uppercase">Saglik</div>
+              <div className="text-[8px] text-nexus-text-dim uppercase">Sağlık</div>
               <div className="text-xs font-mono font-bold text-emerald-400">{state.resources?.healthScore ?? 94}</div>
             </div>
           </div>
@@ -161,8 +162,11 @@ export default function Sidebar() {
         })}
       </nav>
 
-      {/* Bottom: Export + Mission progress + collapse */}
+      {/* Bottom: Tour + Export + Mission progress + collapse */}
       <div className="border-t border-nexus-border p-2.5 space-y-2">
+        {/* Tour reset button */}
+        {!collapsed && <TourResetButton />}
+
         {/* Export button */}
         {!collapsed && (
           <div className="relative">
@@ -179,19 +183,19 @@ export default function Sidebar() {
                   onClick={() => { generateReport(state); setShowExport(false); }}
                   className="w-full text-left px-2 py-1.5 rounded text-[11px] text-nexus-text-dim hover:bg-nexus-bg hover:text-nexus-text transition-colors"
                 >
-                  📄 Rapor Olustur (.txt)
+                  📄 Rapor Oluştur (.txt)
                 </button>
                 <button
                   onClick={() => { exportSimulationJSON(state); setShowExport(false); }}
                   className="w-full text-left px-2 py-1.5 rounded text-[11px] text-nexus-text-dim hover:bg-nexus-bg hover:text-nexus-text transition-colors"
                 >
-                  📊 Simulasyon Verisi (.json)
+                  📊 Simülasyon Verisi (.json)
                 </button>
                 <button
                   onClick={() => { exportSensorHistoryCSV(state); setShowExport(false); }}
                   className="w-full text-left px-2 py-1.5 rounded text-[11px] text-nexus-text-dim hover:bg-nexus-bg hover:text-nexus-text transition-colors"
                 >
-                  📈 Sensor Gecmisi (.csv)
+                  📈 Sensör Geçmişi (.csv)
                 </button>
               </div>
             )}
@@ -201,7 +205,7 @@ export default function Sidebar() {
         {!collapsed && (
           <div>
             <div className="flex justify-between text-[9px] text-nexus-text-dim mb-1">
-              <span>Gorev Ilerlemesi</span>
+              <span>Görev İlerlemesi</span>
               <span className="font-mono">%{(state.mission?.missionProgress || 0).toFixed(1)}</span>
             </div>
             <div className="h-1 bg-nexus-bg rounded-full overflow-hidden">
@@ -211,7 +215,7 @@ export default function Sidebar() {
               />
             </div>
             <div className="text-[8px] text-nexus-text-dim/50 mt-0.5">
-              {state.mission?.missionDay || state.time.day} / {state.mission?.totalMissionDays || 980} gun
+              {state.mission?.missionDay || state.time.day} / {state.mission?.totalMissionDays || 980} gün
             </div>
           </div>
         )}
@@ -219,7 +223,7 @@ export default function Sidebar() {
         <button
           onClick={() => dispatch({ type: 'TOGGLE_SIDEBAR' })}
           className="w-full flex items-center justify-center gap-1.5 py-1.5 rounded-md text-xs text-nexus-text-dim hover:text-nexus-accent hover:bg-nexus-bg/50 transition-colors"
-          title="Daralt/Genislet (B)"
+          title="Daralt/Genişlet (B)"
         >
           {collapsed ? <FiChevronRight size={14} /> : <><FiChevronLeft size={14} /> <span>Daralt</span></>}
         </button>

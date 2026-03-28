@@ -57,12 +57,12 @@ function MacroBreakdown({ protein, carbs, fat }) {
   const data = [
     { name: 'Protein', value: protein, kcal: protein * 4, color: '#06b6d4' },
     { name: 'Karbonhidrat', value: carbs, kcal: carbs * 4, color: '#ff8800' },
-    { name: 'Yag', value: fat, kcal: fat * 9, color: '#a855f7' },
+    { name: 'Yağ', value: fat, kcal: fat * 9, color: '#a855f7' },
   ];
 
   return (
     <div className="bg-nexus-card rounded-xl border border-nexus-border p-4">
-      <h3 className="text-xs text-nexus-text-dim uppercase tracking-wider mb-3">Makro Besin Dagilimi</h3>
+      <h3 className="text-xs text-nexus-text-dim uppercase tracking-wider mb-3">Makro Besin Dağılımı</h3>
       <div className="flex items-center gap-4">
         <ResponsiveContainer width={120} height={120}>
           <PieChart>
@@ -106,7 +106,7 @@ function SourceBreakdown({ bySource }) {
 
   return (
     <div className="bg-nexus-card rounded-xl border border-nexus-border p-4">
-      <h3 className="text-xs text-nexus-text-dim uppercase tracking-wider mb-3">Kaynak Bazinda Üretim</h3>
+      <h3 className="text-xs text-nexus-text-dim uppercase tracking-wider mb-3">Kaynak Bazında Üretim</h3>
       <ResponsiveContainer width="100%" height={160}>
         <BarChart data={data} layout="vertical">
           <CartesianGrid strokeDasharray="3 3" stroke="#1a1f36" />
@@ -129,7 +129,7 @@ function CrewAllocation({ totalCalories }) {
 
   return (
     <div className="bg-nexus-card rounded-xl border border-nexus-border p-4">
-      <h3 className="text-xs text-nexus-text-dim uppercase tracking-wider mb-3">Mürettebat Beslenme Dagilimi</h3>
+      <h3 className="text-xs text-nexus-text-dim uppercase tracking-wider mb-3">Mürettebat Beslenme Dağılımı</h3>
       <div className="space-y-2">
         {CREW.members.map((member) => {
           const ratio = Math.min(1, perPerson / member.calorie);
@@ -395,7 +395,7 @@ export default function NutritionPage() {
         <div className="w-9 h-9 rounded-xl bg-red-500/10 flex items-center justify-center text-lg">🍽️</div>
         <div>
           <h2 className="text-base font-bold text-nexus-text">Beslenme Analizi</h2>
-          <p className="text-[10px] text-nexus-text-dim">Kalori uretimi, makro besinler, vitamin durumu ve murettebat beslenme dagilimi</p>
+          <p className="text-[10px] text-nexus-text-dim">Kalori üretimi, makro besinler, vitamin durumu ve mürettebat beslenme dağılımı</p>
         </div>
       </div>
 

@@ -2,13 +2,13 @@ import { useState, useEffect } from 'react';
 
 const SYSTEMS = [
   { label: 'Atmosfer Kontrol Sistemi', delay: 400 },
-  { label: 'Bitki Buyume Modulleri', delay: 700 },
-  { label: 'Su Isleme & Geri Kazanim', delay: 1000 },
-  { label: 'Besin Dongusu Motoru', delay: 1300 },
-  { label: 'AI Anomali Dedektoru', delay: 1600 },
-  { label: 'Dijital Ikiz Motoru', delay: 1900 },
-  { label: 'Guc & Isil Sistemler', delay: 2200 },
-  { label: 'Gorev Planlayici', delay: 2500 },
+  { label: 'Bitki Büyüme Modülleri', delay: 700 },
+  { label: 'Su İşleme & Geri Kazanım', delay: 1000 },
+  { label: 'Besin Döngüsü Motoru', delay: 1300 },
+  { label: 'AI Anomali Dedektörü', delay: 1600 },
+  { label: 'Dijital İkiz Motoru', delay: 1900 },
+  { label: 'Güç & Isıl Sistemler', delay: 2200 },
+  { label: 'Görev Planlayıcı', delay: 2500 },
 ];
 
 export default function SplashScreen({ onComplete }) {
@@ -95,7 +95,7 @@ export default function SplashScreen({ onComplete }) {
           <span className="genesis-gradient-text">GENESIS</span>
         </h1>
         <p className="text-sm text-nexus-text-dim tracking-widest uppercase mb-8">
-          Kapali Dongu Uzay Tarimi Yasam Destek Sistemi
+          Kapalı Döngü Uzay Tarımı Yaşam Destek Sistemi
         </p>
 
         {/* Progress bar */}
@@ -120,7 +120,7 @@ export default function SplashScreen({ onComplete }) {
           {currentSystem < SYSTEMS.length && (
             <div className="flex items-center gap-2 text-nexus-accent">
               <span className="animate-spin inline-block w-3 h-3 border border-nexus-accent border-t-transparent rounded-full" />
-              <span>{SYSTEMS[currentSystem]?.label || 'Baslatiliyor...'}</span>
+              <span>{SYSTEMS[currentSystem]?.label || 'Başlatılıyor...'}</span>
             </div>
           )}
         </div>
@@ -128,13 +128,13 @@ export default function SplashScreen({ onComplete }) {
         {/* Ready message */}
         {phase === 'ready' && (
           <div className="mt-4 text-sm text-nexus-accent font-medium animate-fade-in">
-            Tum sistemler nominal — Baslatiliyor...
+            Tüm sistemler nominal — Başlatılıyor...
           </div>
         )}
 
         {/* Version info */}
         <div className="mt-6 text-[10px] text-nexus-text-dim/40 tracking-wider">
-          v2.0.0 | MELiSSA Protokol | 6 Murettebat | 980 Gun Gorev
+          v2.0.0 | MELiSSA Protokol | 6 Mürettebat | 980 Gün Görev
         </div>
       </div>
     </div>

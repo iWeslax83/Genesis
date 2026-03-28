@@ -6,7 +6,7 @@ export default function KeyboardHelp({ onClose }) {
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm animate-fade-in" onClick={onClose}>
       <div className="bg-nexus-card border border-nexus-border rounded-2xl p-6 w-96 shadow-2xl animate-slide-up" onClick={e => e.stopPropagation()}>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-sm font-bold text-nexus-text uppercase tracking-wider">Klavye Kisayollari</h2>
+          <h2 className="text-sm font-bold text-nexus-text uppercase tracking-wider">Klavye Kısayolları</h2>
           <button onClick={onClose} className="text-nexus-text-dim hover:text-nexus-text transition-colors">
             <FiX size={16} />
           </button>
@@ -23,7 +23,7 @@ export default function KeyboardHelp({ onClose }) {
         </div>
         <div className="mt-4 pt-3 border-t border-nexus-border">
           <p className="text-[10px] text-nexus-text-dim/60 text-center">
-            Kapat: Esc veya ? tusuna bas
+            Kapat: Esc veya ? tuşuna bas
           </p>
         </div>
       </div>

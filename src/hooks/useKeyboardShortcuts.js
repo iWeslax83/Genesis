@@ -102,10 +102,10 @@ export default function useKeyboardShortcuts() {
 
 export const SHORTCUT_LIST = [
   { key: '1-8', desc: 'Sayfa navigasyonu' },
-  { key: 'Space', desc: 'Simulasyonu durdur/baslat' },
-  { key: '+/-', desc: 'Hizi artir/azalt' },
-  { key: 'B', desc: 'Kenar cubugunu daralt/genislet' },
+  { key: 'Space', desc: 'Simülasyonu durdur/başlat' },
+  { key: '+/-', desc: 'Hızı artır/azalt' },
+  { key: 'B', desc: 'Kenar çubuğunu daralt/genişlet' },
   { key: 'F', desc: 'Tam ekran' },
-  { key: '?', desc: 'Kisayol yardimi' },
+  { key: '?', desc: 'Kısayol yardımı' },
   { key: 'Esc', desc: 'Kapat' },
 ];

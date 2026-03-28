@@ -2,6 +2,7 @@ import React from 'react';
 import { useGenesis } from '../../context/GenesisContext';
 import GaugeCircle from '../ui/GaugeCircle';
 import NDVIHeatmap from './NDVIHeatmap';
+import InfoTooltip from '../ui/InfoTooltip';
 import { PLANTS, INITIAL_PLANTS } from '../../simulation/constants';
 import { calculatePlantGrowth, calculateDLI, getCurrentGrowthPhase } from '../../simulation/plantGrowthModel';
 import { NUTRIENT_RECIPES } from '../../simulation/constants';
@@ -184,7 +185,7 @@ function ClimateRecipePanel({ plants, currentDay, moduleConditions }) {
 
       <div className="space-y-1.5">
         <div className="text-[10px] text-nexus-text-dim uppercase mb-1">Mevcut vs Hedef</div>
-        {compareParam('Sicaklik', moduleConditions?.temperature, phase.temp, '°C')}
+        {compareParam('Sıcaklık', moduleConditions?.temperature, phase.temp, '°C')}
         {compareParam('Nem', moduleConditions?.humidity, phase.humidity, '%')}
         {compareParam('CO2', moduleConditions?.co2, phase.co2, 'ppm')}
         {compareParam('pH', moduleConditions?.pH, phase.ph, '')}
@@ -194,7 +195,7 @@ function ClimateRecipePanel({ plants, currentDay, moduleConditions }) {
       {/* DLI */}
       <div className="mt-3 pt-2 border-t border-nexus-border">
         <div className="flex justify-between items-center text-xs">
-          <span className="text-nexus-text-dim">DLI</span>
+          <span className="text-nexus-text-dim flex items-center gap-0.5">DLI <InfoTooltip metricKey="dli" size={10} /></span>
           <span className="font-mono" style={{
             color: dli >= (plantDef.dliMin || 0) && dli <= (plantDef.dliMax || 30) ? '#00ff88' : '#ff8800'
           }}>
@@ -202,7 +203,7 @@ function ClimateRecipePanel({ plants, currentDay, moduleConditions }) {
           </span>
         </div>
         <div className="flex justify-between items-center text-xs mt-1">
-          <span className="text-nexus-text-dim">GDD Taban</span>
+          <span className="text-nexus-text-dim flex items-center gap-0.5">GDD Taban <InfoTooltip metricKey="gdd" size={10} /></span>
           <span className="font-mono text-nexus-text">{plantDef.gddBase || '-'}°C</span>
         </div>
         {recipe && (
@@ -265,8 +266,8 @@ export default function GrowthMonitorPage() {
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 rounded-xl bg-emerald-500/10 flex items-center justify-center text-lg">🌱</div>
           <div>
-            <h2 className="text-base font-bold text-nexus-text">Bitki Izleme</h2>
-            <p className="text-[10px] text-nexus-text-dim">Canli sensor verileri, buyume durumu ve ortam grafikleri</p>
+            <h2 className="text-base font-bold text-nexus-text">Bitki İzleme</h2>
+            <p className="text-[10px] text-nexus-text-dim">Canlı sensör verileri, büyüme durumu ve ortam grafikleri</p>
           </div>
         </div>
         <div className="flex gap-1.5">
@@ -345,7 +346,13 @@ export default function GrowthMonitorPage() {
 
           {/* NDVI Health heatmap */}
           {(selectedModule === 'aeroponic' || selectedModule === 'nft') && (
-            <NDVIHeatmap />
+            <div>
+              <div className="flex items-center gap-1 mb-2">
+                <span className="text-xs text-nexus-text-dim">Bitki Sağlık Haritası</span>
+                <InfoTooltip metricKey="ndvi" size={11} />
+              </div>
+              <NDVIHeatmap />
+            </div>
           )}
 
           {/* Ortam grafikleri */}

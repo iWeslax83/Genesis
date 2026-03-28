@@ -40,8 +40,8 @@ export default function PowerPage() {
             <FiZap className="text-nexus-accent" size={18} />
           </div>
           <div>
-            <h2 className="text-base font-bold text-nexus-text">Guc ve Enerji Yonetimi</h2>
-            <p className="text-[10px] text-nexus-text-dim">Alt sistem guc tuketimi, uretim dengesi ve isil kontrol</p>
+            <h2 className="text-base font-bold text-nexus-text">Güç ve Enerji Yönetimi</h2>
+            <p className="text-[10px] text-nexus-text-dim">Alt sistem güç tüketimi, üretim dengesi ve ısıl kontrol</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -51,24 +51,24 @@ export default function PowerPage() {
             {balance >= 0 ? '+' : ''}{balance.toFixed(1)} kW
           </div>
           <div className="px-3 py-1.5 rounded-lg text-xs font-medium bg-nexus-accent/10 text-nexus-accent">
-            {power.sourceType === 'nuclear' ? '☢️ Nukleer' : '☀️ Gunes'}
+            {power.sourceType === 'nuclear' ? '☢️ Nukleer' : '☀️ Güneş'}
           </div>
         </div>
       </div>
 
       {/* Stats row */}
       <div className="grid grid-cols-4 gap-3">
-        <StatBox icon={<FiZap />} label="Toplam Uretim" value={`${generation.toFixed(1)} kW`} color="text-nexus-accent" />
-        <StatBox icon={<FiActivity />} label="Toplam Tuketim" value={`${totalConsumption.toFixed(1)} kW`} color="text-amber-400" />
-        <StatBox icon={<FiSun />} label="Aydinlatma Orani" value={formatPercent((power.lightingFactor || 0) * 100)} color="text-emerald-400" />
-        <StatBox icon={<FiThermometer />} label="Kabin Sicakligi" value={`${(thermal.currentTemp || 22).toFixed(1)}°C`} color={thermal.thermalStatus === 'nominal' ? 'text-emerald-400' : 'text-red-400'} />
+        <StatBox icon={<FiZap />} label="Toplam Üretim" value={`${generation.toFixed(1)} kW`} color="text-nexus-accent" />
+        <StatBox icon={<FiActivity />} label="Toplam Tüketim" value={`${totalConsumption.toFixed(1)} kW`} color="text-amber-400" />
+        <StatBox icon={<FiSun />} label="Aydınlatma Oranı" value={formatPercent((power.lightingFactor || 0) * 100)} color="text-emerald-400" />
+        <StatBox icon={<FiThermometer />} label="Kabin Sıcaklığı" value={`${(thermal.currentTemp || 22).toFixed(1)}°C`} color={thermal.thermalStatus === 'nominal' ? 'text-emerald-400' : 'text-red-400'} />
       </div>
 
       {/* Main grid */}
       <div className="flex-1 grid grid-cols-12 gap-3 min-h-0">
         {/* Power distribution pie */}
         <div className="col-span-4 bg-nexus-card border border-nexus-border rounded-xl p-4 flex flex-col">
-          <h3 className="text-xs text-nexus-text-dim uppercase tracking-wider mb-3">Guc Dagilimi</h3>
+          <h3 className="text-xs text-nexus-text-dim uppercase tracking-wider mb-3">Güç Dağılımı</h3>
           <div className="flex-1 min-h-0">
             <ResponsiveContainer width="100%" height="60%">
               <PieChart>
@@ -94,7 +94,7 @@ export default function PowerPage() {
 
         {/* Subsystem bar chart */}
         <div className="col-span-4 bg-nexus-card border border-nexus-border rounded-xl p-4 flex flex-col">
-          <h3 className="text-xs text-nexus-text-dim uppercase tracking-wider mb-3">Alt Sistem Tuketimi</h3>
+          <h3 className="text-xs text-nexus-text-dim uppercase tracking-wider mb-3">Alt Sistem Tüketimi</h3>
           <div className="flex-1 min-h-0">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={subsystemData} layout="vertical">
@@ -110,14 +110,14 @@ export default function PowerPage() {
         {/* Thermal balance */}
         <div className="col-span-4 bg-nexus-card border border-nexus-border rounded-xl p-4 overflow-y-auto">
           <h3 className="text-xs text-nexus-text-dim uppercase tracking-wider mb-3 flex items-center gap-1.5">
-            <FiThermometer className="text-amber-400" size={12} /> Isil Denge
+            <FiThermometer className="text-amber-400" size={12} /> Isıl Denge
           </h3>
           <div className="space-y-3">
             <div>
-              <div className="text-[10px] text-nexus-text-dim mb-1 uppercase">Isi Uretimi</div>
+              <div className="text-[10px] text-nexus-text-dim mb-1 uppercase">Isı Üretimi</div>
               {thermal.heatSources && Object.entries(thermal.heatSources).filter(([k]) => k !== 'total').map(([key, val]) => (
                 <div key={key} className="flex justify-between text-xs py-0.5">
-                  <span className="text-nexus-text-dim capitalize">{key === 'crew' ? 'Murettebat' : key === 'avionics' ? 'Aviyonik' : 'Elektrik'}</span>
+                  <span className="text-nexus-text-dim capitalize">{key === 'crew' ? 'Mürettebat' : key === 'avionics' ? 'Aviyonik' : 'Elektrik'}</span>
                   <span className="text-amber-400 font-mono">{val.toFixed(1)} kW</span>
                 </div>
               ))}
@@ -128,7 +128,7 @@ export default function PowerPage() {
             </div>
 
             <div>
-              <div className="text-[10px] text-nexus-text-dim mb-1 uppercase">Isi Atimi (Radyator)</div>
+              <div className="text-[10px] text-nexus-text-dim mb-1 uppercase">Isı Atımı (Radyatör)</div>
               <div className="flex justify-between text-xs">
                 <span className="text-nexus-text-dim">Kapasite</span>
                 <span className="text-cyan-400 font-mono">{(thermal.heatRejection?.radiatorCapacity || 0).toFixed(1)} kW</span>
@@ -146,7 +146,7 @@ export default function PowerPage() {
             </div>
 
             <div className="flex items-center justify-between p-2 rounded-lg bg-nexus-bg">
-              <span className="text-xs text-nexus-text-dim">Net Isi Akisi</span>
+              <span className="text-xs text-nexus-text-dim">Net Isı Akışı</span>
               <span className={`text-sm font-bold font-mono ${(thermal.netHeatFlux || 0) > 0 ? 'text-amber-400' : 'text-cyan-400'}`}>
                 {(thermal.netHeatFlux || 0) > 0 ? '+' : ''}{(thermal.netHeatFlux || 0).toFixed(2)} kW
               </span>
@@ -159,7 +159,7 @@ export default function PowerPage() {
       <div className="bg-nexus-card border border-nexus-border rounded-xl p-3">
         <div className="flex items-center justify-between mb-2">
           <h3 className="text-xs text-nexus-text-dim uppercase tracking-wider flex items-center gap-1.5">
-            <FiCpu className="text-amber-400" size={12} /> Bilesen Bozulma Durumu
+            <FiCpu className="text-amber-400" size={12} /> Bileşen Bozulma Durumu
           </h3>
           <span className="text-xs font-mono text-nexus-text-dim">
             Ortalama: <span className="text-nexus-text font-bold">{formatPercent(degradation.averageHealth || 100)}</span>
@@ -186,7 +186,7 @@ export default function PowerPage() {
                 }`} style={{ width: `${comp.health}%` }} />
               </div>
               {comp.daysRemaining !== undefined && (
-                <div className="text-[9px] text-nexus-text-dim mt-1 font-mono">{comp.daysRemaining} gun</div>
+                <div className="text-[9px] text-nexus-text-dim mt-1 font-mono">{comp.daysRemaining} gün</div>
               )}
             </div>
           ))}
@@ -198,9 +198,9 @@ export default function PowerPage() {
         <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-3 flex items-center gap-3">
           <FiAlertTriangle className="text-red-400 text-lg flex-shrink-0" />
           <div>
-            <div className="text-sm font-semibold text-red-400">Guc Yetersizligi!</div>
+            <div className="text-sm font-semibold text-red-400">Güç Yetersizliği!</div>
             <div className="text-xs text-nexus-text-dim">
-              Kisilan sistemler: {(power.curtailedSystems || []).join(', ')}
+              Kısılan sistemler: {(power.curtailedSystems || []).join(', ')}
             </div>
           </div>
         </div>

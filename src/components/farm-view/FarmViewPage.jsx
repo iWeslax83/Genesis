@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react';
 import { useGenesis } from '../../context/GenesisContext';
 import { PLANTS } from '../../simulation/constants';
 import { formatNumber } from '../../utils/formatters';
+import InfoTooltip from '../ui/InfoTooltip';
 import {
   FiDroplet, FiSun, FiWind, FiThermometer, FiZap, FiActivity,
   FiAlertTriangle, FiCheckCircle, FiUsers, FiClock,
@@ -267,10 +268,18 @@ function MushroomDetail({ mod }) {
   );
 }
 
+const LABEL_METRIC_MAP = {
+  'PAR': 'par', 'CO₂': 'co2', 'pH': 'ph', 'EC': 'ec', 'NDVI': 'ndvi',
+};
+
 function Env({ icon, label, value }) {
+  const metricKey = LABEL_METRIC_MAP[label];
   return (
     <div className="bg-nexus-bg/40 rounded-lg px-2 py-1.5 text-center">
-      <div className="text-nexus-text-dim text-[10px] flex items-center justify-center gap-1">{icon} {label}</div>
+      <div className="text-nexus-text-dim text-[10px] flex items-center justify-center gap-1">
+        {icon} {label}
+        {metricKey && <InfoTooltip metricKey={metricKey} size={9} />}
+      </div>
       <div className="text-xs font-mono text-nexus-text font-semibold">{value}</div>
     </div>
   );

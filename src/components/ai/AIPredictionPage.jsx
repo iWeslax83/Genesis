@@ -38,16 +38,16 @@ function SystemHealthScore({ state }) {
         <text x="60" y="72" textAnchor="middle" fill="#94a3b8" fontSize="9">GENEL SKOR</text>
       </svg>
       <div className="flex-1 space-y-2">
-        <ScoreLine label="Sistem Sagligi" value={health} />
-        <ScoreLine label="Bitki Sagligi" value={plantScore} />
-        <ScoreLine label="Bilesen Sagligi" value={Math.round(degradation)} />
+        <ScoreLine label="Sistem Sağlığı" value={health} />
+        <ScoreLine label="Bitki Sağlığı" value={plantScore} />
+        <ScoreLine label="Bileşen Sağlığı" value={Math.round(degradation)} />
         <div className="pt-2 border-t border-nexus-border flex items-center gap-3 text-xs">
           {critCount > 0 ? (
             <span className="text-red-400 flex items-center gap-1"><FiAlertTriangle size={12} /> {critCount} kritik alarm</span>
           ) : anomalyCount > 0 ? (
-            <span className="text-amber-400 flex items-center gap-1"><FiAlertTriangle size={12} /> {anomalyCount} uyari</span>
+            <span className="text-amber-400 flex items-center gap-1"><FiAlertTriangle size={12} /> {anomalyCount} uyarı</span>
           ) : (
-            <span className="text-emerald-400 flex items-center gap-1"><FiCheckCircle size={12} /> Tum sistemler nominal</span>
+            <span className="text-emerald-400 flex items-center gap-1"><FiCheckCircle size={12} /> Tüm sistemler nominal</span>
           )}
         </div>
       </div>
@@ -93,7 +93,7 @@ function HarvestPrediction({ currentDay }) {
                 <div className="flex justify-between items-baseline mb-0.5">
                   <span className="text-xs text-nexus-text truncate">{plantDef.name} <span className="text-nexus-text-dim">x{pg.count}</span></span>
                   <span className={`text-[10px] font-mono ${growth.isReady ? 'text-emerald-400' : 'text-nexus-text-dim'}`}>
-                    {growth.isReady ? '✓ Hazir' : `${daysLeft}g`}
+                    {growth.isReady ? '✓ Hazır' : `${daysLeft}g`}
                   </span>
                 </div>
                 <div className="h-1.5 bg-nexus-bg rounded-full overflow-hidden">
@@ -107,7 +107,7 @@ function HarvestPrediction({ currentDay }) {
                 </div>
                 <div className="flex justify-between mt-0.5">
                   <span className="text-[9px] text-nexus-text-dim font-mono">%{(growth.progress * 100).toFixed(0)}</span>
-                  <span className="text-[9px] text-nexus-text-dim font-mono">Guven: %{confidence.toFixed(0)}</span>
+                  <span className="text-[9px] text-nexus-text-dim font-mono">Güven: %{confidence.toFixed(0)}</span>
                 </div>
               </div>
             </div>
@@ -134,7 +134,7 @@ function ResourceProjection({ resources }) {
 
   return (
     <div className="bg-nexus-card rounded-xl border border-nexus-border p-4">
-      <h3 className="text-xs text-nexus-text-dim uppercase tracking-wider mb-3">30 Gunluk Kaynak Projeksiyonu</h3>
+      <h3 className="text-xs text-nexus-text-dim uppercase tracking-wider mb-3">30 Günlük Kaynak Projeksiyonu</h3>
       <ResponsiveContainer width="100%" height={180}>
         <LineChart data={projData}>
           <CartesianGrid strokeDasharray="3 3" stroke="#1a1f36" />
@@ -166,15 +166,15 @@ function Legend({ color, label }) {
 
 function AnomalyTimeline({ anomalies }) {
   const displayAnomalies = anomalies.length > 0 ? anomalies : [
-    { id: 1, message: 'NFT pH dalgalanmasi — Cozuldu', severity: 'resolved', timestamp: { day: 12, hour: 14 } },
-    { id: 2, message: 'Aeroponik sicaklik spike — Cozuldu', severity: 'resolved', timestamp: { day: 23, hour: 8 } },
-    { id: 3, message: 'CO2 yukselis trendi — Izleniyor', severity: 'warning', timestamp: { day: 45, hour: 20 } },
+    { id: 1, message: 'NFT pH dalgalanması — Çözüldü', severity: 'resolved', timestamp: { day: 12, hour: 14 } },
+    { id: 2, message: 'Aeroponik sıcaklık spike — Çözüldü', severity: 'resolved', timestamp: { day: 23, hour: 8 } },
+    { id: 3, message: 'CO2 yükseliş trendi — İzleniyor', severity: 'warning', timestamp: { day: 45, hour: 20 } },
   ];
 
   return (
     <div className="bg-nexus-card rounded-xl border border-nexus-border p-4">
       <h3 className="text-xs text-nexus-text-dim uppercase tracking-wider mb-3 flex items-center gap-1.5">
-        <FiShield size={12} className="text-amber-400" /> Anomali Zaman Cizelgesi
+        <FiShield size={12} className="text-amber-400" /> Anomali Zaman Çizelgesi
       </h3>
       <div className="space-y-2">
         {displayAnomalies.map((a) => (
@@ -186,7 +186,7 @@ function AnomalyTimeline({ anomalies }) {
             <div className="flex-1 min-w-0">
               <span className="text-xs text-nexus-text">{a.message}</span>
               <div className="text-[9px] text-nexus-text-dim font-mono">
-                Gun {a.timestamp?.day || '—'}, {String(a.timestamp?.hour || 0).padStart(2, '0')}:00
+                Gün {a.timestamp?.day || '—'}, {String(a.timestamp?.hour || 0).padStart(2, '0')}:00
               </div>
             </div>
           </div>
@@ -198,16 +198,16 @@ function AnomalyTimeline({ anomalies }) {
 
 function AIInsights({ optimizations }) {
   const insights = optimizations.length > 0 ? optimizations : [
-    { id: 1, icon: '💡', suggestion: 'Spirulina hasat sikligini %15 artirin.', impact: 'Gunluk +180 kcal' },
-    { id: 2, icon: '🔧', suggestion: 'NFT pH kalibrasyon gerektiriyor.', impact: 'Besin alimi %12 artacak' },
-    { id: 3, icon: '🌱', suggestion: 'Yeni marul ve ispanak ekimi oneriliyor.', impact: '25 gun icinde ek vitamin' },
-    { id: 4, icon: '���', suggestion: 'LED spektrumunda kirmizi oranini artirin.', impact: 'Buyume hizi %8 artacak' },
+    { id: 1, icon: '💡', suggestion: 'Spirulina hasat sıklığını %15 artırın.', impact: 'Günlük +180 kcal' },
+    { id: 2, icon: '🔧', suggestion: 'NFT pH kalibrasyon gerektiriyor.', impact: 'Besin alımı %12 artacak' },
+    { id: 3, icon: '🌱', suggestion: 'Yeni marul ve ıspanak ekimi öneriliyor.', impact: '25 gün içinde ek vitamin' },
+    { id: 4, icon: '���', suggestion: 'LED spektrumunda kırmızı oranını artırın.', impact: 'Büyüme hızı %8 artacak' },
   ];
 
   return (
     <div className="bg-nexus-card rounded-xl border border-nexus-border p-4">
       <h3 className="text-xs text-nexus-text-dim uppercase tracking-wider mb-3 flex items-center gap-1.5">
-        <FiCpu size={12} className="text-cyan-400" /> AI Oneriler
+        <FiCpu size={12} className="text-cyan-400" /> AI Öneriler
       </h3>
       <div className="space-y-2">
         {insights.map((ins) => (
@@ -240,18 +240,18 @@ function SystemRiskPanel({ compartments }) {
   return (
     <div className="bg-nexus-card rounded-xl border border-nexus-border p-4">
       <h3 className="text-xs text-nexus-text-dim uppercase tracking-wider mb-3 flex items-center gap-1.5">
-        <FiAlertTriangle size={12} className="text-red-400" /> Risk Gostergeleri
+        <FiAlertTriangle size={12} className="text-red-400" /> Risk Göstergeleri
       </h3>
       <div className="space-y-3">
         <RiskItem
           icon="🧬" label="Spirulina Kontaminasyon" value={contRisk}
           color={riskColor(contRisk)}
-          desc={contRisk > 50 ? 'pH ve sicaklik stabilize edilmeli' : 'Normal aralikta'}
+          desc={contRisk > 50 ? 'pH ve sıcaklık stabilize edilmeli' : 'Normal aralıkta'}
         />
         <RiskItem
           icon="🍄" label="Mantar Substrat" value={subLevel}
           color={riskColor(subLevel, true)}
-          desc={subLevel < 40 ? 'Atik isleme hizi artirilmali' : 'Yeterli seviye'}
+          desc={subLevel < 40 ? 'Atık işleme hızı artırılmalı' : 'Yeterli seviye'}
         />
         <div className="pt-2 border-t border-nexus-border space-y-1">
           <div className="flex justify-between items-center text-xs">
@@ -300,7 +300,7 @@ export default function AIPredictionPage() {
         </div>
         <div>
           <h2 className="text-base font-bold text-nexus-text">AI Tahmin ve Analiz</h2>
-          <p className="text-[10px] text-nexus-text-dim">Makine ogrenimi tabanli anomali tespiti, hasat tahmini ve optimizasyon onerileri</p>
+          <p className="text-[10px] text-nexus-text-dim">Makine öğrenimi tabanlı anomali tespiti, hasat tahmini ve optimizasyon önerileri</p>
         </div>
       </div>
 

@@ -482,6 +482,7 @@ export const SENSOR_CONFIGS = {
 // Kapalılık oranı hedefleri (gerçek projelerden)
 export const CLOSURE_TARGETS = {
   o2:       { target: 100, reference: 'Yuegong-1: %100 O₂ geri kazanımı' },
+  co2:      { target: 100, reference: 'Yuegong-1: %100 CO₂ geri kazanımı' },
   water:    { target: 98,  reference: 'Yuegong-1: %100, BIOS-3: %85' },
   food:     { target: 80,  reference: 'Yuegong-1: %80 gıda döngüsü' },
   material: { target: 98,  reference: 'Yuegong-1: %98.2 malzeme geri dönüşümü' },

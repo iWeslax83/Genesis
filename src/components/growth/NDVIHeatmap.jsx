@@ -3,11 +3,11 @@ import { PLANTS } from '../../simulation/constants';
 
 const NDVI_COLORS = [
   { threshold: 0.2, color: '#ef4444', label: 'Kritik' },
-  { threshold: 0.4, color: '#f97316', label: 'Dusuk' },
-  { threshold: 0.55, color: '#eab308', label: 'Zayif' },
+  { threshold: 0.4, color: '#f97316', label: 'Düşük' },
+  { threshold: 0.55, color: '#eab308', label: 'Zayıf' },
   { threshold: 0.7, color: '#84cc16', label: 'Orta' },
-  { threshold: 0.85, color: '#22c55e', label: 'Iyi' },
-  { threshold: 1.0, color: '#059669', label: 'Mukemmel' },
+  { threshold: 0.85, color: '#22c55e', label: 'İyi' },
+  { threshold: 1.0, color: '#059669', label: 'Mükemmel' },
 ];
 
 function getNDVIColor(value) {
@@ -55,8 +55,8 @@ function PlantHealthCell({ type, ndviValue, count, moduleKey }) {
         <div className="text-[10px] font-bold text-nexus-text mb-1">{plant.icon} {plant.name}</div>
         <div className="text-[9px] text-nexus-text-dim space-y-0.5">
           <div>NDVI: <span className="font-mono" style={{ color }}>{ndviValue.toFixed(3)}</span></div>
-          <div>Modul: <span className="text-nexus-accent">{moduleKey === 'aeroponic' ? 'Aeroponik' : 'NFT'}</span></div>
-          <div>Durum: <span style={{ color }}>{NDVI_COLORS.find(c => ndviValue <= c.threshold)?.label || 'Mukemmel'}</span></div>
+          <div>Modül: <span className="text-nexus-accent">{moduleKey === 'aeroponic' ? 'Aeroponik' : 'NFT'}</span></div>
+          <div>Durum: <span style={{ color }}>{NDVI_COLORS.find(c => ndviValue <= c.threshold)?.label || 'Mükemmel'}</span></div>
         </div>
       </div>
     </div>
@@ -76,7 +76,7 @@ export default function NDVIHeatmap() {
   return (
     <div className="bg-nexus-card rounded-xl border border-nexus-border p-4">
       <div className="flex items-center justify-between mb-3">
-        <h3 className="text-xs text-nexus-text-dim uppercase tracking-wider">NDVI Bitki Saglik Haritasi</h3>
+        <h3 className="text-xs text-nexus-text-dim uppercase tracking-wider">NDVI Bitki Sağlık Haritası</h3>
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-1">
             {NDVI_COLORS.map(({ color, label }) => (

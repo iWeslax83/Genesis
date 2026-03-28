@@ -26,7 +26,7 @@ export default function useNotificationWatcher() {
       const newest = anomalies[anomalies.length - 1];
       addToast({
         type: 'warning',
-        title: 'Uyari',
+        title: 'Uyarı',
         message: newest.message,
         duration: 4000,
       });
@@ -41,7 +41,7 @@ export default function useNotificationWatcher() {
       const newest = harvestLog[harvestLog.length - 1];
       addToast({
         type: 'success',
-        title: 'Hasat Tamamlandi',
+        title: 'Hasat Tamamlandı',
         message: `${newest.type} x${newest.count} — ${newest.yieldKg} kg`,
         duration: 5000,
       });
@@ -55,14 +55,14 @@ export default function useNotificationWatcher() {
       addToast({
         type: 'warning',
         title: 'Senaryo Aktif',
-        message: `What-if senaryosu baslatildi: ${state.scenario.active}`,
+        message: `What-if senaryosu başlatıldı: ${state.scenario.active}`,
         duration: 5000,
       });
     } else if (!state.scenario.active && prevScenario.current) {
       addToast({
         type: 'info',
         title: 'Senaryo Bitti',
-        message: 'Normal operasyona donuldu',
+        message: 'Normal operasyona dönüldü',
         duration: 4000,
       });
     }
@@ -74,8 +74,8 @@ export default function useNotificationWatcher() {
     if (state.power?.powerDeficit && !prevPowerDeficit.current) {
       addToast({
         type: 'error',
-        title: 'Guc Yetersizligi',
-        message: 'Guc uretimi tuketimi karsilamiyor — yuk azaltma aktif',
+        title: 'Güç Yetersizliği',
+        message: 'Güç üretimi tüketimi karşılamıyor — yük azaltma aktif',
         duration: 6000,
       });
     }

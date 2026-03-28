@@ -5,18 +5,18 @@ import { FiChevronUp, FiChevronDown, FiTerminal, FiTrash2 } from 'react-icons/fi
 const EVENT_TYPES = {
   harvest: { color: '#22c55e', icon: '🌾', label: 'HASAT' },
   anomaly: { color: '#f59e0b', icon: '⚠', label: 'ANOMALI' },
-  critical: { color: '#ef4444', icon: '!!', label: 'KRITIK' },
+  critical: { color: '#ef4444', icon: '!!', label: 'KRİTİK' },
   scenario: { color: '#a855f7', icon: '🎬', label: 'SENARYO' },
   system: { color: '#00f0ff', icon: '⚙', label: 'SISTEM' },
-  power: { color: '#3b82f6', icon: '⚡', label: 'GUC' },
-  info: { color: '#94a3b8', icon: 'i', label: 'BILGI' },
+  power: { color: '#3b82f6', icon: '⚡', label: 'GÜÇ' },
+  info: { color: '#94a3b8', icon: 'i', label: 'BİLGİ' },
 };
 
 export default function EventLog() {
   const { state } = useGenesis();
   const [isOpen, setIsOpen] = useState(false);
   const [events, setEvents] = useState([
-    { id: 0, type: 'system', message: 'GENESIS simulasyonu baslatildi', time: { day: 47, hour: 8, minute: 0 } },
+    { id: 0, type: 'system', message: 'GENESIS simülasyonu başlatıldı', time: { day: 47, hour: 8, minute: 0 } },
   ]);
   const scrollRef = useRef(null);
   const prevAnomaliesRef = useRef([]);
@@ -70,7 +70,7 @@ export default function EventLog() {
         newEvents.push({
           id: Date.now() + Math.random(),
           type: 'system',
-          message: 'Senaryo sona erdi — Normal operasyona donus',
+          message: 'Senaryo sona erdi — Normal operasyona dönüş',
           time: { day: state.time.day, hour: state.time.hour, minute: state.time.minute },
         });
       }
@@ -84,7 +84,7 @@ export default function EventLog() {
         newEvents.push({
           id: Date.now() + Math.random(),
           type: 'power',
-          message: `Guc acigi tespit edildi: ${(state.power.generation - state.power.totalConsumption).toFixed(1)} kW`,
+          message: `Güç açığı tespit edildi: ${(state.power.generation - state.power.totalConsumption).toFixed(1)} kW`,
           time: { day: state.time.day, hour: state.time.hour, minute: state.time.minute },
         });
       }
@@ -118,7 +118,7 @@ export default function EventLog() {
       >
         <div className="flex items-center gap-2">
           <FiTerminal size={11} className="text-nexus-accent" />
-          <span className="text-[10px] text-nexus-text-dim uppercase tracking-wider font-medium">Olay Gunlugu</span>
+          <span className="text-[10px] text-nexus-text-dim uppercase tracking-wider font-medium">Olay Günlüğü</span>
           <span className="text-[10px] text-nexus-accent font-mono">({events.length})</span>
         </div>
         <div className="flex items-center gap-2">

@@ -166,10 +166,10 @@ export default function ClosedLoopDiagram() {
 
       {/* Center label */}
       <text x={cx} y={cy - 8} textAnchor="middle" fill="#00f0ff" fontSize="11" fontWeight="800" opacity="0.35" letterSpacing="3">
-        MELiSSA DONGUSU
+        MELiSSA DÖNGÜSÜ
       </text>
       <text x={cx} y={cy + 6} textAnchor="middle" fill="#94a3b8" fontSize="7" opacity="0.25" letterSpacing="1">
-        Kapali Dongu Yasam Destek
+        Kapalı Döngü Yaşam Destek
       </text>
 
       {/* Subtle circular orbit lines */}
@@ -184,7 +184,7 @@ export default function ClosedLoopDiagram() {
         color="#ff8800"
         speed="3s"
       />
-      <FlowLabel x={cx} y={45} text="Organik Atik" value={`${formatNumber(10.8)} kg/gun`} color="#ff8800" />
+      <FlowLabel x={cx} y={45} text="Organik Atık" value={`${formatNumber(10.8)} kg/gün`} color="#ff8800" />
 
       {/* Waste -> Nutrient: Nitrification */}
       <AnimatedFlow
@@ -200,7 +200,7 @@ export default function ClosedLoopDiagram() {
         color="#22c55e"
         speed="3s"
       />
-      <FlowLabel x={440} y={265} text="Besin Cozeltisi" value="NPK Dongusu" color="#22c55e" />
+      <FlowLabel x={440} y={265} text="Besin Çözeltisi" value="NPK Döngüsü" color="#22c55e" />
 
       {/* Growth -> Habitat: O₂ + Food */}
       <AnimatedFlow
@@ -209,7 +209,7 @@ export default function ClosedLoopDiagram() {
         speed="2.5s"
         width={2.5}
       />
-      <FlowLabel x={70} y={270} text="O2 + Gida" value={`${formatNumber(resources.oxygen.production)} L/gun`} color="#34d399" />
+      <FlowLabel x={70} y={270} text="O₂ + Gıda" value={`${formatNumber(resources.oxygen.production)} L/gün`} color="#34d399" />
 
       {/* Habitat -> Growth: CO₂ */}
       <AnimatedFlow
@@ -217,7 +217,7 @@ export default function ClosedLoopDiagram() {
         color="#f97316"
         speed="4s"
       />
-      <FlowLabel x={140} y={310} text="CO2" value={`${formatNumber(resources.co2.production)} L/gun`} color="#f97316" />
+      <FlowLabel x={140} y={310} text="CO2" value={`${formatNumber(resources.co2.production)} L/gün`} color="#f97316" />
 
       {/* Growth -> Habitat: H₂O */}
       <AnimatedFlow
@@ -225,7 +225,7 @@ export default function ClosedLoopDiagram() {
         color="#3b82f6"
         speed="5s"
       />
-      <FlowLabel x={20} y={190} text="H2O Dongusu" value={`Geri kaz. %${(resources.water.recycleRate * 100).toFixed(1)}`} color="#3b82f6" />
+      <FlowLabel x={20} y={190} text="H₂O Döngüsü" value={`Geri kaz. %${(resources.water.recycleRate * 100).toFixed(1)}`} color="#3b82f6" />
 
       {/* ── COMPARTMENT NODES ── */}
       {Object.entries(POSITIONS).map(([id, pos]) => (
@@ -250,7 +250,7 @@ export default function ClosedLoopDiagram() {
           </text>
           <line x1={cx - 75} y1={cy + 46} x2={cx + 75} y2={cy + 46} stroke="#2a3154" strokeWidth="0.5" />
           <text x={cx - 75} y={cy + 60} fill="#94a3b8" fontSize="8" fontFamily="monospace">
-            Sicaklik: {compData[selected]?.temperature?.toFixed?.(1) || '—'}°C
+            Sıcaklık: {compData[selected]?.temperature?.toFixed?.(1) || '—'}°C
           </text>
           <text x={cx - 75} y={cy + 73} fill="#94a3b8" fontSize="8" fontFamily="monospace">
             pH: {compData[selected]?.pH?.toFixed?.(2) || '—'}
@@ -277,7 +277,7 @@ export default function ClosedLoopDiagram() {
           H2O %{(resources.closure?.water || 0).toFixed(1)}
         </text>
         <text x="265" y="14" fill="#ff8800" fontSize="7" fontFamily="monospace">
-          Gida %{(resources.closure?.food || 0).toFixed(1)}
+          Gıda %{(resources.closure?.food || 0).toFixed(1)}
         </text>
         <text x="340" y="14" fill="#94a3b8" fontSize="6" opacity="0.5">|</text>
         <text x="355" y="14" fill="#00f0ff" fontSize="7.5" fontWeight="bold" fontFamily="monospace">

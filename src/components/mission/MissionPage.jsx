@@ -18,17 +18,17 @@ const ACTIVITY_COLORS = {
 function MissionTimeline({ missionDay, totalDays, currentPhase, blss }) {
   const progress = (missionDay / totalDays) * 100;
   const milestones = [
-    { day: 0, label: 'Kalkis', icon: '🚀' },
+    { day: 0, label: 'Kalkış', icon: '🚀' },
     { day: 120, label: 'BLSS Devreye Alma', icon: '🌱' },
     { day: 200, label: 'Tam Kapasite', icon: '🌿' },
-    { day: 500, label: 'Yari Yol', icon: '📍' },
-    { day: 980, label: 'Donus', icon: '🏠' },
+    { day: 500, label: 'Yarı Yol', icon: '📍' },
+    { day: 980, label: 'Dönüş', icon: '🏠' },
   ];
 
   return (
     <div className="bg-nexus-card rounded-xl border border-nexus-border p-4">
       <h3 className="text-xs text-nexus-text-dim uppercase tracking-wider mb-3 flex items-center gap-1.5">
-        <FiClock size={12} /> Gorev Zaman Cizelgesi
+        <FiClock size={12} /> Görev Zaman Çizelgesi
       </h3>
       <div className="relative">
         <div className="h-2 bg-nexus-bg rounded-full overflow-hidden">
@@ -58,7 +58,7 @@ function MissionTimeline({ missionDay, totalDays, currentPhase, blss }) {
         </div>
       </div>
       <div className="flex justify-between mt-2 text-xs">
-        <span className="text-nexus-text-dim">Faz: <span className="text-nexus-accent">{currentPhase?.name || 'Yuzey Op.'}</span></span>
+        <span className="text-nexus-text-dim">Faz: <span className="text-nexus-accent">{currentPhase?.name || 'Yüzey Op.'}</span></span>
         <span className="text-nexus-text-dim">BLSS: <span className={blss?.operational ? 'text-emerald-400' : 'text-amber-400'}>{blss?.operational ? 'Operasyonel' : `%${blss?.rampUpProgress || 0} devrede`}</span></span>
       </div>
     </div>
@@ -72,7 +72,7 @@ function CrewPanel({ crewActivity, morale, time }) {
   return (
     <div className="bg-nexus-card border border-nexus-border rounded-xl p-4 overflow-y-auto">
       <h3 className="text-xs text-nexus-text-dim uppercase tracking-wider mb-3 flex items-center gap-1.5">
-        <FiUsers size={12} className="text-cyan-400" /> Murettebat Durumu
+        <FiUsers size={12} className="text-cyan-400" /> Mürettebat Durumu
       </h3>
 
       {/* Crew cards */}
@@ -107,15 +107,15 @@ function CrewPanel({ crewActivity, morale, time }) {
       {/* Totals */}
       <div className="grid grid-cols-4 gap-2 p-2 rounded-lg bg-nexus-bg/50 border border-nexus-border/20">
         <div className="text-center">
-          <div className="text-[8px] text-nexus-text-dim uppercase">O2 Tuk.</div>
+          <div className="text-[8px] text-nexus-text-dim uppercase">O2 Tük.</div>
           <div className="text-xs font-mono text-cyan-400">{(totals.o2Consumption * 1000).toFixed(0)} g/h</div>
         </div>
         <div className="text-center">
-          <div className="text-[8px] text-nexus-text-dim uppercase">CO2 Ur.</div>
+          <div className="text-[8px] text-nexus-text-dim uppercase">CO2 Ür.</div>
           <div className="text-xs font-mono text-orange-400">{(totals.co2Production * 1000).toFixed(0)} g/h</div>
         </div>
         <div className="text-center">
-          <div className="text-[8px] text-nexus-text-dim uppercase">Isi</div>
+          <div className="text-[8px] text-nexus-text-dim uppercase">Isı</div>
           <div className="text-xs font-mono text-red-400">{totals.heatOutput?.toFixed(0)} W</div>
         </div>
         <div className="text-center">
@@ -150,20 +150,20 @@ export default function MissionPage() {
             <FiMapPin className="text-purple-400" size={18} />
           </div>
           <div>
-            <h2 className="text-base font-bold text-nexus-text">Gorev Planlama ve Cevre</h2>
-            <p className="text-[10px] text-nexus-text-dim">Erzak, murettebat, radyasyon, moral ve cevre kalitesi</p>
+            <h2 className="text-base font-bold text-nexus-text">Görev Planlama ve Çevre</h2>
+            <p className="text-[10px] text-nexus-text-dim">Erzak, mürettebat, radyasyon, moral ve çevre kalitesi</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
           <div className="px-3 py-1.5 rounded-lg text-xs font-mono font-medium bg-purple-500/10 text-purple-400">
-            Gun {mission.missionDay || state.time.day} / {mission.totalMissionDays || 980}
+            Gün {mission.missionDay || state.time.day} / {mission.totalMissionDays || 980}
           </div>
           <div className={`px-3 py-1.5 rounded-lg text-xs font-medium ${
             (mission.status || 'nominal') === 'critical' ? 'bg-red-500/10 text-red-400' :
             (mission.status || 'nominal') === 'warning' ? 'bg-amber-500/10 text-amber-400' :
             'bg-emerald-500/10 text-emerald-400'
           }`}>
-            {mission.currentPhase?.name || 'Yuzey Operasyonlari'}
+            {mission.currentPhase?.name || 'Yüzey Operasyonları'}
           </div>
         </div>
       </div>
@@ -178,10 +178,10 @@ export default function MissionPage() {
 
       {/* Stats row */}
       <div className="grid grid-cols-4 gap-3">
-        <MiniStat icon={<FiPackage />} label="Kalan Erzak" value={`${formatNumber(storedFood.remaining || 0)} kg`} sub={`${storedFood.daysRemaining || '∞'} gun`} color="text-amber-400" />
+        <MiniStat icon={<FiPackage />} label="Kalan Erzak" value={`${formatNumber(storedFood.remaining || 0)} kg`} sub={`${storedFood.daysRemaining || '∞'} gün`} color="text-amber-400" />
         <MiniStat icon={<FiShield />} label="Radyasyon Dozu" value={`${(radiation.cumulativeDose || 0).toFixed(3)} Gy`} sub={radiation.activeEvent ? 'SPE Aktif!' : 'Normal GCR'} color={radiation.status === 'nominal' ? 'text-emerald-400' : 'text-red-400'} />
-        <MiniStat icon={<FiSmile />} label="Murettebat Morali" value={`${morale.score || 70}/100`} sub={morale.status === 'good' ? 'Iyi' : morale.status === 'moderate' ? 'Orta' : 'Dusuk'} color={morale.score >= 70 ? 'text-emerald-400' : morale.score >= 40 ? 'text-amber-400' : 'text-red-400'} />
-        <MiniStat icon={<FiDroplet />} label="Su Geri Kazanim" value={formatPercent((waterProc.overallRecovery || 0.98) * 100)} sub={`Kayip: ${waterProc.dailyLoss || 0} L/gun`} color="text-cyan-400" />
+        <MiniStat icon={<FiSmile />} label="Mürettebat Morali" value={`${morale.score || 70}/100`} sub={morale.status === 'good' ? 'İyi' : morale.status === 'moderate' ? 'Orta' : 'Düşük'} color={morale.score >= 70 ? 'text-emerald-400' : morale.score >= 40 ? 'text-amber-400' : 'text-red-400'} />
+        <MiniStat icon={<FiDroplet />} label="Su Geri Kazanım" value={formatPercent((waterProc.overallRecovery || 0.98) * 100)} sub={`Kayıp: ${waterProc.dailyLoss || 0} L/gün`} color="text-cyan-400" />
       </div>
 
       {/* Main grid: Crew + Morale + Contaminants */}
@@ -233,13 +233,13 @@ export default function MissionPage() {
             </div>
             <div className="flex justify-between text-[9px] text-nexus-text-dim mt-1">
               <span>BLSS: {formatPercent(blss.contribution || 0)}</span>
-              <span>{storedFood.daysRemaining || '∞'} gun</span>
+              <span>{storedFood.daysRemaining || '∞'} gün</span>
             </div>
           </div>
 
           {morale.isLow && (
             <div className="mt-3 p-2 rounded-lg bg-red-500/10 text-xs text-red-400">
-              ⚠ Dusuk moral — verimlilik %{Math.round((morale.efficiencyMultiplier || 1) * 100)}
+              ⚠ Düşük moral — verimlilik %{Math.round((morale.efficiencyMultiplier || 1) * 100)}
             </div>
           )}
         </div>
@@ -285,15 +285,15 @@ export default function MissionPage() {
         {/* Radiation */}
         <div className="bg-nexus-card border border-nexus-border rounded-xl p-3">
           <h3 className="text-xs text-nexus-text-dim uppercase tracking-wider mb-2 flex items-center gap-1.5">
-            <FiShield size={12} className="text-purple-400" /> Radyasyon Izleme
+            <FiShield size={12} className="text-purple-400" /> Radyasyon İzleme
           </h3>
           <div className="grid grid-cols-3 gap-2 mb-2">
             <div className="p-2 rounded-lg bg-nexus-bg text-center">
-              <div className="text-[9px] text-nexus-text-dim">Kumulatif</div>
+              <div className="text-[9px] text-nexus-text-dim">Kümülatif</div>
               <div className="text-xs font-mono text-purple-400">{(radiation.cumulativeDose || 0).toFixed(4)} Gy</div>
             </div>
             <div className="p-2 rounded-lg bg-nexus-bg text-center">
-              <div className="text-[9px] text-nexus-text-dim">Gunluk</div>
+              <div className="text-[9px] text-nexus-text-dim">Günlük</div>
               <div className="text-xs font-mono text-nexus-text">{(radiation.dailyDose || 0).toFixed(4)} Gy</div>
             </div>
             <div className="p-2 rounded-lg bg-nexus-bg text-center">
@@ -305,7 +305,7 @@ export default function MissionPage() {
           </div>
           {radiation.activeEvent && (
             <div className="p-2 rounded-lg bg-red-500/10 border border-red-500/30 text-xs text-red-400">
-              ☢ SPE Aktif! {radiation.activeEvent.type === 'major' ? 'Buyuk' : 'Kucuk'} — {radiation.activeEvent.dose.toFixed(3)} Gy
+              ☢ SPE Aktif! {radiation.activeEvent.type === 'major' ? 'Büyük' : 'Küçük'} — {radiation.activeEvent.dose.toFixed(3)} Gy
             </div>
           )}
         </div>
@@ -313,7 +313,7 @@ export default function MissionPage() {
         {/* Water processing */}
         <div className="bg-nexus-card border border-nexus-border rounded-xl p-3">
           <h3 className="text-xs text-nexus-text-dim uppercase tracking-wider mb-2 flex items-center gap-1.5">
-            <FiDroplet size={12} className="text-cyan-400" /> Su Isleme
+            <FiDroplet size={12} className="text-cyan-400" /> Su İşleme
           </h3>
           <div className="flex gap-2">
             {Object.entries(waterProc.stages || {}).map(([key, stage]) => (
@@ -338,7 +338,7 @@ export default function MissionPage() {
                 waterProc.waterQuality === 'potable' ? 'text-emerald-400' :
                 waterProc.waterQuality === 'marginal' ? 'text-amber-400' : 'text-red-400'
               }`}>
-                {waterProc.waterQuality === 'potable' ? 'Icilebilir' : waterProc.waterQuality === 'marginal' ? 'Sinirda' : 'Kontamine'}
+                {waterProc.waterQuality === 'potable' ? 'İçilebilir' : waterProc.waterQuality === 'marginal' ? 'Sınırda' : 'Kontamine'}
               </div>
             </div>
           </div>

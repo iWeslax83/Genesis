@@ -166,9 +166,9 @@ function MiniHabitat3D({ scenario }) {
       <HabitatShell />
 
       {/* Compartment sections */}
-      <CompSection position={[0, 0, -3]} color="#ff8800" label="♻ Atik Isleme" isWarning={false} />
-      <CompSection position={[0, 0, -1]} color="#c084fc" label="🧪 Besin Cozeltisi" isWarning={false} />
-      <CompSection position={[0, 0, 1]} color="#22c55e" label="🌱 Bitki Modulu" isWarning={scenario?.active === 'led_failure'} emissiveIntensity={0.12} />
+      <CompSection position={[0, 0, -3]} color="#ff8800" label="♻ Atık İşleme" isWarning={false} />
+      <CompSection position={[0, 0, -1]} color="#c084fc" label="🧪 Besin Çözeltisi" isWarning={false} />
+      <CompSection position={[0, 0, 1]} color="#22c55e" label="🌱 Bitki Modülü" isWarning={scenario?.active === 'led_failure'} emissiveIntensity={0.12} />
       <CompSection position={[0, 0, 3]} color="#3b82f6" label="👨‍🚀 Habitat" isWarning={false} />
 
       {/* Plants */}
@@ -233,7 +233,7 @@ function SystemSchematic({ state }) {
 
       {/* Title */}
       <text x="340" y="16" textAnchor="middle" fill="#475569" fontSize="8" fontFamily="monospace" letterSpacing="2">
-        GENESIS DIJITAL IKIZ — SISTEM MIMARISI
+        GENESIS DİJİTAL İKİZ — SİSTEM MİMARİSİ
       </text>
 
       {/* Atmosphere System */}
@@ -244,7 +244,7 @@ function SystemSchematic({ state }) {
           O2: %{hab?.o2Level?.toFixed(1)} | CO2: %{hab?.co2Level?.toFixed(3)} | {hab?.temperature?.toFixed(1)}°C
         </text>
         <text x="250" y="68" fill="#94a3b8" fontSize="7" fontFamily="monospace">
-          O2 Uretim: {formatNumber(resources.oxygen.production)} L/gun | Denge: {resources.oxygen.balance > 0 ? '+' : ''}{formatNumber(resources.oxygen.balance)} L
+          O2 Üretim: {formatNumber(resources.oxygen.production)} L/gün | Denge: {resources.oxygen.balance > 0 ? '+' : ''}{formatNumber(resources.oxygen.balance)} L
         </text>
         <g transform="translate(428, 38)">{statusDot(hab?.status)}</g>
       </g>
@@ -252,7 +252,7 @@ function SystemSchematic({ state }) {
       {/* Growing modules */}
       <g>
         <rect x="20" y="95" width="200" height="130" rx="8" fill="#0f172a" stroke="#22c55e40" strokeWidth="1" />
-        <text x="35" y="115" fill="#22c55e" fontSize="10" fontWeight="bold">🌱 Bitki Yetistirme</text>
+        <text x="35" y="115" fill="#22c55e" fontSize="10" fontWeight="bold">🌱 Bitki Yetiştirme</text>
         <g transform="translate(200, 107)">{statusDot(compartments.growth?.status)}</g>
 
         <rect x="30" y="122" width="90" height="35" rx="4" fill="#0a1a0a" stroke="#22c55e25" strokeWidth="0.7" />
@@ -279,15 +279,15 @@ function SystemSchematic({ state }) {
       {/* Power System */}
       <g>
         <rect x="460" y="95" width="200" height="70" rx="8" fill="#0f172a" stroke="#00f0ff40" strokeWidth="1" />
-        <text x="475" y="115" fill="#00f0ff" fontSize="10" fontWeight="bold">⚡ Guc Sistemi</text>
+        <text x="475" y="115" fill="#00f0ff" fontSize="10" fontWeight="bold">⚡ Güç Sistemi</text>
         <text x="475" y="130" fill="#94a3b8" fontSize="8" fontFamily="monospace">
-          Uretim: {(power?.generation || 0).toFixed(1)} kW | Tuketim: {(power?.totalConsumption || 0).toFixed(1)} kW
+          Üretim: {(power?.generation || 0).toFixed(1)} kW | Tüketim: {(power?.totalConsumption || 0).toFixed(1)} kW
         </text>
         <text x="475" y="143" fill="#94a3b8" fontSize="7" fontFamily="monospace">
-          Kullanim: %{(power?.utilizationPercent || 0).toFixed(0)} | {power?.sourceType === 'nuclear' ? '☢ Nukleer' : '☀ Gunes'}
+          Kullanım: %{(power?.utilizationPercent || 0).toFixed(0)} | {power?.sourceType === 'nuclear' ? '☢ Nükleer' : '☀ Güneş'}
         </text>
         {power?.powerDeficit && (
-          <text x="475" y="155" fill="#ef4444" fontSize="7" fontWeight="bold">!! GUC YETERSIZLIGI</text>
+          <text x="475" y="155" fill="#ef4444" fontSize="7" fontWeight="bold">!! GÜÇ YETERSİZLİĞİ</text>
         )}
         <g transform="translate(638, 107)">{statusDot(power?.powerDeficit ? 'critical' : 'nominal')}</g>
       </g>
@@ -295,12 +295,12 @@ function SystemSchematic({ state }) {
       {/* Thermal */}
       <g>
         <rect x="460" y="175" width="200" height="55" rx="8" fill="#0f172a" stroke="#f59e0b40" strokeWidth="1" />
-        <text x="475" y="195" fill="#f59e0b" fontSize="10" fontWeight="bold">🌡 Isil Kontrol</text>
+        <text x="475" y="195" fill="#f59e0b" fontSize="10" fontWeight="bold">🌡 Isıl Kontrol</text>
         <text x="475" y="210" fill="#94a3b8" fontSize="8" fontFamily="monospace">
           Kabin: {(thermal?.currentTemp || 22).toFixed(1)}°C | Net: {(thermal?.netHeatFlux || 0).toFixed(2)} kW
         </text>
         <text x="475" y="222" fill="#94a3b8" fontSize="7" fontFamily="monospace">
-          Radyator: %{(thermal?.heatRejection?.utilizationPercent || 0).toFixed(0)} kapasite
+          Radyatör: %{(thermal?.heatRejection?.utilizationPercent || 0).toFixed(0)} kapasite
         </text>
         <g transform="translate(638, 187)">{statusDot(thermal?.thermalStatus || 'nominal')}</g>
       </g>
@@ -308,12 +308,12 @@ function SystemSchematic({ state }) {
       {/* Water Processing */}
       <g>
         <rect x="230" y="245" width="220" height="55" rx="8" fill="#0f172a" stroke="#3b82f640" strokeWidth="1" />
-        <text x="250" y="265" fill="#3b82f6" fontSize="10" fontWeight="bold">💧 Su Isleme</text>
+        <text x="250" y="265" fill="#3b82f6" fontSize="10" fontWeight="bold">💧 Su İşleme</text>
         <text x="250" y="280" fill="#94a3b8" fontSize="8" fontFamily="monospace">
-          Geri Kaz: {formatPercent((waterProcessing?.overallRecovery || 0.987) * 100)} | Kayip: {waterProcessing?.dailyLoss || 0.4} L/gun
+          Geri Kaz: {formatPercent((waterProcessing?.overallRecovery || 0.987) * 100)} | Kayıp: {waterProcessing?.dailyLoss || 0.4} L/gün
         </text>
         <text x="250" y="292" fill="#94a3b8" fontSize="7" fontFamily="monospace">
-          Kalite: {waterProcessing?.waterQuality === 'potable' ? '✓ Icilebilir' : '⚠ Dikkat'} | TOC: {waterProcessing?.tocLevel || 0} mg/L
+          Kalite: {waterProcessing?.waterQuality === 'potable' ? '✓ İçilebilir' : '⚠ Dikkat'} | TOC: {waterProcessing?.tocLevel || 0} mg/L
         </text>
         <g transform="translate(428, 258)">{statusDot(waterProcessing?.status || 'nominal')}</g>
       </g>
@@ -321,7 +321,7 @@ function SystemSchematic({ state }) {
       {/* Degradation */}
       <g>
         <rect x="20" y="245" width="200" height="55" rx="8" fill="#0f172a" stroke="#f59e0b40" strokeWidth="1" />
-        <text x="35" y="265" fill="#f59e0b" fontSize="10" fontWeight="bold">🔧 Bilesen Sagligi</text>
+        <text x="35" y="265" fill="#f59e0b" fontSize="10" fontWeight="bold">🔧 Bileşen Sağlığı</text>
         <text x="35" y="280" fill="#94a3b8" fontSize="8" fontFamily="monospace">
           Ortalama: {formatPercent(degradation?.averageHealth || 100)}
         </text>
@@ -335,9 +335,9 @@ function SystemSchematic({ state }) {
       {/* Crew */}
       <g>
         <rect x="460" y="245" width="200" height="55" rx="8" fill="#0f172a" stroke="#ef444440" strokeWidth="1" />
-        <text x="475" y="265" fill="#ef4444" fontSize="10" fontWeight="bold">👨‍🚀 Murettebat</text>
+        <text x="475" y="265" fill="#ef4444" fontSize="10" fontWeight="bold">👨‍🚀 Mürettebat</text>
         <text x="475" y="280" fill="#94a3b8" fontSize="8" fontFamily="monospace">
-          {hab?.crewCount || 6} kisi | Moral: {state.morale?.score?.toFixed(0) || 72}/100
+          {hab?.crewCount || 6} kişi | Moral: {state.morale?.score?.toFixed(0) || 72}/100
         </text>
         <text x="475" y="292" fill="#94a3b8" fontSize="7" fontFamily="monospace">
           Su: {formatNumber(hab?.waterReserve || 0)} L | Nem: %{hab?.humidity?.toFixed(0)}
@@ -366,9 +366,9 @@ function SystemSchematic({ state }) {
       {/* Mission info */}
       <g transform="translate(240, 320)">
         <rect width="200" height="30" rx="6" fill="#0a0e1a" stroke="#a855f730" strokeWidth="0.7" />
-        <text x="10" y="14" fill="#a855f7" fontSize="8" fontWeight="bold">🚀 Gorev</text>
+        <text x="10" y="14" fill="#a855f7" fontSize="8" fontWeight="bold">🚀 Görev</text>
         <text x="60" y="14" fill="#94a3b8" fontSize="7" fontFamily="monospace">
-          Gun {state.time.day}/{state.mission?.totalMissionDays || 980} | %{(state.mission?.missionProgress || 0).toFixed(1)}
+          Gün {state.time.day}/{state.mission?.totalMissionDays || 980} | %{(state.mission?.missionProgress || 0).toFixed(1)}
         </text>
         <rect x="10" y="19" width="180" height="3" rx="1" fill="#1e293b" />
         <rect x="10" y="19" width={180 * (state.mission?.missionProgress || 0) / 100} height="3" rx="1" fill="#a855f7" opacity="0.7" />
@@ -430,7 +430,7 @@ function ScenarioPanel() {
       </div>
       {state.scenario.active && (
         <div className="mt-2 p-2 rounded-lg bg-red-500/10 border border-red-500/20 text-[10px] text-red-400">
-          ⚠ Senaryo etkisi simulasyonda aktif
+          ⚠ Senaryo etkisi simülasyonda aktif
         </div>
       )}
     </div>
@@ -452,8 +452,8 @@ export default function DigitalTwinPage() {
             <FiBox className="text-blue-400" size={18} />
           </div>
           <div>
-            <h2 className="text-base font-bold text-nexus-text">Dijital Ikiz</h2>
-            <p className="text-[10px] text-nexus-text-dim">Canli sistem durumu, 3D goruntuleme ve senaryo simulasyonu</p>
+            <h2 className="text-base font-bold text-nexus-text">Dijital İkiz</h2>
+            <p className="text-[10px] text-nexus-text-dim">Canlı sistem durumu, 3D görüntüleme ve senaryo simülasyonu</p>
           </div>
         </div>
         <div className="flex items-center gap-1 bg-nexus-bg rounded-lg p-0.5">
@@ -461,7 +461,7 @@ export default function DigitalTwinPage() {
             onClick={() => setView('schematic')}
             className={`px-3 py-1 rounded text-xs transition-all ${view === 'schematic' ? 'bg-nexus-accent text-nexus-bg font-bold' : 'text-nexus-text-dim'}`}
           >
-            Sematik
+            Şematik
           </button>
           <button
             onClick={() => setView('3d')}
@@ -491,12 +491,12 @@ export default function DigitalTwinPage() {
 
           {/* Quick stats */}
           <div className="bg-nexus-card rounded-xl border border-nexus-border p-3 space-y-2">
-            <h3 className="text-xs text-nexus-text-dim uppercase tracking-wider">Canli Durum</h3>
+            <h3 className="text-xs text-nexus-text-dim uppercase tracking-wider">Canlı Durum</h3>
             <QuickStat icon={<FiActivity size={11} />} label="Sistem" value={`${state.resources?.healthScore ?? 94}/100`} color={state.resources?.healthScore > 80 ? '#22c55e' : '#f59e0b'} />
-            <QuickStat icon={<FiThermometer size={11} />} label="Sicaklik" value={`${(state.compartments?.habitat?.temperature || 22).toFixed(1)}°C`} color="#f59e0b" />
+            <QuickStat icon={<FiThermometer size={11} />} label="Sıcaklık" value={`${(state.compartments?.habitat?.temperature || 22).toFixed(1)}°C`} color="#f59e0b" />
             <QuickStat icon={<FiWind size={11} />} label="O2" value={`%${(state.compartments?.habitat?.o2Level || 21).toFixed(1)}`} color="#22c55e" />
             <QuickStat icon={<FiDroplet size={11} />} label="Su" value={`${formatNumber(state.resources?.water?.total || 0)} L`} color="#3b82f6" />
-            <QuickStat icon={<FiZap size={11} />} label="Guc" value={`%${(state.power?.utilizationPercent || 0).toFixed(0)}`} color="#00f0ff" />
+            <QuickStat icon={<FiZap size={11} />} label="Güç" value={`%${(state.power?.utilizationPercent || 0).toFixed(0)}`} color="#00f0ff" />
           </div>
 
           {/* Compartment statuses */}
@@ -523,16 +523,16 @@ export default function DigitalTwinPage() {
           <div className="bg-nexus-card rounded-xl border border-nexus-border p-3">
             <h3 className="text-xs text-nexus-text-dim uppercase tracking-wider mb-2">Radyasyon</h3>
             <div className="flex justify-between text-xs">
-              <span className="text-nexus-text-dim">Kumulatif Doz</span>
+              <span className="text-nexus-text-dim">Kümülatif Doz</span>
               <span className="font-mono text-nexus-text">{(state.radiation?.cumulativeDose || 0).toFixed(4)} Gy</span>
             </div>
             <div className="flex justify-between text-xs mt-1">
-              <span className="text-nexus-text-dim">Gunluk Doz</span>
+              <span className="text-nexus-text-dim">Günlük Doz</span>
               <span className="font-mono text-nexus-text">{(state.radiation?.dailyDose || 0).toFixed(4)} Gy</span>
             </div>
             {state.radiation?.activeEvent && (
               <div className="mt-2 p-1.5 rounded bg-red-500/10 border border-red-500/20 text-[10px] text-red-400 animate-blink">
-                ☢ SPE Olayi Aktif
+                ☢ SPE Olayı Aktif
               </div>
             )}
           </div>
@@ -547,7 +547,7 @@ export default function DigitalTwinPage() {
             Senaryo Aktif: {SCENARIOS.find(s => s.id === state.scenario.active)?.name}
           </span>
           <span className="text-[10px] text-red-400/70 ml-auto font-mono">
-            {SCENARIOS.find(s => s.id === state.scenario.active)?.duration - (state.time.day - state.scenario.startDay)} gun kaldi
+            {SCENARIOS.find(s => s.id === state.scenario.active)?.duration - (state.time.day - state.scenario.startDay)} gün kaldı
           </span>
         </div>
       )}

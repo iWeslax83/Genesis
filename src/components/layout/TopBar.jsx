@@ -28,7 +28,7 @@ export default function TopBar() {
             <span className="text-nexus-text-dim">/100</span>
           </span>
           <div className="tooltip-content absolute top-full left-0 mt-1 z-50 bg-nexus-card border border-nexus-border rounded-lg px-2 py-1 text-[10px] text-nexus-text-dim whitespace-nowrap">
-            Sistem Saglik Skoru
+            Sistem Sağlık Skoru
           </div>
         </div>
 
@@ -36,7 +36,7 @@ export default function TopBar() {
         <div className="hidden xl:flex items-center gap-2">
           <QuickPill icon={<FiWind size={10} />} value={`${o2.toFixed(1)}%`} color={o2 > 19.5 ? '#22c55e' : '#ef4444'} label="O2" />
           <QuickPill icon={<FiDroplet size={10} />} value={`${co2.toFixed(2)}%`} color={co2 < 0.08 ? '#22c55e' : '#f59e0b'} label="CO2" />
-          <QuickPill icon={<FiZap size={10} />} value={`${power?.utilizationPercent?.toFixed(0)}%`} color={power?.powerDeficit ? '#ef4444' : '#22c55e'} label="Guc" />
+          <QuickPill icon={<FiZap size={10} />} value={`${power?.utilizationPercent?.toFixed(0)}%`} color={power?.powerDeficit ? '#ef4444' : '#22c55e'} label="Güç" />
           {morale && (
             <QuickPill icon={<span className="text-[10px]">😊</span>} value={`${morale.score?.toFixed(0)}`} color={morale.score > 60 ? '#22c55e' : '#f59e0b'} label="Moral" />
           )}
@@ -54,7 +54,7 @@ export default function TopBar() {
       <div className="flex items-center gap-3">
         <div className="flex items-center gap-2 text-xs font-mono">
           <FiClock size={12} className="text-nexus-text-dim" />
-          <span className="text-nexus-accent font-bold">Gun {time.day}</span>
+          <span className="text-nexus-accent font-bold">Gün {time.day}</span>
           <span className="text-nexus-border">|</span>
           <span className="text-nexus-text font-bold">{formatTime(time.hour, time.minute)}</span>
           <div className={`flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] ${
@@ -85,7 +85,7 @@ export default function TopBar() {
                   ? 'bg-nexus-accent text-nexus-bg font-bold'
                   : 'text-nexus-text-dim hover:text-nexus-text'
               }`}
-              title={`${spd}x hiz (+ / - tuslari)`}
+              title={`${spd}x hız (+ / - tuşları)`}
             >
               {spd}x
             </button>
@@ -100,7 +100,7 @@ export default function TopBar() {
               ? 'bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30'
               : 'bg-amber-500/20 text-amber-400 hover:bg-amber-500/30'
           }`}
-          title={`${time.isRunning ? 'Durdur' : 'Baslat'} (Space)`}
+          title={`${time.isRunning ? 'Durdur' : 'Başlat'} (Space)`}
         >
           {time.isRunning ? <FiPause size={14} /> : <FiPlay size={14} />}
         </button>
@@ -124,7 +124,7 @@ export default function TopBar() {
         <button
           onClick={() => window.dispatchEvent(new KeyboardEvent('keydown', { key: '?' }))}
           className="hidden lg:flex items-center gap-1 px-1.5 py-0.5 rounded bg-nexus-bg text-nexus-text-dim hover:text-nexus-accent text-[10px] font-mono transition-all"
-          title="Klavye kisayollari"
+          title="Klavye kısayolları"
         >
           <FiCommand size={10} />
           <span>?</span>
