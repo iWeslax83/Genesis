@@ -83,7 +83,7 @@ function AeroponicDetail({ mod, day, ndvi, pathogens }) {
               <MiniBar value={growth} max={100} color={ready ? '#4ead5b' : '#4a9caa'} />
               <div className="flex justify-between mt-1 text-[9px] text-nexus-text-dim">
                 <span>Gün {age}/{info.growthDays}</span>
-                <span>{info.caloriesPerKg} kcal/kg</span>
+                <span>{info.caloriesPer100g} kcal/100g</span>
               </div>
             </div>
           );
@@ -143,7 +143,7 @@ function NFTDetail({ mod, day, ndvi, pathogens }) {
               <MiniBar value={growth} max={100} color={ready ? '#4ead5b' : '#4a9caa'} />
               <div className="flex justify-between mt-1 text-[9px] text-nexus-text-dim">
                 <span>Gün {age}/{info.growthDays}</span>
-                <span>{info.caloriesPerKg} kcal/kg</span>
+                <span>{info.caloriesPer100g} kcal/100g</span>
               </div>
             </div>
           );

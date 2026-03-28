@@ -4,7 +4,7 @@ import { OrbitControls, Html, Float, MeshDistortMaterial } from '@react-three/dr
 import { useGenesis } from '../../context/GenesisContext';
 import { COMPARTMENTS, SCENARIOS } from '../../simulation/constants';
 import { formatNumber, formatPercent } from '../../utils/formatters';
-import { FiBox, FiAlertTriangle, FiPlay, FiX, FiActivity, FiThermometer, FiDroplet, FiWind, FiZap, FiRefreshCw, FiCpu, FiSun, FiTool, FiUsers, FiNavigation, FiRadio, FiMap } from 'react-icons/fi';
+import { FiBox, FiAlertTriangle, FiPlay, FiX, FiActivity, FiThermometer, FiDroplet, FiWind, FiZap, FiRefreshCw, FiCpu, FiSun, FiTool, FiUsers, FiNavigation, FiRadio } from 'react-icons/fi';
 import * as THREE from 'three';
 
 const FarmViewPage = React.lazy(() => import('../farm-view/FarmViewPage'));

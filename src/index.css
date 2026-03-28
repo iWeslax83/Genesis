@@ -106,14 +106,13 @@ kbd {
 }
 
 /* Tooltip */
-.tooltip-trigger:hover .tooltip-content {
-  opacity: 1;
-  transform: translateY(0);
-  pointer-events: auto;
-}
+/* tooltip hover handled below */
 .tooltip-content {
   opacity: 0;
-  transform: translateY(4px);
   pointer-events: none;
-  transition: all 0.15s ease;
+  transition: opacity 0.15s ease;
+}
+.tooltip-trigger:hover .tooltip-content {
+  opacity: 1;
+  pointer-events: auto;
 }

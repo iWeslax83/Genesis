@@ -25,7 +25,7 @@ function PlantHealthCell({ type, ndviValue, count, moduleKey }) {
   const healthPct = Math.round(ndviValue * 100);
 
   return (
-    <div className="relative group">
+    <div className="relative group tooltip-trigger">
       <div
         className="rounded-lg p-2 border border-transparent hover:border-nexus-accent/30 transition-all cursor-default"
         style={{ backgroundColor: `${color}15` }}

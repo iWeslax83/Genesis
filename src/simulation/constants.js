@@ -382,7 +382,10 @@ export const MEALWORM = {
   dailyCapacity: 0.8,         // kg bitki atığı / gün işleme
   waterPerDay: 0.1,           // L
   growthDays: 45,             // Larva evresi
-  reference: 'Yuegong-1 — yenilenemeyen bitki kısımları ile beslenir',
+  vitaminB12Per100g: 0.47,    // µg — böcek proteini B12 kaynağı (EFSA, 2021)
+  ironPer100g: 3.8,           // mg
+  calciumPer100g: 43,         // mg
+  reference: 'Yuegong-1 — yenilenemeyen bitki kısımları ile beslenir. B12 kaynağı (EFSA)',
 };
 
 // Mürettebat sabitleri (NASA BVAD Rev2 — NASA/TP-2015-218570)
@@ -557,22 +560,57 @@ export const SCENARIOS = [
 //     çilek 0.9m²(15×0.06) ≈ 6.9 m²
 //
 // Ardışık ekim: farklı plantedDay değerleri ile sürekli hasat garantisi
+// Kademeli ekim: aynı türden birden fazla grup, farklı ekim günleri
+// Bu sayede tüm bitkiler aynı anda hasat edilmez, sürekli üretim sağlanır
 export const INITIAL_PLANTS = {
   aeroponic: [
-    { type: 'potato', plantedDay: -55, count: 50 },
-    { type: 'sweetPotato', plantedDay: -40, count: 22 },
-    { type: 'wheat', plantedDay: -70, count: 120 },
-    { type: 'soybean', plantedDay: -30, count: 50 },
-    { type: 'peanut', plantedDay: -50, count: 40 },
+    // Patates: 3 kademe (105 gün döngü → ~35 gün aralık)
+    { type: 'potato', plantedDay: -95, count: 40 },
+    { type: 'potato', plantedDay: -60, count: 40 },
+    { type: 'potato', plantedDay: -25, count: 40 },
+    // Tatlı patates: 2 kademe (120 gün döngü → 60 gün aralık)
+    { type: 'sweetPotato', plantedDay: -100, count: 28 },
+    { type: 'sweetPotato', plantedDay: -40, count: 27 },
+    // Buğday: 4 kademe (86 gün döngü → ~22 gün aralık)
+    { type: 'wheat', plantedDay: -80, count: 70 },
+    { type: 'wheat', plantedDay: -58, count: 70 },
+    { type: 'wheat', plantedDay: -36, count: 70 },
+    { type: 'wheat', plantedDay: -14, count: 70 },
+    // Soya: 3 kademe (97 gün döngü → ~32 gün aralık)
+    { type: 'soybean', plantedDay: -90, count: 40 },
+    { type: 'soybean', plantedDay: -58, count: 40 },
+    { type: 'soybean', plantedDay: -26, count: 40 },
+    // Yer fıstığı: 3 kademe (100 gün döngü → ~33 gün aralık)
+    { type: 'peanut', plantedDay: -90, count: 30 },
+    { type: 'peanut', plantedDay: -57, count: 30 },
+    { type: 'peanut', plantedDay: -24, count: 30 },
   ],
   nft: [
-    { type: 'lettuce', plantedDay: -18, count: 30 },
-    { type: 'mizuna', plantedDay: -12, count: 25 },    // Eden ISS en verimli yapraklı
-    { type: 'tomato', plantedDay: -35, count: 8 },
-    { type: 'spinach', plantedDay: -14, count: 20 },
-    { type: 'pepper', plantedDay: -80, count: 8 },      // 137 gün döngü — erken ekildi
-    { type: 'radish', plantedDay: -16, count: 20 },
-    { type: 'strawberry', plantedDay: -35, count: 15 },  // Yuegong-1 tek meyve
+    // Marul: 3 kademe (28 gün döngü → ~9 gün aralık)
+    { type: 'lettuce', plantedDay: -24, count: 24 },
+    { type: 'lettuce', plantedDay: -15, count: 23 },
+    { type: 'lettuce', plantedDay: -6, count: 23 },
+    // Mizuna: 3 kademe (21 gün döngü → 7 gün aralık)
+    { type: 'mizuna', plantedDay: -18, count: 20 },
+    { type: 'mizuna', plantedDay: -11, count: 20 },
+    { type: 'mizuna', plantedDay: -4, count: 20 },
+    // Domates: 2 kademe (65 gün döngü → ~32 gün aralık)
+    { type: 'tomato', plantedDay: -55, count: 10 },
+    { type: 'tomato', plantedDay: -23, count: 10 },
+    // Ispanak: 3 kademe (25 gün döngü → ~8 gün aralık)
+    { type: 'spinach', plantedDay: -22, count: 17 },
+    { type: 'spinach', plantedDay: -14, count: 17 },
+    { type: 'spinach', plantedDay: -6, count: 16 },
+    // Biber: 2 kademe (137 gün döngü → ~68 gün aralık)
+    { type: 'pepper', plantedDay: -120, count: 8 },
+    { type: 'pepper', plantedDay: -52, count: 8 },
+    // Turp: 3 kademe (27 gün döngü → 9 gün aralık)
+    { type: 'radish', plantedDay: -24, count: 17 },
+    { type: 'radish', plantedDay: -15, count: 17 },
+    { type: 'radish', plantedDay: -6, count: 16 },
+    // Çilek: 2 kademe (60 gün döngü → 30 gün aralık)
+    { type: 'strawberry', plantedDay: -50, count: 18 },
+    { type: 'strawberry', plantedDay: -20, count: 17 },
   ],
 };
 
@@ -688,10 +726,10 @@ export const SUBSTRATE = {
 // Vitamin/mineral veritabanı
 export const VITAMINS = {
   A:       { name: 'A Vitamini',   unit: 'µg', dailyNeed: 900,  sources: { spinach: 469, sweetPotato: 709, lettuce: 370, pepper: 157, mizuna: 198 } },
-  B12:     { name: 'B12 Vitamini', unit: 'µg', dailyNeed: 2.4,  sources: { spirulina: 0.1 } },  // MELiSSA: B12 eksikliği bilinen risk
+  B12:     { name: 'B12 Vitamini', unit: 'µg', dailyNeed: 2.4,  sources: { spirulina: 0.1, mealworm: 0.47 } },  // Un kurdu birincil B12 kaynağı
   C:       { name: 'C Vitamini',   unit: 'mg', dailyNeed: 90,   sources: { pepper: 128, strawberry: 59, tomato: 14, spinach: 28, potato: 20 } },
-  iron:    { name: 'Demir',        unit: 'mg', dailyNeed: 8,    sources: { spinach: 2.7, soybean: 15.7, spirulina: 28.5, peanut: 4.6 } },
-  calcium: { name: 'Kalsiyum',     unit: 'mg', dailyNeed: 1000, sources: { spinach: 99, soybean: 277, spirulina: 120, mizuna: 210 } },
+  iron:    { name: 'Demir',        unit: 'mg', dailyNeed: 8,    sources: { spinach: 2.7, soybean: 15.7, spirulina: 28.5, peanut: 4.6, mealworm: 3.8 } },
+  calcium: { name: 'Kalsiyum',     unit: 'mg', dailyNeed: 1000, sources: { spinach: 99, soybean: 277, spirulina: 120, mizuna: 210, mealworm: 43 } },
 };
 
 // ============================================================

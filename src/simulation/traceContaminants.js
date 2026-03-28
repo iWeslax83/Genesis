@@ -10,7 +10,8 @@ export function calculateTraceContaminants(currentLevels, crewCount, carbonBedHe
   const scrubberEfficiency = carbonBedHealth || 1.0;
 
   for (const [contId, contDef] of Object.entries(TRACE_CONTAMINANTS)) {
-    const current = (currentLevels && currentLevels[contId]) || 0;
+    const raw = currentLevels && currentLevels[contId];
+    const current = (typeof raw === 'object' && raw !== null) ? (raw.level || 0) : (raw || 0);
 
     // Üretim hızı (mg/m³/gün) — mürettebat sayısına bağlı
     const productionRate = contDef.baseRate * (crewCount / 6);

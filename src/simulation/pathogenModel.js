@@ -78,7 +78,7 @@ export function calculatePathogenRisk(moduleConditions, currentInfections, tickF
       let newState = current.state;
       let newAffected = current.affectedPercent;
       let newSeverity = current.severity;
-      let incubationDays = (current.incubationDays || 0) + tickFraction;
+      let incubationDays = (current.incubationDays || 0);
 
       // Tedavi etkisi: yayılma %70 yavaşlar, iyileşme başlar
       const treatmentMod = current.treatmentApplied ? 0.3 : 1.0;

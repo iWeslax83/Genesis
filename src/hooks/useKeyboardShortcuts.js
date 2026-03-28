@@ -3,13 +3,12 @@ import { useGenesis } from '../context/GenesisContext';
 
 const PAGE_KEYS = {
   '1': 'overview',
-  '2': 'farm-view',
-  '3': 'growth',
-  '4': 'nutrition',
-  '5': 'power',
-  '6': 'mission',
-  '7': 'digital-twin',
-  '8': 'ai',
+  '2': 'growth',
+  '3': 'nutrition',
+  '4': 'power',
+  '5': 'mission',
+  '6': 'digital-twin',
+  '7': 'ai',
 };
 
 export default function useKeyboardShortcuts() {
@@ -101,7 +100,7 @@ export default function useKeyboardShortcuts() {
 }
 
 export const SHORTCUT_LIST = [
-  { key: '1-8', desc: 'Sayfa navigasyonu' },
+  { key: '1-7', desc: 'Sayfa navigasyonu' },
   { key: 'Space', desc: 'Simülasyonu durdur/başlat' },
   { key: '+/-', desc: 'Hızı artır/azalt' },
   { key: 'B', desc: 'Kenar çubuğunu daralt/genişlet' },

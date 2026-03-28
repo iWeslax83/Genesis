@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { FiInfo } from 'react-icons/fi';
 
@@ -38,7 +38,7 @@ const METRIC_GLOSSARY = {
     desc: 'Bitkinin ne kadar ısı biriktirdiğini ölçer. Her bitki olgunlaşmak için belirli bir GDD\'ye ulaşmalıdır.',
   },
   vpd: {
-    title: 'VPD (Buhar Basinci Acigi)',
+    title: 'VPD (Buhar Basıncı Açığı)',
     desc: 'Hava ile yaprak arasındaki nem farkı. Doğru VPD bitkinin su alımını ve büyümesini optimize eder.',
   },
 
@@ -113,25 +113,57 @@ export function getMetricInfo(key) {
 
 function TooltipPortal({ anchorRef, info, onClose }) {
   const [pos, setPos] = useState(null);
+  const tooltipRef = useRef(null);
 
-  useEffect(() => {
+  const updatePosition = useCallback(() => {
     if (!anchorRef.current) return;
     const rect = anchorRef.current.getBoundingClientRect();
-    setPos({
-      top: rect.top - 8,
-      left: rect.left + rect.width / 2,
-    });
+    const tooltipW = 224; // w-56 = 14rem = 224px
+    const tooltipH = 80;
+    const pad = 8;
+
+    let top = rect.top - pad;
+    let left = rect.left + rect.width / 2;
+    let placeBelow = false;
+
+    // Üstte yer yoksa alta aç
+    if (top - tooltipH < pad) {
+      top = rect.bottom + pad;
+      placeBelow = true;
+    }
+
+    // Yatayda ekran dışına taşmasını engelle
+    if (left - tooltipW / 2 < pad) left = tooltipW / 2 + pad;
+    if (left + tooltipW / 2 > window.innerWidth - pad) left = window.innerWidth - tooltipW / 2 - pad;
+
+    setPos({ top, left, placeBelow });
   }, [anchorRef]);
+
+  useEffect(() => {
+    updatePosition();
+    // Scroll ve resize'da pozisyonu güncelle
+    const scrollables = document.querySelectorAll('[class*="overflow"]');
+    const handler = () => updatePosition();
+    window.addEventListener('scroll', handler, true);
+    window.addEventListener('resize', handler);
+    scrollables.forEach(el => el.addEventListener('scroll', handler));
+    return () => {
+      window.removeEventListener('scroll', handler, true);
+      window.removeEventListener('resize', handler);
+      scrollables.forEach(el => el.removeEventListener('scroll', handler));
+    };
+  }, [updatePosition]);
 
   if (!pos) return null;
 
   return createPortal(
     <div
+      ref={tooltipRef}
       className="fixed animate-fade-in"
       style={{
         top: pos.top,
         left: pos.left,
-        transform: 'translate(-50%, -100%)',
+        transform: pos.placeBelow ? 'translate(-50%, 0)' : 'translate(-50%, -100%)',
         zIndex: 99999,
       }}
       onMouseEnter={(e) => e.stopPropagation()}
@@ -141,7 +173,10 @@ function TooltipPortal({ anchorRef, info, onClose }) {
         <div className="text-[11px] font-semibold text-nexus-accent mb-1">{info.title}</div>
         <div className="text-[10px] text-nexus-text-dim leading-relaxed">{info.desc}</div>
       </div>
-      <div className="w-2 h-2 bg-nexus-card border-b border-r border-nexus-border rotate-45 absolute left-1/2 -translate-x-1/2 -bottom-1" />
+      {/* Ok işareti — üstte veya altta */}
+      <div className={`w-2 h-2 bg-nexus-card border-nexus-border rotate-45 absolute left-1/2 -translate-x-1/2 ${
+        pos.placeBelow ? '-top-1 border-t border-l' : '-bottom-1 border-b border-r'
+      }`} />
     </div>,
     document.body
   );

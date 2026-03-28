@@ -29,10 +29,10 @@ export function formatPercent(value, decimals = 1) {
  */
 export function getStatusColor(status) {
   switch (status) {
-    case 'nominal': return '#00ff88';
-    case 'warning': return '#ff8800';
-    case 'critical': return '#ff4466';
-    default: return '#94a3b8';
+    case 'nominal': return '#4ead5b';
+    case 'warning': return '#d4903a';
+    case 'critical': return '#d45555';
+    default: return '#6c6e78';
   }
 }
 
@@ -41,7 +41,7 @@ export function getStatusColor(status) {
  */
 export function getValueColor(value, min, max) {
   const ratio = (value - min) / (max - min);
-  if (ratio < 0.3) return '#00ff88';
-  if (ratio < 0.7) return '#ff8800';
-  return '#ff4466';
+  if (ratio < 0.3) return '#4ead5b';
+  if (ratio < 0.7) return '#d4903a';
+  return '#d45555';
 }

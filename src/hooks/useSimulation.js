@@ -284,7 +284,7 @@ export default function useSimulation() {
         dispatch({ type: 'UPDATE_TRACE_CONTAMINANTS', payload: contaminantData });
       }
 
-      // 14. AI, vitamin, NDVI, patojen, görev, moral — her 30 dakikada bir
+      // 14. AI, vitamin, NDVI, patojen, görev — her 30 dakikada bir
       if (s.time.minute % 30 === 0) {
         const anomalies = detectAnomalies(s.sensorHistory, sensors, s.time);
         const insights = generateAIInsights(flow, s.compartments, s.time, s.sensorHistory);

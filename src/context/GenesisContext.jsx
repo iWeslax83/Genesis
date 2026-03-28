@@ -199,7 +199,7 @@ const initialState = {
     missionProgress: 4.8,
     storedFood: { total: 10584, consumed: 500, remaining: 10084, daysRemaining: 900, emergencyReserve: 972 },
     blss: { rampUpProgress: 39, operational: false, closurePercent: 0, contribution: 0 },
-    growingArea: { total: 22, perPerson: 3.7, targetPerPerson: 8, adequate: false },
+    growingArea: { total: 52, perPerson: 8.7, targetPerPerson: 8, adequate: true },
     status: 'nominal',
   },
 

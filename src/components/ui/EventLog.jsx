@@ -110,7 +110,7 @@ export default function EventLog() {
   };
 
   return (
-    <div className={`fixed bottom-0 left-0 right-0 z-40 transition-all duration-200 ${
+    <div className={`absolute bottom-0 left-0 right-0 z-40 transition-all duration-200 ${
       isOpen ? 'h-48' : 'h-7'
     }`}>
       {/* Toggle bar */}
