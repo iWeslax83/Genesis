@@ -145,15 +145,6 @@ C1 (Anaerobik Fermenter)  →  C3 (Nitrifikasyon)  →  C4a/4b (Fotobiyoreaktör
 
 ### Mürettebat (6 kişi, 980 gün görev)
 
-| Görev | İsim | Günlük Kalori |
-|-------|------|---------------|
-| Komutan | Cmdr. Yıldız | 2.700 kcal |
-| Pilot | Plt. Demir | 2.500 kcal |
-| Mühendis | Müh. Kaya | 2.600 kcal |
-| Mühendis | Müh. Aras | 2.500 kcal |
-| Doktor | Dr. Işık | 2.300 kcal |
-| Botanikçi | Bot. Toprak | 2.400 kcal |
-
 Kişi başı günlük tüketim: 630 L O2, 550 L CO2 üretimi, 3.8 L su, 1.8 kg atık.
 
 ### What-If Senaryoları
