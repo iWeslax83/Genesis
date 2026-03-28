@@ -1,5 +1,5 @@
-import React, { createContext, useContext, useReducer, useCallback, useEffect, useRef } from 'react';
-import { INITIAL_PLANTS, CREW, SCENARIOS } from '../simulation/constants';
+import { createContext, useContext, useReducer, useCallback, useEffect, useRef } from 'react';
+import { INITIAL_PLANTS, SCENARIOS } from '../simulation/constants';
 
 const GenesisContext = createContext(null);
 
@@ -103,7 +103,6 @@ const initialState = {
 
   ai: {
     anomalies: [],
-    predictions: [],
     plantHealth: {
       overallScore: 95,
       issues: [
@@ -587,7 +586,7 @@ export function GenesisProvider({ children }) {
     () => loadSavedState() || initialState,
   );
 
-  const stableDispatch = useCallback((action) => dispatch(action), []);
+  // dispatch from useReducer is already stable — no wrapper needed
 
   // --- Debounced auto-save to localStorage ---
   const saveTimerRef = useRef(null);
@@ -626,7 +625,7 @@ export function GenesisProvider({ children }) {
   }, []);
 
   return (
-    <GenesisContext.Provider value={{ state, dispatch: stableDispatch, resetSimulation }}>
+    <GenesisContext.Provider value={{ state, dispatch, resetSimulation }}>
       {children}
     </GenesisContext.Provider>
   );

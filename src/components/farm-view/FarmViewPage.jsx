@@ -6,7 +6,7 @@ import InfoTooltip from '../ui/InfoTooltip';
 import {
   FiDroplet, FiSun, FiWind, FiThermometer, FiZap, FiActivity,
   FiAlertTriangle, FiCheckCircle, FiUsers, FiClock,
-  FiCircle, FiHexagon, FiBox, FiHome, FiFeather,
+  FiCircle, FiHexagon, FiHome, FiFeather,
 } from 'react-icons/fi';
 
 /* --- Yardımcı --- */

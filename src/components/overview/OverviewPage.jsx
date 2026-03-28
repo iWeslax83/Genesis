@@ -80,10 +80,8 @@ function crew6Summary(o2, foodPct, waterPct, progress, time) {
 
 /* Key Metrics Bar */
 function KeyMetrics({ state }) {
-  const { resources, power, ai } = state;
+  const { resources, power } = state;
   const cal = resources.calories;
-  const anomalyCount = (ai?.anomalies || []).length;
-  const critCount = (ai?.anomalies || []).filter(a => a.severity === 'critical').length;
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">

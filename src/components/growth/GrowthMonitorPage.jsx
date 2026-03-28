@@ -1,4 +1,3 @@
-import React from 'react';
 import { useGenesis } from '../../context/GenesisContext';
 import GaugeCircle from '../ui/GaugeCircle';
 import NDVIHeatmap from './NDVIHeatmap';
@@ -6,7 +5,7 @@ import InfoTooltip from '../ui/InfoTooltip';
 import { PLANTS, NUTRIENT_RECIPES } from '../../simulation/constants';
 import { calculatePlantGrowth, calculateDLI, getCurrentGrowthPhase } from '../../simulation/plantGrowthModel';
 import { formatNumber } from '../../utils/formatters';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
+import { XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
 import { FiActivity } from 'react-icons/fi';
 
 const MODULE_TABS = [

@@ -4,14 +4,8 @@
 @tailwind components;
 @tailwind utilities;
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
 body {
-  font-family: 'Inter', 'IBM Plex Sans', sans-serif;
+  font-family: 'Inter', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: #111318;
@@ -67,12 +61,9 @@ code {
   100% { stroke-dashoffset: 24; }
 }
 
-/* Custom scrollbar for panels */
+/* Custom scrollbar for panels — narrower variant */
 .custom-scrollbar::-webkit-scrollbar {
   width: 4px;
-}
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: transparent;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb {
   background: #2a2c35;
@@ -106,7 +97,6 @@ kbd {
 }
 
 /* Tooltip */
-/* tooltip hover handled below */
 .tooltip-content {
   opacity: 0;
   pointer-events: none;

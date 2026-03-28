@@ -1,6 +1,6 @@
-import React from 'react';
 import { useGenesis } from '../../context/GenesisContext';
 import { formatNumber, formatPercent } from '../../utils/formatters';
+import InfoTooltip from '../ui/InfoTooltip';
 import {
   FiMapPin, FiPackage, FiShield, FiWind, FiDroplet, FiClock, FiUsers,
   FiMoon, FiCoffee, FiActivity, FiTool, FiSettings, FiSearch, FiTarget,
@@ -48,7 +48,7 @@ function MissionTimeline({ missionDay, totalDays, currentPhase, blss }) {
   return (
     <div className="bg-nexus-card rounded-lg border border-nexus-border p-4">
       <h3 className="text-xs text-nexus-text-dim uppercase tracking-wider mb-3 flex items-center gap-1.5">
-        <FiClock size={12} /> Görev Zaman Çizelgesi
+        <FiClock size={12} /> Görev Zaman Çizelgesi <InfoTooltip metricKey="missionTimeline" size={11} />
       </h3>
       <div className="relative">
         <div className="h-2 bg-nexus-bg rounded-full overflow-hidden">
@@ -95,7 +95,7 @@ function CrewPanel({ crewActivity, time }) {
   return (
     <div className="bg-nexus-card border border-nexus-border rounded-lg p-4 overflow-y-auto">
       <h3 className="text-xs text-nexus-text-dim uppercase tracking-wider mb-3 flex items-center gap-1.5">
-        <FiUsers size={12} style={{ color: '#5b8def' }} /> Mürettebat Durumu
+        <FiUsers size={12} style={{ color: '#5b8def' }} /> Mürettebat Durumu <InfoTooltip metricKey="crewStatus" size={11} />
       </h3>
 
       {/* Crew cards */}
@@ -104,7 +104,7 @@ function CrewPanel({ crewActivity, time }) {
           const actColor = ACTIVITY_COLORS[member.activityKey] || '#94a3b8';
           const ActIcon = ACTIVITY_ICON_MAP[member.activityKey] || FiUser;
           return (
-            <div key={member.id} className="p-2.5 rounded-lg bg-nexus-bg border border-nexus-border/30 transition-colors" style={{ '--hover-border': 'rgba(91,141,239,0.2)' }}>
+            <div key={member.id} className="p-2.5 rounded-lg bg-nexus-bg border border-nexus-border/30 transition-colors hover:border-nexus-accent/20">
               <div className="flex items-center gap-2 mb-1.5">
                 <div className="w-7 h-7 rounded-full bg-nexus-card flex items-center justify-center">
                   <ActIcon size={14} style={{ color: actColor }} />
@@ -200,8 +200,8 @@ export default function MissionPage() {
 
       {/* Stats row */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        <MiniStat icon={<FiShield />} label="Radyasyon Dozu" value={`${(radiation.cumulativeDose || 0).toFixed(3)} Gy`} sub={radiation.activeEvent ? 'SPE Aktif!' : 'Normal GCR'} color={radiation.status === 'nominal' ? '#4ead5b' : '#d45555'} />
-        <MiniStat icon={<FiDroplet />} label="Su Geri Kazanım" value={formatPercent((waterProc.overallRecovery || 0.98) * 100)} sub={`Kayıp: ${waterProc.dailyLoss || 0} L/gün`} color="#4a9caa" />
+        <MiniStat icon={<FiShield />} label="Radyasyon Dozu" value={`${(radiation.cumulativeDose || 0).toFixed(3)} Gy`} sub={radiation.activeEvent ? 'SPE Aktif!' : 'Normal GCR'} color={radiation.status === 'nominal' ? '#4ead5b' : '#d45555'} metricKey="radiation" />
+        <MiniStat icon={<FiDroplet />} label="Su Geri Kazanım" value={formatPercent((waterProc.overallRecovery || 0.98) * 100)} sub={`Kayıp: ${waterProc.dailyLoss || 0} L/gün`} color="#4a9caa" metricKey="waterRecycle" />
       </div>
 
       {/* Main grid: Crew + Erzak + Contaminants */}
@@ -214,7 +214,7 @@ export default function MissionPage() {
         {/* Erzak */}
         <div className="col-span-12 lg:col-span-3 bg-nexus-card border border-nexus-border rounded-lg p-4 overflow-y-auto">
           <h3 className="text-xs text-nexus-text-dim uppercase tracking-wider mb-3 flex items-center gap-1.5">
-            <FiPackage size={12} style={{ color: '#d4903a' }} /> Depolanan Erzak
+            <FiPackage size={12} style={{ color: '#d4903a' }} /> Depolanan Erzak <InfoTooltip metricKey="storedFood" size={11} />
           </h3>
           <div className="flex justify-between text-xs mb-1">
             <span className="text-nexus-text-dim">Kalan</span>
@@ -235,7 +235,7 @@ export default function MissionPage() {
         {/* Trace contaminants */}
         <div className="col-span-12 lg:col-span-4 bg-nexus-card border border-nexus-border rounded-lg p-4 overflow-y-auto">
           <h3 className="text-xs text-nexus-text-dim uppercase tracking-wider mb-3 flex items-center gap-1.5">
-            <FiWind size={12} className="text-nexus-accent" /> Eser Kirleticiler (TCCS)
+            <FiWind size={12} className="text-nexus-accent" /> Eser Kirleticiler (TCCS) <InfoTooltip metricKey="traceContaminants" size={11} />
           </h3>
           <div className="space-y-2">
             {Object.entries(contaminantLevels).map(([key, cont]) => (
@@ -274,7 +274,7 @@ export default function MissionPage() {
         {/* Radiation */}
         <div className="bg-nexus-card border border-nexus-border rounded-lg p-3">
           <h3 className="text-xs text-nexus-text-dim uppercase tracking-wider mb-2 flex items-center gap-1.5">
-            <FiShield size={12} style={{ color: '#8b7fc7' }} /> Radyasyon İzleme
+            <FiShield size={12} style={{ color: '#8b7fc7' }} /> Radyasyon İzleme <InfoTooltip metricKey="radiation" size={11} />
           </h3>
           <div className="grid grid-cols-3 gap-2 mb-2">
             <div className="p-2 rounded-lg bg-nexus-bg text-center">
@@ -308,7 +308,7 @@ export default function MissionPage() {
         {/* Water processing */}
         <div className="bg-nexus-card border border-nexus-border rounded-lg p-3">
           <h3 className="text-xs text-nexus-text-dim uppercase tracking-wider mb-2 flex items-center gap-1.5">
-            <FiDroplet size={12} style={{ color: '#4a9caa' }} /> Su İşleme
+            <FiDroplet size={12} style={{ color: '#4a9caa' }} /> Su İşleme <InfoTooltip metricKey="waterProcessing" size={11} />
           </h3>
           <div className="flex gap-2">
             {Object.entries(waterProc.stages || {}).map(([key, stage]) => (
@@ -343,12 +343,13 @@ export default function MissionPage() {
   );
 }
 
-function MiniStat({ icon, label, value, sub, color }) {
+function MiniStat({ icon, label, value, sub, color, metricKey }) {
   return (
     <div className="bg-nexus-card border border-nexus-border rounded-lg p-3">
       <div className="flex items-center gap-1.5 mb-1">
         <span style={{ color }}>{icon}</span>
         <span className="text-[10px] text-nexus-text-dim uppercase">{label}</span>
+        {metricKey && <InfoTooltip metricKey={metricKey} size={10} />}
       </div>
       <div className="text-base font-semibold font-mono" style={{ color }}>{value}</div>
       {sub && <div className="text-[9px] text-nexus-text-dim mt-0.5">{sub}</div>}

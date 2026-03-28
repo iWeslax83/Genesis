@@ -105,6 +105,102 @@ const METRIC_GLOSSARY = {
     title: 'Eser Kirleticiler',
     desc: 'Havada biriken düşük miktardaki zararlı gazlar (etilen, amonyak vb). Scrubber sistemleri bunları temizler.',
   },
+
+  // Power & systems management
+  powerGeneration: {
+    title: 'Toplam Güç Üretimi',
+    desc: 'Güneş panelleri veya nükleer reaktörün anlık ürettiği elektrik. Tüm sistemlerin enerji kaynağıdır.',
+  },
+  powerConsumption: {
+    title: 'Toplam Güç Tüketimi',
+    desc: 'LED aydınlatma, pompalar, ECLSS ve aviyonik dahil tüm alt sistemlerin toplam enerji kullanımı.',
+  },
+  powerDistribution: {
+    title: 'Güç Dağılımı',
+    desc: 'Her alt sistemin ne kadar enerji tükettiğini gösterir. Enerji açığında düşük öncelikli sistemler kısılır.',
+  },
+  lightingFactor: {
+    title: 'Aydınlatma Oranı',
+    desc: 'LED büyüme ışıklarının çalışma yoğunluğu. Gece döngüsünde %0, gündüz tam kapasitede çalışır.',
+  },
+  heatRejection: {
+    title: 'Isı Atımı (Radyatör)',
+    desc: 'Uzay radyatörleri ısıyı kızılötesi radyasyonla uzaya atar. Kapasite aşılırsa kabin ısınır.',
+  },
+  componentDegradation: {
+    title: 'Bileşen Bozulma Durumu',
+    desc: 'Pompalar, LED paneller ve filtreler zamanla yıpranır. %30 altı kritik, acil bakım gerektirir.',
+  },
+
+  // AI & prediction
+  systemHealth: {
+    title: 'Sistem Sağlık Skoru',
+    desc: 'Tüm alt sistemlerin ağırlıklı ortalaması. Kaynak dengesi, bitki sağlığı ve ekipman durumunu birleştirir.',
+  },
+  harvestPrediction: {
+    title: 'Hasat Tahmini',
+    desc: 'GDD ve büyüme modeline göre her bitkinin ne zaman hasat edileceğini tahmin eder. Güven oranı dahildir.',
+  },
+  resourceProjection: {
+    title: 'Kaynak Projeksiyonu',
+    desc: '30 günlük su, oksijen ve besin trendini gösterir. Kritik eşiklerin altına düşüş erken uyarı verir.',
+  },
+  anomalyDetection: {
+    title: 'Anomali Tespiti',
+    desc: 'Sensör verilerindeki anormal değişimleri algılar. Erken müdahale sistem kaybını önler.',
+  },
+  aiOptimization: {
+    title: 'AI Optimizasyon',
+    desc: 'Makine öğrenimi modeli enerji, su ve besin kullanımını optimize eden öneriler sunar.',
+  },
+  riskIndicators: {
+    title: 'Risk Göstergeleri',
+    desc: 'Kontaminasyon, substrat seviyesi ve atmosfer kalitesi gibi kritik parametreleri izler.',
+  },
+
+  // Mission & environment
+  missionTimeline: {
+    title: 'Görev Zaman Çizelgesi',
+    desc: '980 günlük Mars görevinin aşamalarını gösterir: kalkış, BLSS devreye alma, tam kapasite, dönüş.',
+  },
+  crewStatus: {
+    title: 'Mürettebat Durumu',
+    desc: '6 kişilik mürettebatın anlık aktivitesi, O2 tüketimi, CO2 üretimi ve ısı çıkışını izler.',
+  },
+  storedFood: {
+    title: 'Depolanan Erzak',
+    desc: 'Dünyadan getirilen gıda stoğu. BLSS devreye girdikçe tüketim hızı düşer.',
+  },
+  waterProcessing: {
+    title: 'Su İşleme Sistemi',
+    desc: 'Çok aşamalı arıtma: ters osmoz, iyon değişimi ve UV sterilizasyon. Hedef: %98+ geri kazanım.',
+  },
+
+  // Nutrition
+  calorieProduction: {
+    title: 'Kalori Üretimi',
+    desc: '6 kişi günde ~15.000 kcal ihtiyacı duyar. Bitkiler, spirulina ve mantar bu kaloriyi karşılar.',
+  },
+  macroNutrient: {
+    title: 'Makro Besin Dağılımı',
+    desc: 'Protein, karbonhidrat ve yağ oranı. Dengeli beslenme için protein %15-20, yağ %25-35 olmalı.',
+  },
+  sourceBreakdown: {
+    title: 'Kaynak Bazında Üretim',
+    desc: 'Hangi bitki veya kaynağın ne kadar kalori sağladığını gösterir. Çeşitlilik riski azaltır.',
+  },
+  vitaminStatus: {
+    title: 'Vitamin / Mineral Durumu',
+    desc: 'Uzayda en kritik eksiklikler: D vitamini (güneş yok), demir, kalsiyum. Takviye gerekebilir.',
+  },
+  biodiversityScore: {
+    title: 'Beslenme Çeşitliliği',
+    desc: 'Shannon İndeksi ile ölçülür. Tek kaynağa bağımlılık riski artırır, çeşitlilik dayanıklılık sağlar.',
+  },
+  crewNutrition: {
+    title: 'Mürettebat Beslenme',
+    desc: 'Her mürettebat üyesinin kalori ihtiyacı aktivite düzeyine göre değişir. Eksiklik performansı düşürür.',
+  },
 };
 
 export function getMetricInfo(key) {

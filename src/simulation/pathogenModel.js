@@ -13,8 +13,6 @@ import { PATHOGENS, DISSOLVED_OXYGEN } from './constants';
  *   - Hava sirkülasyonu ile cross-module yayılma (düşük olasılık)
  */
 
-const DISEASE_STATES = ['healthy', 'incubation', 'infected', 'symptomatic', 'severe'];
-
 /**
  * Çözünmüş oksijen bazlı Pythium risk hesabı
  */

@@ -1,4 +1,4 @@
-import { CREW, SPIRULINA, MEALWORM, PLANTS, VITAMINS, HABITAT_VOLUME, SUBSTRATE } from './constants';
+import { CREW, MEALWORM, PLANTS, VITAMINS, SUBSTRATE } from './constants';
 import {
   calculatePlantGrowth,
   calculateModuleCalories,

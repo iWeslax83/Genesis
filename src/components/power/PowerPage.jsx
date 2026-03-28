@@ -1,6 +1,6 @@
-import React from 'react';
 import { useGenesis } from '../../context/GenesisContext';
 import { formatNumber, formatPercent } from '../../utils/formatters';
+import InfoTooltip from '../ui/InfoTooltip';
 import { FiZap, FiSun, FiThermometer, FiAlertTriangle, FiActivity, FiCpu } from 'react-icons/fi';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 
@@ -58,17 +58,17 @@ export default function PowerPage() {
 
       {/* Stats row */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-        <StatBox icon={<FiZap />} label="Toplam Üretim" value={`${generation.toFixed(1)} kW`} color="text-nexus-accent" />
-        <StatBox icon={<FiActivity />} label="Toplam Tüketim" value={`${totalConsumption.toFixed(1)} kW`} color="text-amber-400" />
-        <StatBox icon={<FiSun />} label="Aydınlatma Oranı" value={formatPercent((power.lightingFactor || 0) * 100)} color="text-nexus-green" />
-        <StatBox icon={<FiThermometer />} label="Kabin Sıcaklığı" value={`${(thermal.currentTemp || 22).toFixed(1)}°C`} color={thermal.thermalStatus === 'nominal' ? 'text-nexus-green' : 'text-red-400'} />
+        <StatBox icon={<FiZap />} label="Toplam Üretim" value={`${generation.toFixed(1)} kW`} color="text-nexus-accent" metricKey="powerGeneration" />
+        <StatBox icon={<FiActivity />} label="Toplam Tüketim" value={`${totalConsumption.toFixed(1)} kW`} color="text-amber-400" metricKey="powerConsumption" />
+        <StatBox icon={<FiSun />} label="Aydınlatma Oranı" value={formatPercent((power.lightingFactor || 0) * 100)} color="text-nexus-green" metricKey="lightingFactor" />
+        <StatBox icon={<FiThermometer />} label="Kabin Sıcaklığı" value={`${(thermal.currentTemp || 22).toFixed(1)}°C`} color={thermal.thermalStatus === 'nominal' ? 'text-nexus-green' : 'text-red-400'} metricKey="thermalBalance" />
       </div>
 
       {/* Main grid */}
       <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-3 min-h-0">
         {/* Power distribution pie */}
         <div className="col-span-12 lg:col-span-4 bg-nexus-card border border-nexus-border rounded-lg p-4 flex flex-col">
-          <h3 className="text-[11px] text-nexus-text-dim uppercase tracking-wider mb-3">Güç Dağılımı</h3>
+          <h3 className="text-[11px] text-nexus-text-dim uppercase tracking-wider mb-3 flex items-center gap-1">Güç Dağılımı <InfoTooltip metricKey="powerDistribution" size={11} /></h3>
           <div className="flex-1 min-h-0">
             <ResponsiveContainer width="100%" height="60%">
               <PieChart>
@@ -94,7 +94,7 @@ export default function PowerPage() {
 
         {/* Subsystem bar chart */}
         <div className="col-span-12 lg:col-span-4 bg-nexus-card border border-nexus-border rounded-lg p-4 flex flex-col">
-          <h3 className="text-[11px] text-nexus-text-dim uppercase tracking-wider mb-3">Alt Sistem Tüketimi</h3>
+          <h3 className="text-[11px] text-nexus-text-dim uppercase tracking-wider mb-3 flex items-center gap-1">Alt Sistem Tüketimi <InfoTooltip metricKey="powerConsumption" size={11} /></h3>
           <div className="flex-1 min-h-0">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={subsystemData} layout="vertical">
@@ -110,7 +110,7 @@ export default function PowerPage() {
         {/* Thermal balance */}
         <div className="col-span-12 lg:col-span-4 bg-nexus-card border border-nexus-border rounded-lg p-4 overflow-y-auto">
           <h3 className="text-[11px] text-nexus-text-dim uppercase tracking-wider mb-3 flex items-center gap-1.5">
-            <FiThermometer className="text-amber-400" size={12} /> Isıl Denge
+            <FiThermometer className="text-amber-400" size={12} /> Isıl Denge <InfoTooltip metricKey="thermalBalance" size={11} />
           </h3>
           <div className="space-y-3">
             <div>
@@ -128,7 +128,7 @@ export default function PowerPage() {
             </div>
 
             <div>
-              <div className="text-[10px] text-nexus-text-dim mb-1 uppercase">Isı Atımı (Radyatör)</div>
+              <div className="text-[10px] text-nexus-text-dim mb-1 uppercase flex items-center gap-1">Isı Atımı (Radyatör) <InfoTooltip metricKey="heatRejection" size={9} /></div>
               <div className="flex justify-between text-xs">
                 <span className="text-nexus-text-dim">Kapasite</span>
                 <span className="text-nexus-accent font-mono">{(thermal.heatRejection?.radiatorCapacity || 0).toFixed(1)} kW</span>
@@ -159,7 +159,7 @@ export default function PowerPage() {
       <div className="bg-nexus-card border border-nexus-border rounded-lg p-3">
         <div className="flex items-center justify-between mb-2">
           <h3 className="text-[11px] text-nexus-text-dim uppercase tracking-wider flex items-center gap-1.5">
-            <FiCpu className="text-amber-400" size={12} /> Bileşen Bozulma Durumu
+            <FiCpu className="text-amber-400" size={12} /> Bileşen Bozulma Durumu <InfoTooltip metricKey="componentDegradation" size={11} />
           </h3>
           <span className="text-xs font-mono text-nexus-text-dim">
             Ortalama: <span className="text-nexus-text font-semibold">{formatPercent(degradation.averageHealth || 100)}</span>
@@ -209,12 +209,13 @@ export default function PowerPage() {
   );
 }
 
-function StatBox({ icon, label, value, color }) {
+function StatBox({ icon, label, value, color, metricKey }) {
   return (
     <div className="bg-nexus-card border border-nexus-border rounded-lg p-3">
       <div className="flex items-center gap-1.5 mb-1">
         <span className={`${color}`}>{icon}</span>
         <span className="text-[10px] text-nexus-text-dim uppercase">{label}</span>
+        {metricKey && <InfoTooltip metricKey={metricKey} size={10} />}
       </div>
       <div className={`text-base font-semibold font-mono ${color}`}>{value}</div>
     </div>

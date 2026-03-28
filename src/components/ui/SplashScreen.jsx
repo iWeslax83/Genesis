@@ -47,7 +47,7 @@ export default function SplashScreen({ onComplete }) {
   }, [onComplete]);
 
   return (
-    <div className={`fixed inset-0 z-50 bg-nexus-bg flex flex-col items-center justify-center transition-opacity duration-400 ${
+    <div className={`fixed inset-0 z-50 bg-nexus-bg flex flex-col items-center justify-center ${
       phase === 'exit' ? 'opacity-0' : 'opacity-100'
     }`} style={{ transition: 'opacity 0.4s ease' }}>
       {/* Logo and title */}

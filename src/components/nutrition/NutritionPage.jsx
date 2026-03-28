@@ -1,7 +1,7 @@
-import React from 'react';
 import { useGenesis } from '../../context/GenesisContext';
 import { CREW, SOURCE_COLORS, SOURCE_LABELS } from '../../simulation/constants';
 import { formatNumber } from '../../utils/formatters';
+import InfoTooltip from '../ui/InfoTooltip';
 import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
 import { FiHeart, FiAlertTriangle, FiUser } from 'react-icons/fi';
 
@@ -32,7 +32,7 @@ function CalorieGauge({ produced, target }) {
           %{(ratio * 100).toFixed(1)}
         </text>
       </svg>
-      <span className="text-xs text-nexus-text-dim mt-1">Günlük Kalori Üretimi</span>
+      <span className="text-xs text-nexus-text-dim mt-1 flex items-center gap-0.5">Günlük Kalori Üretimi <InfoTooltip metricKey="calorieProduction" size={10} /></span>
     </div>
   );
 }
@@ -47,7 +47,7 @@ function MacroBreakdown({ protein, carbs, fat }) {
 
   return (
     <div className="bg-nexus-card rounded-lg border border-nexus-border p-4">
-      <h3 className="text-xs text-nexus-text-dim uppercase tracking-wider mb-3">Makro Besin Dağılımı</h3>
+      <h3 className="text-xs text-nexus-text-dim uppercase tracking-wider mb-3 flex items-center gap-1">Makro Besin Dağılımı <InfoTooltip metricKey="macroNutrient" size={11} /></h3>
       <div className="flex items-center gap-4">
         <ResponsiveContainer width={120} height={120}>
           <PieChart>
@@ -91,7 +91,7 @@ function SourceBreakdown({ bySource }) {
 
   return (
     <div className="bg-nexus-card rounded-lg border border-nexus-border p-4">
-      <h3 className="text-xs text-nexus-text-dim uppercase tracking-wider mb-3">Kaynak Bazında Üretim</h3>
+      <h3 className="text-xs text-nexus-text-dim uppercase tracking-wider mb-3 flex items-center gap-1">Kaynak Bazında Üretim <InfoTooltip metricKey="sourceBreakdown" size={11} /></h3>
       <ResponsiveContainer width="100%" height={160}>
         <BarChart data={data} layout="vertical">
           <CartesianGrid strokeDasharray="3 3" stroke="#2a2c35" />
@@ -114,7 +114,7 @@ function CrewAllocation({ totalCalories }) {
 
   return (
     <div className="bg-nexus-card rounded-lg border border-nexus-border p-4">
-      <h3 className="text-xs text-nexus-text-dim uppercase tracking-wider mb-3">Mürettebat Beslenme Dağılımı</h3>
+      <h3 className="text-xs text-nexus-text-dim uppercase tracking-wider mb-3 flex items-center gap-1">Mürettebat Beslenme Dağılımı <InfoTooltip metricKey="crewNutrition" size={11} /></h3>
       <div className="space-y-2">
         {CREW.members.map((member) => {
           const ratio = Math.min(1, perPerson / member.calorie);
@@ -166,8 +166,8 @@ function VitaminPanel({ vitaminStatus }) {
 
   return (
     <div className="bg-nexus-card rounded-lg border border-nexus-border p-4">
-      <h3 className="text-xs text-nexus-text-dim uppercase tracking-wider mb-3">
-        Vitamin / Mineral Durumu <span className="text-nexus-text-dim">(kişi başı / gün)</span>
+      <h3 className="text-xs text-nexus-text-dim uppercase tracking-wider mb-3 flex items-center gap-1">
+        Vitamin / Mineral Durumu <span className="text-nexus-text-dim">(kişi başı / gün)</span> <InfoTooltip metricKey="vitaminStatus" size={11} />
       </h3>
       <div className="space-y-2.5">
         {Object.entries(vitaminStatus).map(([key, vit]) => {
@@ -228,8 +228,8 @@ function BiodiversityScore({ score }) {
 
   return (
     <div className="bg-nexus-card rounded-lg border border-nexus-border p-4 flex flex-col items-center">
-      <h3 className="text-xs text-nexus-text-dim uppercase tracking-wider mb-3">
-        Beslenme Çeşitliliği
+      <h3 className="text-xs text-nexus-text-dim uppercase tracking-wider mb-3 flex items-center gap-1">
+        Beslenme Çeşitliliği <InfoTooltip metricKey="biodiversityScore" size={11} />
       </h3>
       <svg width={90} height={90} viewBox="0 0 90 90" role="img" aria-label={`Beslenme Çeşitliliği: ${score} / 100`}>
         <circle cx="45" cy="45" r="35" fill="none" stroke="#1a1c23" strokeWidth="6" />
@@ -255,99 +255,14 @@ function BiodiversityScore({ score }) {
   );
 }
 
-function MenuSuggestion({ bySource, harvestLog, day }) {
-  // Dinamik menü oluşturma — mevcut üretim verilerine göre
-  const RECIPES = {
-    potato:      { label: 'Patates', meals: ['Patates haşlama', 'Patates çorbası', 'Fırın patates'] },
-    sweetPotato: { label: 'T. Patates', meals: ['Tatlı patates püresi', 'Tatlı patates cipsi', 'Karamel tatlı patates'] },
-    wheat:       { label: 'Buğday', meals: ['Buğday lapası', 'Ekmek', 'Makarna'] },
-    soybean:     { label: 'Soya', meals: ['Soya fasulyesi sote', 'Tofu', 'Soya sütü'] },
-    peanut:      { label: 'Fıstık', meals: ['Fıstık ezmesi', 'Fıstıklı sos', 'Enerji bar'] },
-    lettuce:     { label: 'Marul', meals: ['Marul salatası', 'Wrap', 'Taze garnitür'] },
-    mizuna:      { label: 'Mizuna', meals: ['Mizuna salatası', 'Yeşil smoothie', 'Çiğ garnitür'] },
-    tomato:      { label: 'Domates', meals: ['Domates çorbası', 'Bruschetta', 'Domates sos'] },
-    spinach:     { label: 'Ispanak', meals: ['Ispanak sote', 'Ispanaklı börek', 'Yeşil smoothie'] },
-    pepper:      { label: 'Biber', meals: ['Biberli pilav', 'Dolma biber', 'Acılı sos'] },
-    radish:      { label: 'Turp', meals: ['Turp salatası', 'Turp garnitür', 'Turşu'] },
-    strawberry:  { label: 'Çilek', meals: ['Çilek tatlısı', 'Meyve tabağı', 'Smoothie'] },
-  };
-
-  // Son hasatlardan mevcut stok belirle
-  const recentHarvests = (harvestLog || []).slice(-12);
-  const availableCrops = [...new Set(recentHarvests.map(h => h.type))];
-  const hasAeroponic = (bySource?.aeroponic || 0) > 500;
-  const hasNFT = (bySource?.nft || 0) > 100;
-
-  // Deterministic pick seeded by simulation day — stable per day, no flicker
-  const pickByDay = (arr, offset = 0) => arr[(day + offset) % arr.length] || arr[0];
-
-  const breakfastItems = ['Spirulina smoothie'];
-  const lunchItems = [];
-  const dinnerItems = [];
-  const snackItems = ['Spirulina bar'];
-
-  if (hasAeroponic) {
-    breakfastItems.push(pickByDay(RECIPES.wheat?.meals || ['Buğday lapası'], 0));
-    lunchItems.push(pickByDay(RECIPES.potato?.meals || ['Patates haşlama'], 1));
-    dinnerItems.push(pickByDay(RECIPES.soybean?.meals || ['Soya fasulyesi sote'], 2));
-    snackItems.push(pickByDay(RECIPES.peanut?.meals || ['Fıstık ezmesi'], 3));
-  }
-
-  if (hasNFT) {
-    lunchItems.push(pickByDay(RECIPES.lettuce?.meals || ['Marul salatası'], 4));
-    dinnerItems.push('Mantar sote');
-    if (availableCrops.includes('tomato')) {
-      lunchItems.push(pickByDay(RECIPES.tomato?.meals || ['Domates çorbası'], 5));
-    }
-    if (availableCrops.includes('pepper')) {
-      dinnerItems.push(pickByDay(RECIPES.pepper?.meals || ['Biberli pilav'], 6));
-    }
-    if (availableCrops.includes('strawberry')) {
-      snackItems.push(pickByDay(RECIPES.strawberry?.meals || ['Çilek tatlısı'], 7));
-    }
-  }
-
-  // Fallback
-  if (lunchItems.length === 0) lunchItems.push('Depo gıdası');
-  if (dinnerItems.length === 0) dinnerItems.push('Mantar sote');
-
-  const menu = [
-    { meal: 'Kahvaltı', items: breakfastItems.join(' + ') },
-    { meal: 'Öğle', items: lunchItems.join(' + ') },
-    { meal: 'Akşam', items: dinnerItems.join(' + ') },
-    { meal: 'Ara', items: snackItems.join(' + ') },
-  ];
-
-  return (
-    <div className="bg-nexus-card rounded-lg border border-nexus-border p-4">
-      <h3 className="text-xs text-nexus-text-dim uppercase tracking-wider mb-3">
-        Bugünün Menüsü <span className="text-nexus-accent">(dinamik)</span>
-      </h3>
-      <div className="space-y-2">
-        {menu.map((m) => (
-          <div key={m.meal} className="flex items-start gap-2">
-            <span className="text-xs font-semibold text-nexus-accent w-14">{m.meal}</span>
-            <span className="text-xs text-nexus-text-dim">{m.items}</span>
-          </div>
-        ))}
-      </div>
-      <div className="mt-2 pt-2 border-t border-nexus-border">
-        <p className="text-[10px] text-nexus-text-dim">
-          Menü mevcut hasat ve üretim verilerine göre otomatik oluşturulur
-        </p>
-      </div>
-    </div>
-  );
-}
+const PLANT_NAMES = {
+  potato: 'Patates', sweetPotato: 'T. Patates', wheat: 'Buğday',
+  soybean: 'Soya', peanut: 'Fıstık', lettuce: 'Marul',
+  tomato: 'Domates', spinach: 'Ispanak', pepper: 'Biber', radish: 'Turp',
+};
 
 function HarvestLog({ harvestLog }) {
   if (!harvestLog || harvestLog.length === 0) return null;
-
-  const PLANT_NAMES = {
-    potato: 'Patates', sweetPotato: 'T. Patates', wheat: 'Buğday',
-    soybean: 'Soya', peanut: 'Fıstık', lettuce: 'Marul',
-    tomato: 'Domates', spinach: 'Ispanak', pepper: 'Biber', radish: 'Turp',
-  };
 
   const recent = harvestLog.slice(-8).reverse();
 
@@ -412,9 +327,8 @@ export default function NutritionPage() {
         </div>
       </div>
 
-      {/* Alt: Menü + Hasat Günlüğü */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <MenuSuggestion bySource={cal.bySource} harvestLog={state.compartments.growth.harvestLog} day={state.time.day} />
+      {/* Hasat Günlüğü */}
+      <div className="grid grid-cols-1 gap-4">
         <HarvestLog harvestLog={state.compartments.growth.harvestLog} />
       </div>
     </div>

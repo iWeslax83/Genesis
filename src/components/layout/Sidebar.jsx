@@ -60,8 +60,7 @@ const STATUS_COLORS = {
 
 export default function Sidebar() {
   const { state, dispatch } = useGenesis();
-  const { currentPage, sidebarCollapsed } = state.ui;
-  const collapsed = sidebarCollapsed;
+  const { currentPage, sidebarCollapsed: collapsed } = state.ui;
   const [showExport, setShowExport] = useState(false);
 
   const groups = ['ana', 'izleme', 'sistem', 'analiz'];

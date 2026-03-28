@@ -65,13 +65,7 @@ export default function OnboardingTour({ onComplete }) {
     }
   }, []);
 
-  const handleFinish = () => {
-    localStorage.setItem(STORAGE_KEY, 'true');
-    setVisible(false);
-    onComplete?.();
-  };
-
-  const handleSkip = () => {
+  const handleDismiss = () => {
     localStorage.setItem(STORAGE_KEY, 'true');
     setVisible(false);
     onComplete?.();
@@ -102,7 +96,7 @@ export default function OnboardingTour({ onComplete }) {
             Adım {step + 1} / {TOUR_STEPS.length}
           </span>
           <button
-            onClick={handleSkip}
+            onClick={handleDismiss}
             className="text-nexus-text-dim hover:text-nexus-text transition-colors p-1"
             title="Turu atla"
           >
@@ -157,7 +151,7 @@ export default function OnboardingTour({ onComplete }) {
 
           {isLast ? (
             <button
-              onClick={handleFinish}
+              onClick={handleDismiss}
               className="flex items-center gap-1.5 px-4 py-1.5 rounded-lg text-xs font-semibold bg-[#4ead5b] text-nexus-bg hover:opacity-90 transition-all"
             >
               <FiPlay size={12} />

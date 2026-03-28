@@ -1,4 +1,3 @@
-import React from 'react';
 import { useGenesis } from '../../context/GenesisContext';
 import { COMPARTMENTS } from '../../simulation/constants';
 import { formatNumber } from '../../utils/formatters';

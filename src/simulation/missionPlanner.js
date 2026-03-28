@@ -1,4 +1,4 @@
-import { MISSION, CREW, MODULE_AREAS } from './constants';
+import { MISSION, MODULE_AREAS } from './constants';
 
 /**
  * Görev planlama ve erzak tamponu hesaplama

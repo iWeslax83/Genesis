@@ -1,8 +1,8 @@
-import React from 'react';
 import { useGenesis } from '../../context/GenesisContext';
 import { PLANTS, INITIAL_PLANTS } from '../../simulation/constants';
 import { calculatePlantGrowth } from '../../simulation/plantGrowthModel';
 import { formatNumber } from '../../utils/formatters';
+import InfoTooltip from '../ui/InfoTooltip';
 import {
   FiCpu, FiAlertTriangle, FiTrendingUp, FiShield, FiCheckCircle,
   FiZap, FiTool, FiSun, FiDroplet, FiWind, FiActivity, FiDisc
@@ -41,9 +41,9 @@ function SystemHealthScore({ state }) {
         <text x="60" y="72" textAnchor="middle" fill="#6c6e78" fontSize="9">GENEL SKOR</text>
       </svg>
       <div className="flex-1 space-y-2">
-        <ScoreLine label="Sistem Sağlığı" value={health} />
-        <ScoreLine label="Bitki Sağlığı" value={plantScore} />
-        <ScoreLine label="Bileşen Sağlığı" value={Math.round(degradation)} />
+        <ScoreLine label="Sistem Sağlığı" value={health} metricKey="systemHealth" />
+        <ScoreLine label="Bitki Sağlığı" value={plantScore} metricKey="ndvi" />
+        <ScoreLine label="Bileşen Sağlığı" value={Math.round(degradation)} metricKey="degradation" />
         <div className="pt-2 border-t border-nexus-border flex items-center gap-3 text-xs">
           {critCount > 0 ? (
             <span style={{ color: '#d45555' }} className="flex items-center gap-1"><FiAlertTriangle size={12} /> {critCount} kritik alarm</span>
@@ -58,12 +58,12 @@ function SystemHealthScore({ state }) {
   );
 }
 
-function ScoreLine({ label, value }) {
+function ScoreLine({ label, value, metricKey }) {
   const color = value >= 80 ? '#4ead5b' : value >= 60 ? '#d4903a' : '#d45555';
   return (
     <div>
       <div className="flex justify-between text-xs mb-0.5">
-        <span className="text-nexus-text-dim">{label}</span>
+        <span className="text-nexus-text-dim flex items-center gap-0.5">{label} {metricKey && <InfoTooltip metricKey={metricKey} size={9} />}</span>
         <span className="font-mono font-semibold" style={{ color }}>{value}</span>
       </div>
       <div className="h-1 bg-nexus-bg rounded-full">
@@ -79,7 +79,7 @@ function HarvestPrediction({ currentDay }) {
   return (
     <div className="bg-nexus-card rounded-lg border border-nexus-border p-4">
       <h3 className="text-xs text-nexus-text-dim uppercase tracking-wider mb-3 flex items-center gap-1.5">
-        <FiTrendingUp size={12} style={{ color: '#4ead5b' }} /> Hasat Tahmini
+        <FiTrendingUp size={12} style={{ color: '#4ead5b' }} /> Hasat Tahmini <InfoTooltip metricKey="harvestPrediction" size={11} />
       </h3>
       <div className="space-y-2.5">
         {allPlants.map((pg, i) => {
@@ -138,7 +138,7 @@ function ResourceProjection({ resources }) {
 
   return (
     <div className="bg-nexus-card rounded-lg border border-nexus-border p-4">
-      <h3 className="text-xs text-nexus-text-dim uppercase tracking-wider mb-3">30 Günlük Kaynak Projeksiyonu</h3>
+      <h3 className="text-xs text-nexus-text-dim uppercase tracking-wider mb-3 flex items-center gap-1">30 Günlük Kaynak Projeksiyonu <InfoTooltip metricKey="resourceProjection" size={11} /></h3>
       <ResponsiveContainer width="100%" height={180}>
         <LineChart data={projData}>
           <CartesianGrid strokeDasharray="3 3" stroke="#2a2c35" />
@@ -169,21 +169,19 @@ function Legend({ color, label }) {
 }
 
 function AnomalyTimeline({ anomalies }) {
-  const displayAnomalies = anomalies;
-
   return (
     <div className="bg-nexus-card rounded-lg border border-nexus-border p-4">
       <h3 className="text-xs text-nexus-text-dim uppercase tracking-wider mb-3 flex items-center gap-1.5">
-        <FiShield size={12} style={{ color: '#d4903a' }} /> Anomali Zaman Çizelgesi
+        <FiShield size={12} style={{ color: '#d4903a' }} /> Anomali Zaman Çizelgesi <InfoTooltip metricKey="anomalyDetection" size={11} />
       </h3>
-      {displayAnomalies.length === 0 ? (
+      {anomalies.length === 0 ? (
         <div className="flex items-center gap-2 text-xs text-nexus-text-dim py-2">
           <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
           <span>Anomali tespit edilmedi</span>
         </div>
       ) : (
       <div className="space-y-2">
-        {displayAnomalies.map((a) => (
+        {anomalies.map((a) => (
           <div key={a.id} className="flex items-start gap-2">
             <div className="mt-0.5 w-2 h-2 rounded-full flex-shrink-0"
               style={{
@@ -215,7 +213,7 @@ function AIInsights({ optimizations }) {
   return (
     <div className="bg-nexus-card rounded-lg border border-nexus-border p-4">
       <h3 className="text-xs text-nexus-text-dim uppercase tracking-wider mb-3 flex items-center gap-1.5">
-        <FiCpu size={12} style={{ color: '#4a9caa' }} /> AI Öneriler
+        <FiCpu size={12} style={{ color: '#4a9caa' }} /> AI Öneriler <InfoTooltip metricKey="aiOptimization" size={11} />
       </h3>
       {optimizations.length === 0 ? (
         <div className="flex items-center gap-2 text-xs text-nexus-text-dim py-2">
@@ -252,13 +250,13 @@ function SystemRiskPanel({ compartments }) {
 
   const riskColor = (v, inv = false) => {
     const val = inv ? 100 - v : v;
-    return val > 80 ? '#d45555' : val > 50 ? '#d4903a' : val > 20 ? '#d4903a' : '#4ead5b';
+    return val > 80 ? '#d45555' : val > 50 ? '#d4903a' : val > 20 ? '#e6c84a' : '#4ead5b';
   };
 
   return (
     <div className="bg-nexus-card rounded-lg border border-nexus-border p-4">
       <h3 className="text-xs text-nexus-text-dim uppercase tracking-wider mb-3 flex items-center gap-1.5">
-        <FiAlertTriangle size={12} style={{ color: '#d45555' }} /> Risk Göstergeleri
+        <FiAlertTriangle size={12} style={{ color: '#d45555' }} /> Risk Göstergeleri <InfoTooltip metricKey="riskIndicators" size={11} />
       </h3>
       <div className="space-y-3">
         <RiskItem
@@ -273,13 +271,13 @@ function SystemRiskPanel({ compartments }) {
         />
         <div className="pt-2 border-t border-nexus-border space-y-1">
           <div className="flex justify-between items-center text-xs">
-            <span className="text-nexus-text flex items-center gap-1"><FiShield size={11} /> Habitat O2</span>
+            <span className="text-nexus-text flex items-center gap-1"><FiShield size={11} /> Habitat O2 <InfoTooltip metricKey="o2" size={9} /></span>
             <span className="font-mono" style={{ color: compartments.habitat?.o2Level < 19.5 ? '#d45555' : '#4ead5b' }}>
               %{(compartments.habitat?.o2Level || 21).toFixed(2)}
             </span>
           </div>
           <div className="flex justify-between items-center text-xs">
-            <span className="text-nexus-text flex items-center gap-1"><FiWind size={11} /> Habitat CO2</span>
+            <span className="text-nexus-text flex items-center gap-1"><FiWind size={11} /> Habitat CO2 <InfoTooltip metricKey="co2" size={9} /></span>
             <span className="font-mono" style={{ color: compartments.habitat?.co2Level > 0.08 ? '#d4903a' : '#4ead5b' }}>
               %{(compartments.habitat?.co2Level || 0.04).toFixed(4)}
             </span>

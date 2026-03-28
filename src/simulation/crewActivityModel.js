@@ -51,10 +51,8 @@ export function calculateCrewMetabolics(crewMembers, hour, minute) {
     caloriesBurning: acc.caloriesBurning + r.caloriesBurning,
   }), { o2Consumption: 0, co2Production: 0, heatOutput: 0, caloriesBurning: 0 });
 
-  // Günlük O₂ tüketimi tahmin (saatlik oran × 24)
-  totals.dailyO2Liters = totals.o2Consumption * 24 * (1000 / 1.429) * 24.04 / 32;
-  // Basitleştirilmiş: kg/saat → L/gün
-  totals.dailyO2Liters = totals.o2Consumption * 24 * 700; // ~700 L/kg O₂
+  // Günlük O₂ tüketimi tahmin: kg/saat → L/gün (~700 L/kg O₂)
+  totals.dailyO2Liters = totals.o2Consumption * 24 * 700;
 
   return { crew: results, totals };
 }
