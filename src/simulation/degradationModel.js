@@ -13,7 +13,7 @@ export function calculateDegradation(state) {
   // 1. HEPA Filtre — doğrusal bozulma
   const hepa = DEGRADATION.hepaFilter;
   const hepaHealth = Math.max(0, 1 - (missionDay / hepa.lifespanDays));
-  const hepaPressureDrop = 1 + (1 - hepaHealth) * (hepa.pressureDropThreshold - 1);
+  const hepaPressureDrop = 1 + (1 - Math.max(0, hepaHealth)) * (hepa.pressureDropThreshold - 1);
   components.hepaFilter = {
     health: hepaHealth * 100,
     pressureDrop: hepaPressureDrop,
@@ -36,8 +36,9 @@ export function calculateDegradation(state) {
   };
 
   // 3. Su Pompası — Weibull güvenilirlik
+  // Pompa günde ~16 saat çalışır (gece kısmi), 24/7 değil
   const pump = DEGRADATION.waterPump;
-  const pumpHours = missionDay * 24;
+  const pumpHours = missionDay * 16;
   // R(t) = exp(-(t/η)^β)
   const pumpReliability = Math.exp(-Math.pow(pumpHours / pump.weibullEta, pump.weibullBeta));
   const pumpEfficiency = 0.5 + 0.5 * pumpReliability; // %50 minimum

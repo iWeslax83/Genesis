@@ -4,7 +4,7 @@ import { TRACE_CONTAMINANTS, TCCS, TICK_FRACTION } from './constants';
  * Eser kirletici birikim ve kontrol modeli
  * ISS TCCS (Trace Contaminant Control Subassembly) referansı
  */
-export function calculateTraceContaminants(currentLevels, crewCount, carbonBedHealth) {
+export function calculateTraceContaminants(currentLevels, crewCount, carbonBedHealth, missionDay) {
   const levels = {};
   let alarmCount = 0;
   const scrubberEfficiency = carbonBedHealth || 1.0;
@@ -45,7 +45,7 @@ export function calculateTraceContaminants(currentLevels, crewCount, carbonBedHe
     alarmCount,
     scrubberHealth: Math.round(scrubberEfficiency * 100),
     tccsPower: TCCS.powerDraw,
-    carbonBedRemaining: Math.round((scrubberEfficiency) * TCCS.carbonLifespan),
+    carbonBedRemaining: Math.max(0, Math.round(scrubberEfficiency * TCCS.carbonLifespan - (missionDay || 0))),
     status: alarmCount > 0 ? 'critical' : Object.values(levels).some(l => l.status === 'warning') ? 'warning' : 'nominal',
   };
 }

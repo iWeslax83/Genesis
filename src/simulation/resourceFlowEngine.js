@@ -11,8 +11,14 @@ import {
  * Tüm kapalı döngüyü bir adımda hesaplar
  */
 export function calculateResourceFlow(state) {
-  const { compartments, resources, time, scenario } = state;
+  const { compartments, resources, time, scenario, pathogens, radiation } = state;
   const { growth, habitat, waste, nutrient } = compartments;
+
+  // Patojen verim cezası (önceki tick'ten)
+  const aeroYieldPenalty = pathogens?.aeroponic?.yieldPenalty || 0;
+  const nftYieldPenalty = pathogens?.nft?.yieldPenalty || 0;
+  // Radyasyon bitki büyüme cezası (SPE sırasında)
+  const radiationPenalty = radiation?.cropGrowthPenalty || 0;
   const crewCount = scenario?.active && scenario.effects?.crewCount
     ? scenario.effects.crewCount
     : habitat.crewCount;
@@ -59,7 +65,25 @@ export function calculateResourceFlow(state) {
     growth.modules.mushroom.substrateLevel
   );
 
-  // ====== 6. Toplam O₂ / CO₂ Dengesi ======
+  // ====== 6. Patojen + Radyasyon Cezası Uygulama ======
+  const aeroPenalty = (1 - aeroYieldPenalty) * (1 - radiationPenalty);
+  const nftPenalty = (1 - nftYieldPenalty) * (1 - radiationPenalty);
+
+  aeroProduction.totalCalories *= aeroPenalty;
+  aeroProduction.totalProtein *= aeroPenalty;
+  aeroProduction.totalCarbs *= aeroPenalty;
+  aeroProduction.totalFat *= aeroPenalty;
+  aeroProduction.totalO2 *= aeroPenalty;
+  aeroProduction.totalCO2 *= aeroPenalty;
+
+  nftProduction.totalCalories *= nftPenalty;
+  nftProduction.totalProtein *= nftPenalty;
+  nftProduction.totalCarbs *= nftPenalty;
+  nftProduction.totalFat *= nftPenalty;
+  nftProduction.totalO2 *= nftPenalty;
+  nftProduction.totalCO2 *= nftPenalty;
+
+  // ====== 7. Toplam O₂ / CO₂ Dengesi ======
   const totalO2Production = aeroProduction.totalO2 + nftProduction.totalO2 + spirulina.o2Production;
   const totalCO2Absorption = aeroProduction.totalCO2 + nftProduction.totalCO2 + spirulina.co2Consumption;
   const o2Balance = totalO2Production - crewO2Consumption;
@@ -83,8 +107,11 @@ export function calculateResourceFlow(state) {
   const substrateDelta = substrateReplenishment - substrateConsumption;
 
   // ====== 10. Böcek Protein (Yuegong-1: Tenebrio molitor) ======
-  // Yenilenemeyen bitki kısımları (gövde, kök, kabuk) ≈ toplam biyokütlenin %40'ı
-  const inedibleBiomass = (aeroProduction.totalWater * 0.3 + nftProduction.totalWater * 0.2); // kg/gün yaklaşık
+  // Yenilenemeyen bitki biyokütlesi: edible/harvestIndex × (1 - harvestIndex)
+  // Ortalama hasat indeksi ~0.55, kalori→kütle ~500 kcal/kg
+  const edibleBiomassKg = (aeroProduction.totalCalories + nftProduction.totalCalories) / 500;
+  const avgHarvestIndex = 0.55;
+  const inedibleBiomass = edibleBiomassKg * ((1 - avgHarvestIndex) / avgHarvestIndex); // kg/gün
   const mealwormFeed = Math.min(inedibleBiomass, MEALWORM.dailyCapacity); // kg/gün
   const mealwormYield = mealwormFeed * MEALWORM.yieldPerKgWaste / 1000; // kg/gün
   const mealwormCalories = (mealwormYield * 1000 / 100) * MEALWORM.caloriesPer100g;

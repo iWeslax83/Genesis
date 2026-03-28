@@ -14,8 +14,9 @@ export function calculateWaterProcessing(state, flowData) {
   const pumpEfficiency = state.degradation?.components?.waterPump?.efficiency || 1.0;
 
   for (const [stageId, stageDef] of Object.entries(WATER_PROCESSING.stages)) {
-    const stageInput = totalWaterInput * stageDef.fraction;
-    const stageEfficiency = stageDef.efficiency * pumpEfficiency;
+    // Pompa bozulması akış hızını düşürür, aşama verimliliğini değil
+    const stageInput = totalWaterInput * stageDef.fraction * pumpEfficiency;
+    const stageEfficiency = stageDef.efficiency;
     const stageOutput = stageInput * stageEfficiency;
     const stageLoss = stageInput - stageOutput;
 

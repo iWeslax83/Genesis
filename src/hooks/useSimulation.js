@@ -256,18 +256,18 @@ export default function useSimulation() {
         }
       }
 
-      // 9. Güç sistemi hesaplama
-      const powerData = calculatePowerSystem(s);
-      dispatch({ type: 'UPDATE_POWER', payload: powerData });
-
-      // 10. Isıl denge hesaplama
-      const thermalData = calculateThermalBalance(s, powerData);
-      dispatch({ type: 'UPDATE_THERMAL', payload: thermalData });
-
-      // 11. Mürettebat aktivite modeli
+      // 9. Mürettebat aktivite modeli (güç ve ısıl sistemden ÖNCE — onlar crew heat'e bağımlı)
       const crewMembers = CREW.members || Array.from({ length: s.compartments.habitat.crewCount || 6 }, (_, i) => ({ id: i+1, name: `Crew ${i+1}`, role: 'Genel' }));
       const crewMetabolics = calculateCrewMetabolics(crewMembers, s.time.hour, s.time.minute);
       dispatch({ type: 'UPDATE_CREW_ACTIVITY', payload: crewMetabolics });
+
+      // 10. Güç sistemi hesaplama
+      const powerData = calculatePowerSystem(s);
+      dispatch({ type: 'UPDATE_POWER', payload: powerData });
+
+      // 11. Isıl denge hesaplama
+      const thermalData = calculateThermalBalance(s, powerData);
+      dispatch({ type: 'UPDATE_THERMAL', payload: thermalData });
 
       // 12. Radyasyon modeli
       const radiationData = calculateRadiation(s, s.radiation);
@@ -279,7 +279,8 @@ export default function useSimulation() {
         const contaminantData = calculateTraceContaminants(
           s.traceContaminants?.levels || {},
           s.compartments.habitat.crewCount || 6,
-          carbonHealth
+          carbonHealth,
+          s.time.day
         );
         dispatch({ type: 'UPDATE_TRACE_CONTAMINANTS', payload: contaminantData });
       }

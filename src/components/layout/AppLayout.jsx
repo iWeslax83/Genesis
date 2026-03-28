@@ -63,7 +63,6 @@ export default function AppLayout() {
         <main className="flex-1 min-h-0 overflow-auto p-2 sm:p-4 pb-10">
           <PageContent />
         </main>
-        <EventLog />
       </div>
       {showHelp && <KeyboardHelp onClose={() => setShowHelp(false)} />}
     </div>

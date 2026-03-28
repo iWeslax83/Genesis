@@ -23,10 +23,14 @@ export function calculateThermalBalance(state, powerData) {
   const maxRadiatorRejection = rad.emissivity * sigma * rad.area *
     (Math.pow(rad.operatingTemp, 4) - Math.pow(rad.sinkTemp, 4)) / 1000;
 
-  // Aktif soğutma kontrolü (hedef sıcaklığa doğru)
+  // Aktif soğutma kontrolü — hedefin üstündeyse tam soğutma, altındaysa kısmi
   const tempError = currentTemp - THERMAL.cabin.targetTemp;
-  const coolingDemand = Math.max(0, totalHeatGeneration * (1 + tempError * 0.05));
-  const actualRejection = Math.min(coolingDemand, maxRadiatorRejection);
+  // Sıcaklık hedefin üstünde: tam kapasite + ekstra efor
+  // Sıcaklık hedefin altında: sadece minimum (ısı kaybını azalt)
+  const coolingDemand = tempError > 0
+    ? totalHeatGeneration + tempError * 0.5  // Fazla ısıyı at
+    : totalHeatGeneration * Math.max(0.3, 1 - Math.abs(tempError) * 0.1); // Soğuksa soğutmayı azalt
+  const actualRejection = Math.min(Math.max(0, coolingDemand), maxRadiatorRejection);
 
   // 3. Net ısı akısı
   const netHeatFlux = totalHeatGeneration - actualRejection;

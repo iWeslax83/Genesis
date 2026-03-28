@@ -797,7 +797,7 @@ export const THERMAL = {
   },
   // Kabin
   cabin: {
-    thermalMass: 50000,   // J/K (basitleştirilmiş)
+    thermalMass: 250000,  // J/K (hava ~200m³ + yapı/ekipman)
     targetTemp: 22,       // °C
     minSafe: 15,
     maxSafe: 30,

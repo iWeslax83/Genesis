@@ -19,6 +19,7 @@ export default function PowerPage() {
     name: val.label || key,
     value: Math.round((val.consumption || 0) * 100) / 100,
     curtailed: val.curtailed || 0,
+    factor: val.factor ?? 100, // yük yüzdesi (baz kapasiteye göre)
   }));
 
   const generation = power.generation || 0;
@@ -69,16 +70,6 @@ export default function PowerPage() {
         {/* Power distribution pie */}
         <div className="col-span-12 lg:col-span-4 bg-nexus-card border border-nexus-border rounded-lg p-4 flex flex-col">
           <h3 className="text-[11px] text-nexus-text-dim uppercase tracking-wider mb-3 flex items-center gap-1">Güç Dağılımı <InfoTooltip metricKey="powerDistribution" size={11} /></h3>
-          <div className="flex-1 min-h-0">
-            <ResponsiveContainer width="100%" height="60%">
-              <PieChart>
-                <Pie data={subsystemData} dataKey="value" cx="50%" cy="50%" outerRadius="80%" stroke="none" label={({ value }) => `${value}kW`}>
-                  {subsystemData.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
-                </Pie>
-                <Tooltip contentStyle={TOOLTIP_STYLE} />
-              </PieChart>
-            </ResponsiveContainer>
-          </div>
           <div className="space-y-1 mt-2">
             {subsystemData.map((s, i) => (
               <div key={i} className="flex items-center justify-between text-xs">
@@ -86,7 +77,12 @@ export default function PowerPage() {
                   <div className="w-2 h-2 rounded-sm" style={{ backgroundColor: COLORS[i % COLORS.length] }} />
                   <span className="text-nexus-text-dim truncate">{s.name}</span>
                 </div>
-                <span className="text-nexus-text font-mono">{s.value} kW</span>
+                <div className="flex items-center gap-2">
+                  <span className={`text-[10px] font-mono ${s.factor > 100 ? 'text-amber-400' : s.factor < 50 ? 'text-nexus-accent' : 'text-nexus-text-dim'}`}>
+                    {s.factor}%
+                  </span>
+                  <span className="text-nexus-text font-mono w-14 text-right">{s.value} kW</span>
+                </div>
               </div>
             ))}
           </div>

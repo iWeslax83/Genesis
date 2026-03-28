@@ -24,8 +24,9 @@ export function calculateCrewMetabolics(crewMembers, hour, minute) {
   const crewCount = crewMembers.length;
 
   for (let i = 0; i < crewCount; i++) {
-    // Her mürettebat üyesine 1-2 saatlik faz kaydırma
-    const phaseShift = Math.floor(i / 2); // Her 2 kişi aynı program
+    // Mürettebat 3 gruba ayrılır, her grup 4 saat kaydırılır
+    // Böylece her an en az 2 kişi aktif (güvenlik)
+    const phaseShift = Math.floor(i / 2) * 4; // 0, 0, 4, 4, 8, 8 saat
     const shiftedHour = (hour + phaseShift) % 24;
     const activity = getCurrentActivity(shiftedHour);
     const actData = CREW_ACTIVITIES[activity] || CREW_ACTIVITIES.rest;

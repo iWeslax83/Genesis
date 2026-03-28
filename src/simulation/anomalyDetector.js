@@ -137,13 +137,15 @@ export function detectAnomalies(sensorHistory, currentValues, time) {
         }
       }
 
-      // 2. Spike tespiti
+      // 2. Spike tespiti (standart sapma bazlı)
       if (history.length >= 10) {
         const recent = history.slice(-HISTORY_WINDOW);
         const avg = recent.reduce((a, b) => a + b, 0) / recent.length;
-        const deviation = Math.abs(currentVal - avg) / Math.max(avg, 0.001);
+        const variance = recent.reduce((s, v) => s + (v - avg) ** 2, 0) / recent.length;
+        const std = Math.sqrt(variance);
+        const deviation = std > 0.01 ? Math.abs(currentVal - avg) / std : 0;
 
-        if (deviation > 0.5) {
+        if (deviation > 3.0) { // 3-sigma kuralı
           anomalies.push({
             id: idCounter++, type: 'spike', severity: 'warning',
             module, sensor, value: currentVal, expected: avg,

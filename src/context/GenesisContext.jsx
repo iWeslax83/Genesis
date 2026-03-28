@@ -99,6 +99,9 @@ const initialState = {
     },
     vitaminStatus: {},
     biodiversityScore: 0,
+    healthScore: 94,
+    healthIssues: [],
+    closure: { o2: 95, co2: 92, water: 98, food: 72, material: 89 },
   },
 
   ai: {
