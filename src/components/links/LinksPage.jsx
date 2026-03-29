@@ -16,7 +16,7 @@ const LINKS = [
     description: 'Proje tanıtım sunumu — PPTX',
     icon: FiFileText,
     gradient: 'from-[#d4903a] to-[#c07e2e]',
-    url: null,
+    url: "https://docs.google.com/presentation/d/1iFJ6-2ah1kDQG7Gi3x75rMn0hSuBRcml/edit?usp=sharing&ouid=105007010425965348442&rtpof=true&sd=true",
   },
     {
     id: 'github',
