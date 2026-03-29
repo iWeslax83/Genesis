@@ -162,8 +162,8 @@ function calcHvacFactor(thermal, crewActivity) {
   const tempFactor = 0.5 + Math.min(tempError / 10, 1.0);
 
   // Mürettebat ısı çıkışı yüksekse HVAC daha çok çalışır
-  const crewHeat = crewActivity?.totals?.heatOutput ?? 750; // W (6 kişi × 125W)
-  const baseCrewHeat = 750;
+  const crewHeat = crewActivity?.totals?.heatOutput ?? 125; // W (1 kişi × 125W)
+  const baseCrewHeat = 125;
   const crewFactor = 0.8 + 0.4 * (crewHeat / baseCrewHeat); // egzersiz zamanı daha yüksek
 
   return tempFactor * crewFactor;
@@ -228,10 +228,10 @@ function calcWasteFactor(compartments) {
  * Uyku saatlerinde düşük, egzersiz/çalışma saatlerinde yüksek
  */
 function calcCrewFactor(crewActivity, hour) {
-  const crewHeat = crewActivity?.totals?.heatOutput ?? 750;
-  const baseHeat = 750; // 6 × 125W ortalama
+  const crewHeat = crewActivity?.totals?.heatOutput ?? 125;
+  const baseHeat = 125; // 1 × 125W ortalama
 
-  // Metabolik çıktı oranı (uyku ~480W, egzersiz ~3000W, orta ~750W)
+  // Metabolik çıktı oranı (uyku ~80W, egzersiz ~500W, orta ~125W)
   const activityRatio = crewHeat / baseHeat;
 
   // 0.4x (uyku) → 1.0x (normal) → 1.6x (yoğun egzersiz)

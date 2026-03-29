@@ -51,7 +51,7 @@ function NarrativeHero({ state }) {
             Gün {time.day} — {overallGood ? 'Tüm Sistemler Normal' : 'Bazı Sistemler Dikkat Gerektiriyor'}
           </h2>
           <p className="text-xs text-nexus-text-dim leading-relaxed">
-            {crew6Summary(o2, foodPct, waterPct, progress, time)}
+            {crewSummary(o2, foodPct, waterPct, progress, time)}
           </p>
         </div>
         <div className="text-right flex-shrink-0">
@@ -63,9 +63,9 @@ function NarrativeHero({ state }) {
   );
 }
 
-function crew6Summary(o2, foodPct, waterPct, progress, time) {
+function crewSummary(o2, foodPct, waterPct, progress, time) {
   const parts = [];
-  parts.push(`6 kişilik mürettebat ${o2 > 20 ? 'rahatça' : 'zorlanarak'} nefes alıyor`);
+  parts.push(`Mürettebat ${o2 > 20 ? 'rahatça' : 'zorlanarak'} nefes alıyor`);
   parts.push(`bitkiler ihtiyacın %${foodPct.toFixed(0)}'ini karşılıyor`);
   parts.push(`su geri kazanımı %${waterPct.toFixed(1)}`);
 

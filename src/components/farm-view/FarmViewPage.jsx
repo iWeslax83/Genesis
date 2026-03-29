@@ -153,50 +153,11 @@ function NFTDetail({ mod, day, ndvi, pathogens }) {
   );
 }
 
-function SpirulinaDetail({ mod }) {
-  if (!mod) return null;
-  return (
-    <div className="space-y-3">
-      <div className="grid grid-cols-2 gap-2">
-        <Env icon={<FiThermometer />} label="Sıcaklık" value={`${mod.temperature?.toFixed(1)}°C`} />
-        <Env icon={<FiDroplet />} label="pH" value={mod.pH?.toFixed(1)} />
-        <Env icon={<FiActivity />} label="Yoğunluk" value={`${mod.density?.toFixed(1)} g/L`} />
-        <Env icon={<FiSun />} label="Işık" value={`${mod.lightIntensity?.toFixed(0)} µmol`} />
-      </div>
-      <div className="space-y-2">
-        <div className="bg-nexus-bg/50 rounded-lg p-2">
-          <div className="flex justify-between text-xs mb-1">
-            <span className="text-nexus-text-dim">O2 Üretim</span>
-            <span className="text-emerald-400 font-mono">{mod.o2Production?.toFixed(0)} L/gün</span>
-          </div>
-          <MiniBar value={mod.o2Production || 0} max={1200} color="#4ead5b" />
-        </div>
-        <div className="bg-nexus-bg/50 rounded-lg p-2">
-          <div className="flex justify-between text-xs mb-1">
-            <span className="text-nexus-text-dim">Hasat Oranı</span>
-            <span className="text-cyan-400 font-mono">{mod.harvestRate?.toFixed(1)} g/gün</span>
-          </div>
-          <MiniBar value={mod.harvestRate || 0} max={500} color="#4a9caa" />
-        </div>
-        <div className="bg-nexus-bg/50 rounded-lg p-2">
-          <div className="flex justify-between text-xs mb-1">
-            <span className="text-nexus-text-dim">Kontaminasyon Riski</span>
-            <span className="font-mono" style={{ color: (mod.contaminationRisk || 0) > 30 ? '#d45555' : '#4ead5b' }}>
-              %{(mod.contaminationRisk || 0).toFixed(0)}
-            </span>
-          </div>
-          <MiniBar value={mod.contaminationRisk || 0} max={100} color={(mod.contaminationRisk || 0) > 30 ? '#d45555' : '#4ead5b'} />
-        </div>
-      </div>
-    </div>
-  );
-}
-
 function HabitatDetail({ habitat, crew, resources }) {
   return (
     <div className="space-y-3">
       <div className="grid grid-cols-3 gap-2">
-        <Env icon={<FiUsers />} label="Mürettebat" value={`${habitat?.crewCount || 6} kişi`} />
+        <Env icon={<FiUsers />} label="Mürettebat" value={`${habitat?.crewCount || 1} kişi`} />
         <Env icon={<FiThermometer />} label="Sıcaklık" value={`${habitat?.temperature?.toFixed(1)}°C`} />
         <Env icon={<FiDroplet />} label="Nem" value={`%${habitat?.humidity?.toFixed(0)}`} />
       </div>
@@ -234,27 +195,6 @@ function HabitatDetail({ habitat, crew, resources }) {
   );
 }
 
-function MushroomDetail({ mod }) {
-  if (!mod) return null;
-  return (
-    <div className="space-y-3">
-      <div className="grid grid-cols-2 gap-2">
-        <Env icon={<FiThermometer />} label="Sıcaklık" value={`${mod.temperature?.toFixed(1)}°C`} />
-        <Env icon={<FiDroplet />} label="Nem" value={`%${mod.humidity?.toFixed(0)}`} />
-        <Env icon={<FiWind />} label="CO2" value={`${mod.co2?.toFixed(0)} ppm`} />
-        <Env icon={<FiActivity />} label="Substrat" value={`%${(mod.substrateLevel || 0).toFixed(0)}`} />
-      </div>
-      <div className="bg-nexus-bg/50 rounded-lg p-2">
-        <div className="flex justify-between text-xs mb-1">
-          <span className="text-nexus-text-dim">Hasat Oranı</span>
-          <span className="text-amber-400 font-mono">{mod.harvestRate?.toFixed(1)} g/gün</span>
-        </div>
-        <MiniBar value={mod.harvestRate || 0} max={300} color="#d4903a" />
-      </div>
-    </div>
-  );
-}
-
 const LABEL_METRIC_MAP = {
   'PAR': 'par', 'CO2': 'co2', 'pH': 'ph', 'EC': 'ec', 'NDVI': 'ndvi',
 };
@@ -279,8 +219,6 @@ function Env({ icon, label, value }) {
 const ZONES = [
   { id: 'aeroponic', label: 'Aeroponik Modül', icon: <FiFeather size={14} />, color: '#4ead5b', borderColor: '#4ead5b' },
   { id: 'nft',       label: 'NFT Hidroponik',  icon: <FiDroplet size={14} />, color: '#4a9caa', borderColor: '#4a9caa' },
-  { id: 'spirulina', label: 'Spirulina Reaktör', icon: <FiHexagon size={14} />, color: '#8b7fc7', borderColor: '#8b7fc7' },
-  { id: 'mushroom',  label: 'Mantar Üretim',   icon: <FiCircle size={14} />, color: '#d4903a', borderColor: '#d4903a' },
   { id: 'habitat',   label: 'Mürettebat Alanı', icon: <FiHome size={14} />, color: '#d45555', borderColor: '#d45555' },
 ];
 
@@ -291,8 +229,6 @@ const ZONES = [
 function FacilityMap({ selected, onSelect, modules, state }) {
   const aero = modules?.aeroponic;
   const nft = modules?.nft;
-  const spir = modules?.spirulina;
-  const mush = modules?.mushroom;
   const hab = state.compartments?.habitat;
 
   // Mini status dot
@@ -340,12 +276,6 @@ function FacilityMap({ selected, onSelect, modules, state }) {
       <line x1="590" y1="200" x2="340" y2="120" stroke="url(#waterGrad)" strokeWidth="3" className="flow-line" />
       {/* Besin hattı: Aeroponik -> NFT */}
       <line x1="190" y1="250" x2="190" y2="340" stroke="url(#pipeGrad)" strokeWidth="3" className="flow-line" />
-      {/* O2 hattı: Spirulina -> Habitat */}
-      <line x1="540" y1="410" x2="620" y2="280" stroke="#4ead5b" strokeWidth="2" strokeDasharray="6 4" opacity="0.5" className="flow-line" />
-      {/* CO2 hattı: Habitat -> Spirulina */}
-      <line x1="600" y1="290" x2="520" y2="400" stroke="#d4903a" strokeWidth="2" strokeDasharray="6 4" opacity="0.4" className="flow-line-reverse" />
-      {/* Atık -> Mantar */}
-      <line x1="660" y1="280" x2="660" y2="370" stroke="#d4903a" strokeWidth="2" strokeDasharray="4 6" opacity="0.4" className="flow-line" />
 
       {/* Akış etiketleri */}
       <text x="450" y="148" fill="#5b8def" fontSize="8" fontFamily="monospace" opacity="0.7">Su</text>
@@ -450,55 +380,6 @@ function FacilityMap({ selected, onSelect, modules, state }) {
         </text>
       </g>
 
-      {/* ---- ZONE: Spirulina ---- */}
-      <g className="cursor-pointer" onClick={() => onSelect('spirulina')}>
-        <rect x="380" y="360" width="210" height="130" rx="12"
-          fill={selected === 'spirulina' ? '#8b7fc710' : '#0f172a'}
-          stroke={selected === 'spirulina' ? '#8b7fc7' : '#8b7fc740'}
-          strokeWidth={selected === 'spirulina' ? 2.5 : 1.5}
-        />
-        <text x="400" y="390" fill="#8b7fc7" fontSize="13" fontWeight="600" fontFamily="sans-serif">Spirulina Reaktör</text>
-        <g transform="translate(524, 378)">{dot(spir?.status)}</g>
-
-        {/* Tank görseli */}
-        {[0, 1, 2].map(i => (
-          <g key={i}>
-            <rect x={405 + i * 55} y={405} width="40" height="60" rx="8"
-              fill="#1a2a4a" stroke="#8b7fc730" strokeWidth="1" />
-            <rect x={409 + i * 55} y={410 + 60 - (spir?.density || 1) * 20} width="32"
-              height={Math.min(50, (spir?.density || 1) * 20)} rx="6"
-              fill="#4ead5b" opacity={0.3 + (spir?.density || 1) * 0.15}>
-              <animate attributeName="opacity" values={`${0.2 + (spir?.density || 1) * 0.1};${0.4 + (spir?.density || 1) * 0.15};${0.2 + (spir?.density || 1) * 0.1}`} dur="4s" repeatCount="indefinite" />
-            </rect>
-          </g>
-        ))}
-        <text x="400" y="480" fill="#94a3b8" fontSize="9" fontFamily="monospace">
-          {spir?.density?.toFixed(1)} g/L | O2: {spir?.o2Production?.toFixed(0)} L/gün
-        </text>
-      </g>
-
-      {/* ---- ZONE: Mantar ---- */}
-      <g className="cursor-pointer" onClick={() => onSelect('mushroom')}>
-        <rect x="610" y="360" width="150" height="130" rx="12"
-          fill={selected === 'mushroom' ? '#d4903a10' : '#0f172a'}
-          stroke={selected === 'mushroom' ? '#d4903a' : '#d4903a40'}
-          strokeWidth={selected === 'mushroom' ? 2.5 : 1.5}
-        />
-        <text x="625" y="390" fill="#d4903a" fontSize="12" fontWeight="600" fontFamily="sans-serif">Mantar</text>
-        <g transform="translate(698, 378)">{dot(mush?.status)}</g>
-
-        {/* Mantar görselleri -- basit kutular */}
-        {[0, 1, 2, 3].map(i => (
-          <g key={i}>
-            <rect x={635 + (i % 2) * 50} y={410 + Math.floor(i / 2) * 30} width="16" height="16" rx="3"
-              fill="#d4903a" opacity={0.3 + (mush?.substrateLevel || 50) / 200} />
-          </g>
-        ))}
-        <text x="625" y="480" fill="#94a3b8" fontSize="9" fontFamily="monospace">
-          {mush?.harvestRate?.toFixed(0)} g/gün | Sub: %{(mush?.substrateLevel || 0).toFixed(0)}
-        </text>
-      </g>
-
       {/* ---- ZONE: Habitat ---- */}
       <g className="cursor-pointer" onClick={() => onSelect('habitat')}>
         <rect x="380" y="55" width="380" height="270" rx="12"
@@ -562,7 +443,7 @@ function FacilityMap({ selected, onSelect, modules, state }) {
 
         {/* Mürettebat ikonu row */}
         <g transform="translate(410, 238)">
-          {Array.from({ length: hab?.crewCount || 6 }, (_, i) => (
+          {Array.from({ length: hab?.crewCount || 1 }, (_, i) => (
             <g key={i} transform={`translate(${i * 42}, 0)`}>
               <circle cx="15" cy="12" r="10" fill="#1e293b" stroke="#d4555540" strokeWidth="1" />
               <text x="15" y="16" textAnchor="middle" fontSize="9" fill="#c5c6cc" fontFamily="monospace">C{i + 1}</text>
@@ -690,12 +571,6 @@ export default function FarmViewPage() {
             )}
             {selectedZone === 'nft' && (
               <NFTDetail mod={modules?.nft} day={state.time?.day} ndvi={state.ndvi?.nft} pathogens={state.pathogens?.nft} />
-            )}
-            {selectedZone === 'spirulina' && (
-              <SpirulinaDetail mod={modules?.spirulina} />
-            )}
-            {selectedZone === 'mushroom' && (
-              <MushroomDetail mod={modules?.mushroom} />
             )}
             {selectedZone === 'habitat' && (
               <HabitatDetail

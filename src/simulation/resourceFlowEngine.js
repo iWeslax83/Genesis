@@ -1,9 +1,7 @@
-import { CREW, MEALWORM, PLANTS, VITAMINS, SUBSTRATE } from './constants';
+import { CREW, PLANTS, VITAMINS } from './constants';
 import {
   calculatePlantGrowth,
   calculateModuleCalories,
-  calculateSpirulinaProduction,
-  calculateMushroomProduction,
 } from './plantGrowthModel';
 
 /**
@@ -51,21 +49,7 @@ export function calculateResourceFlow(state) {
     growth.modules.nft.plants, nftConditions, time.day
   );
 
-  // ====== 4. Spirulina Üretim (kontaminasyon dahil) ======
-  const spirulina = calculateSpirulinaProduction(
-    growth.modules.spirulina.density,
-    growth.modules.spirulina.temperature,
-    growth.modules.spirulina.contaminationRisk || 0,
-  );
-
-  // ====== 5. Mantar Üretim ======
-  const mushroom = calculateMushroomProduction(
-    growth.modules.mushroom.temperature,
-    growth.modules.mushroom.humidity,
-    growth.modules.mushroom.substrateLevel
-  );
-
-  // ====== 6. Patojen + Radyasyon Cezası Uygulama ======
+  // ====== 4. Patojen + Radyasyon Cezası Uygulama ======
   const aeroPenalty = (1 - aeroYieldPenalty) * (1 - radiationPenalty);
   const nftPenalty = (1 - nftYieldPenalty) * (1 - radiationPenalty);
 
@@ -83,13 +67,13 @@ export function calculateResourceFlow(state) {
   nftProduction.totalO2 *= nftPenalty;
   nftProduction.totalCO2 *= nftPenalty;
 
-  // ====== 7. Toplam O₂ / CO₂ Dengesi ======
-  const totalO2Production = aeroProduction.totalO2 + nftProduction.totalO2 + spirulina.o2Production;
-  const totalCO2Absorption = aeroProduction.totalCO2 + nftProduction.totalCO2 + spirulina.co2Consumption;
+  // ====== 5. Toplam O₂ / CO₂ Dengesi ======
+  const totalO2Production = aeroProduction.totalO2 + nftProduction.totalO2;
+  const totalCO2Absorption = aeroProduction.totalCO2 + nftProduction.totalCO2;
   const o2Balance = totalO2Production - crewO2Consumption;
   const co2Balance = crewCO2Production - totalCO2Absorption;
 
-  // ====== 7. Su Döngüsü ======
+  // ====== 6. Su Döngüsü ======
   const totalPlantWater = aeroProduction.totalWater + nftProduction.totalWater;
   const recycleRate = scenario?.active && scenario.effects?.waterRecycleRate
     ? scenario.effects.waterRecycleRate
@@ -97,37 +81,15 @@ export function calculateResourceFlow(state) {
   const waterRecycled = (totalPlantWater + crewWaterConsumption) * recycleRate;
   const waterLoss = (totalPlantWater + crewWaterConsumption) * (1 - recycleRate);
 
-  // ====== 8. Besin Döngüsü ======
+  // ====== 7. Besin Döngüsü ======
   const wasteProcessed = crewWasteProduction * (waste.decompositionRate || 0.85);
   const nutrientRecycled = wasteProcessed * (nutrient.nitrificationRate || 0.92);
 
-  // ====== 9. Mantar Substrat Dengesi ======
-  const substrateConsumption = (mushroom.yield / 714) * SUBSTRATE.depletionRatePerDay;
-  const substrateReplenishment = wasteProcessed * SUBSTRATE.replenishRatePerKgWaste;
-  const substrateDelta = substrateReplenishment - substrateConsumption;
-
-  // ====== 10. Böcek Protein (Yuegong-1: Tenebrio molitor) ======
-  // Yenilenemeyen bitki biyokütlesi: edible/harvestIndex × (1 - harvestIndex)
-  // Ortalama hasat indeksi ~0.55, kalori→kütle ~500 kcal/kg
-  const edibleBiomassKg = (aeroProduction.totalCalories + nftProduction.totalCalories) / 500;
-  const avgHarvestIndex = 0.55;
-  const inedibleBiomass = edibleBiomassKg * ((1 - avgHarvestIndex) / avgHarvestIndex); // kg/gün
-  const mealwormFeed = Math.min(inedibleBiomass, MEALWORM.dailyCapacity); // kg/gün
-  const mealwormYield = mealwormFeed * MEALWORM.yieldPerKgWaste / 1000; // kg/gün
-  const mealwormCalories = (mealwormYield * 1000 / 100) * MEALWORM.caloriesPer100g;
-  const mealwormProtein = (mealwormYield * 1000 / 100) * MEALWORM.proteinPer100g;
-  const mealwormCarbs = (mealwormYield * 1000 / 100) * MEALWORM.carbsPer100g;
-  const mealwormFat = (mealwormYield * 1000 / 100) * MEALWORM.fatPer100g;
-
-  // ====== 11. Toplam Kalori ======
-  const totalCalories = aeroProduction.totalCalories + nftProduction.totalCalories
-    + spirulina.calories + mushroom.calories + mealwormCalories;
-  const totalProtein = aeroProduction.totalProtein + nftProduction.totalProtein
-    + spirulina.protein + mushroom.protein + mealwormProtein;
-  const totalCarbs = aeroProduction.totalCarbs + nftProduction.totalCarbs
-    + spirulina.carbs + mushroom.carbs + mealwormCarbs;
-  const totalFat = aeroProduction.totalFat + nftProduction.totalFat
-    + spirulina.fat + mushroom.fat + mealwormFat;
+  // ====== 8. Toplam Kalori ======
+  const totalCalories = aeroProduction.totalCalories + nftProduction.totalCalories;
+  const totalProtein = aeroProduction.totalProtein + nftProduction.totalProtein;
+  const totalCarbs = aeroProduction.totalCarbs + nftProduction.totalCarbs;
+  const totalFat = aeroProduction.totalFat + nftProduction.totalFat;
 
   const result = {
     crew: {
@@ -140,15 +102,11 @@ export function calculateResourceFlow(state) {
     production: {
       aeroponic: aeroProduction,
       nft: nftProduction,
-      spirulina,
-      mushroom,
-      mealworm: { yield: mealwormYield * 1000, calories: mealwormCalories, protein: mealwormProtein, carbs: mealwormCarbs, fat: mealwormFat },
     },
     oxygen: {
       production: totalO2Production,
       consumption: crewO2Consumption,
       balance: o2Balance,
-      spirulinaContribution: spirulina.o2Production,
     },
     co2: {
       production: crewCO2Production,
@@ -166,20 +124,12 @@ export function calculateResourceFlow(state) {
       nutrientRecycled,
       recyclePercent: wasteProcessed > 0 ? (nutrientRecycled / wasteProcessed) * 100 : 0,
     },
-    substrate: {
-      consumption: substrateConsumption,
-      replenishment: substrateReplenishment,
-      delta: substrateDelta,
-    },
     calories: {
       total: totalCalories,
       target: CREW.caloriePerPersonPerDay * crewCount,
       bySource: {
         aeroponic: aeroProduction.totalCalories,
         nft: nftProduction.totalCalories,
-        spirulina: spirulina.calories,
-        mushroom: mushroom.calories,
-        mealworm: mealwormCalories,
       },
       protein: totalProtein,
       carbs: totalCarbs,
@@ -253,23 +203,6 @@ export function calculateHealthScore(flow, compartments) {
     else if (comp.status === 'warning') { score -= 3; }
   }
 
-  // Spirulina kontaminasyon riski
-  const contRisk = compartments.growth?.modules?.spirulina?.contaminationRisk || 0;
-  if (contRisk > 50) {
-    score -= Math.min(15, (contRisk - 50) / 3);
-    issues.push({ type: 'Spirulina kontaminasyon riski', severity: contRisk > 80 ? 'critical' : 'warning' });
-  }
-
-  // Mantar substrat
-  const subLevel = compartments.growth?.modules?.mushroom?.substrateLevel || 85;
-  if (subLevel < 20) {
-    score -= 10;
-    issues.push({ type: 'Mantar substratı kritik düşük', severity: 'critical' });
-  } else if (subLevel < 40) {
-    score -= 5;
-    issues.push({ type: 'Mantar substratı düşük', severity: 'warning' });
-  }
-
   return {
     score: Math.max(0, Math.min(100, Math.round(score))),
     issues,
@@ -283,7 +216,7 @@ export function calculateHealthScore(flow, compartments) {
 export function calculateVitaminIntake(state) {
   const { compartments, time } = state;
   const { growth, habitat } = compartments;
-  const crewCount = habitat.crewCount || 6;
+  const crewCount = habitat.crewCount || 1;
 
   // Bitki türü bazında günlük verim (g/gün)
   const yields = {};
@@ -307,11 +240,6 @@ export function calculateVitaminIntake(state) {
       yields[pg.type] = (yields[pg.type] || 0) + dailyPerPlant * pg.count;
     }
   }
-
-  // Spirulina biyokütle
-  const sp = growth.modules.spirulina;
-  const spProd = calculateSpirulinaProduction(sp.density, sp.temperature, sp.contaminationRisk || 0);
-  yields.spirulina = spProd.biomass;
 
   // Vitamin bazında alım hesapla
   const intake = {};

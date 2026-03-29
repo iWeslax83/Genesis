@@ -14,7 +14,7 @@ export function calculateTraceContaminants(currentLevels, crewCount, carbonBedHe
     const current = (typeof raw === 'object' && raw !== null) ? (raw.level || 0) : (raw || 0);
 
     // Üretim hızı (mg/m³/gün) — mürettebat sayısına bağlı
-    const productionRate = contDef.baseRate * (crewCount / 6);
+    const productionRate = contDef.baseRate * crewCount;
 
     // Temizleme hızı (TCCS)
     const removalRate = current * contDef.scrubberEff * scrubberEfficiency;

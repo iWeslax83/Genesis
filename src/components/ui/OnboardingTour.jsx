@@ -5,13 +5,13 @@ const TOUR_STEPS = [
   {
     icon: FiNavigation,
     title: 'GENESIS\'e Hoş Geldiniz!',
-    body: 'Bu simülasyon, 6 kişilik bir mürettebatın 980 günlük uzay görevinde hayatta kalmasını sağlayan kapalı döngü yaşam destek sistemini modeller.',
+    body: 'Bu simülasyon, tek kişilik bir mürettebatın 980 günlük uzay görevinde hayatta kalmasını sağlayan kapalı döngü yaşam destek sistemini modeller.',
     hint: 'Gerçek NASA ve ESA verilerine dayanır.',
   },
   {
     icon: FiHome,
     title: 'Habitat — Yaşam Alanı',
-    body: '350 m3\'luk bir alan. Mürettebat burada yaşar, nefes alır ve yemek yer. Oksijen, CO2, sıcaklık ve nem sürekli izlenir.',
+    body: '40 m³\'luk kompakt bir alan. Mürettebat burada yaşar, nefes alır ve yemek yer. Oksijen, CO₂, sıcaklık ve nem sürekli izlenir.',
     hint: 'Sol paneldeki "Genel Bakış" sayfasında habitat durumunu görebilirsiniz.',
   },
   {

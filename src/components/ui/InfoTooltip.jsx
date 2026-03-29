@@ -11,7 +11,7 @@ const METRIC_GLOSSARY = {
   },
   o2: {
     title: 'O2 (Oksijen)',
-    desc: 'Mürettebatın nefes alması için gereken gaz. Bitkiler ve spirulina fotosentezle oksijen üretir.',
+    desc: 'Mürettebatın nefes alması için gereken gaz. Bitkiler fotosentezle oksijen üretir.',
   },
   par: {
     title: 'PAR (Fotosentetik Aktif Işık)',
@@ -53,7 +53,7 @@ const METRIC_GLOSSARY = {
   },
   calorieBalance: {
     title: 'Kalori Dengesi',
-    desc: '6 kişilik mürettebat günde ~15.000 kcal ihtiyacı duyar. Bitkiler, spirulina ve mantar bu kaloriyi sağlar.',
+    desc: 'Mürettebat günde ~2.500 kcal ihtiyacı duyar. Bitkiler bu kaloriyi sağlar.',
   },
 
   // Systems
@@ -64,10 +64,6 @@ const METRIC_GLOSSARY = {
   melissa: {
     title: 'MELiSSA Protokolü',
     desc: 'ESA\'nın geliştirdiği kapalı döngü yaşam destek modeli. 4 kompartmandan oluşur: atık, besin, büyüme, habitat.',
-  },
-  spirulina: {
-    title: 'Spirulina',
-    desc: 'Yüksek proteinli (%65) mavi-yeşil alg. Hem oksijen üretir hem besin sağlar. Uzayda ideal gıda kaynağı.',
   },
   aeroponic: {
     title: 'Aeroponik Sistem',
@@ -165,7 +161,7 @@ const METRIC_GLOSSARY = {
   },
   crewStatus: {
     title: 'Mürettebat Durumu',
-    desc: '6 kişilik mürettebatın anlık aktivitesi, O2 tüketimi, CO2 üretimi ve ısı çıkışını izler.',
+    desc: 'Mürettebatın anlık aktivitesi, O2 tüketimi, CO2 üretimi ve ısı çıkışını izler.',
   },
   storedFood: {
     title: 'Depolanan Erzak',
@@ -179,7 +175,7 @@ const METRIC_GLOSSARY = {
   // Nutrition
   calorieProduction: {
     title: 'Kalori Üretimi',
-    desc: '6 kişi günde ~15.000 kcal ihtiyacı duyar. Bitkiler, spirulina ve mantar bu kaloriyi karşılar.',
+    desc: 'Mürettebat günde ~2.500 kcal ihtiyacı duyar. Bitkiler bu kaloriyi karşılar.',
   },
   macroNutrient: {
     title: 'Makro Besin Dağılımı',

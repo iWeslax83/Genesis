@@ -4,6 +4,7 @@ import { ToastProvider } from './components/ui/ToastNotification';
 import AppLayout from './components/layout/AppLayout';
 import SplashScreen from './components/ui/SplashScreen';
 import OnboardingTour from './components/ui/OnboardingTour';
+import LinksPage from './components/links/LinksPage';
 
 export default function App() {
   const [showSplash, setShowSplash] = useState(true);
@@ -12,6 +13,10 @@ export default function App() {
     setShowSplash(false);
     setShowTour(true);
   }, []);
+
+  if (window.location.hash === '#links') {
+    return <LinksPage />;
+  }
 
   return (
     <GenesisProvider>

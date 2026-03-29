@@ -170,7 +170,7 @@ function AeroponicTower({ position, growthProgress = 0.7, plantType = 'potato' }
     }
   });
 
-  const plantColor = plantType === 'wheat' ? '#a3e635' : plantType === 'soybean' ? '#4ade80' : '#22c55e';
+  const plantColor = plantType === 'peanut' ? '#4ade80' : '#22c55e';
   const plantScale = 0.3 + growthProgress * 0.7;
   const slotCount = 6;
 
@@ -422,133 +422,261 @@ function FloorGrid() {
   );
 }
 
+function FarmHUD({ simState }) {
+  const aero = simState?.compartments?.growth?.modules?.aeroponic;
+  const nft = simState?.compartments?.growth?.modules?.nft;
+  const cal = simState?.resources?.calories;
+  const aeroNdvi = simState?.ndvi?.aeroponic?.average;
+  const nftNdvi = simState?.ndvi?.nft?.average;
+
+  const bar = (val, max, color) => (
+    <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden mt-0.5">
+      <div className="h-full rounded-full" style={{ width: `${Math.min(100, (val / max) * 100)}%`, background: color }} />
+    </div>
+  );
+
+  return (
+    <div className="absolute inset-0 pointer-events-none z-10 p-3 flex flex-col justify-between">
+      {/* Top bar */}
+      <div className="flex items-start justify-between gap-2">
+        <div className="bg-black/60 backdrop-blur-sm border border-green-500/30 rounded-lg px-3 py-2 pointer-events-auto">
+          <div className="text-[10px] text-green-400 font-semibold uppercase tracking-wider mb-1">Aeroponik — 15 m²</div>
+          <div className="grid grid-cols-2 gap-x-4 gap-y-0.5 text-[9px] font-mono">
+            <span className="text-gray-400">Sıcaklık</span><span className="text-green-300">{aero?.temperature?.toFixed(1) ?? '—'}°C</span>
+            <span className="text-gray-400">pH</span><span className="text-green-300">{aero?.pH?.toFixed(1) ?? '—'}</span>
+            <span className="text-gray-400">EC</span><span className="text-green-300">{aero?.EC?.toFixed(1) ?? '—'} mS</span>
+            <span className="text-gray-400">NDVI</span><span className="text-green-300">{aeroNdvi?.toFixed(2) ?? '—'}</span>
+          </div>
+          {bar(aeroNdvi || 0, 1, '#22c55e')}
+        </div>
+
+        <div className="bg-black/60 backdrop-blur-sm border border-emerald-500/30 rounded-lg px-3 py-2 pointer-events-auto">
+          <div className="text-[10px] text-emerald-400 font-semibold uppercase tracking-wider mb-1">NFT Hidroponik — 7 m²</div>
+          <div className="grid grid-cols-2 gap-x-4 gap-y-0.5 text-[9px] font-mono">
+            <span className="text-gray-400">Sıcaklık</span><span className="text-emerald-300">{nft?.temperature?.toFixed(1) ?? '—'}°C</span>
+            <span className="text-gray-400">pH</span><span className="text-emerald-300">{nft?.pH?.toFixed(1) ?? '—'}</span>
+            <span className="text-gray-400">EC</span><span className="text-emerald-300">{nft?.EC?.toFixed(1) ?? '—'} mS</span>
+            <span className="text-gray-400">NDVI</span><span className="text-emerald-300">{nftNdvi?.toFixed(2) ?? '—'}</span>
+          </div>
+          {bar(nftNdvi || 0, 1, '#34d399')}
+        </div>
+      </div>
+
+      {/* Bottom bar */}
+      <div className="flex items-end justify-between gap-2">
+        <div className="bg-black/60 backdrop-blur-sm border border-purple-500/30 rounded-lg px-3 py-2 pointer-events-auto">
+          <div className="text-[10px] text-purple-400 font-semibold uppercase tracking-wider mb-1">Toplam Üretim</div>
+          <div className="grid grid-cols-2 gap-x-4 gap-y-0.5 text-[9px] font-mono">
+            <span className="text-gray-400">Kalori</span><span className="text-purple-300">{formatNumber(cal?.dailyProduction || 0)} kcal</span>
+            <span className="text-gray-400">Hedef</span><span className="text-purple-300">{formatNumber(cal?.dailyTarget || 0)} kcal</span>
+            <span className="text-gray-400">Oran</span><span className={cal?.dailyProduction >= cal?.dailyTarget ? 'text-green-400' : 'text-red-400'}>
+              %{cal?.dailyTarget ? ((cal.dailyProduction / cal.dailyTarget) * 100).toFixed(0) : '—'}
+            </span>
+          </div>
+          {bar(cal?.dailyProduction || 0, cal?.dailyTarget || 1, cal?.dailyProduction >= cal?.dailyTarget ? '#a855f7' : '#ef4444')}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function VerticalFarm3D({ simState }) {
   const aeroGrowth = simState?.ndvi?.aeroponic?.average || 0.7;
   const nftGrowth = simState?.ndvi?.nft?.average || 0.75;
 
   return (
-    <Canvas camera={{ position: [5, 3.5, 7], fov: 42 }} style={{ background: '#060a12' }}>
-      <color attach="background" args={['#060a12']} />
-      <fog attach="fog" args={['#060a12', 15, 35]} />
+    <div className="relative w-full h-full">
+      <FarmHUD simState={simState} />
+      <Canvas camera={{ position: [5, 3.5, 7], fov: 42 }} style={{ background: '#060a12' }}>
+        <color attach="background" args={['#060a12']} />
+        <fog attach="fog" args={['#060a12', 15, 35]} />
 
-      <ambientLight intensity={0.15} />
-      <directionalLight position={[8, 10, 5]} intensity={0.6} color="#ffffff" castShadow />
-      <pointLight position={[-3, 4, 0]} intensity={0.4} color="#a855f7" distance={12} />
-      <pointLight position={[3, 2, -2]} intensity={0.3} color="#22c55e" distance={10} />
-      <pointLight position={[0, 1, 4]} intensity={0.25} color="#4a9caa" distance={8} />
+        <ambientLight intensity={0.15} />
+        <directionalLight position={[8, 10, 5]} intensity={0.6} color="#ffffff" castShadow />
+        <pointLight position={[-3, 4, 0]} intensity={0.4} color="#a855f7" distance={12} />
+        <pointLight position={[3, 2, -2]} intensity={0.3} color="#22c55e" distance={10} />
+        <pointLight position={[0, 1, 4]} intensity={0.25} color="#4a9caa" distance={8} />
 
-      <group position={[-3, -0.2, 0]}>
-        <Html position={[0, 1.8, 0]} center distanceFactor={10}>
-          <div className="px-2 py-0.5 rounded text-[9px] whitespace-nowrap pointer-events-none bg-green-500/15 text-green-400 border border-green-500/30 font-semibold">
-            AEROPONIK &mdash; 15 m²
+        <group position={[-3, -0.2, 0]}>
+          <AeroponicTower position={[-0.8, 0, -0.6]} growthProgress={aeroGrowth} plantType="potato" />
+          <AeroponicTower position={[0, 0, -0.6]} growthProgress={Math.max(0.2, aeroGrowth - 0.1)} plantType="potato" />
+          <AeroponicTower position={[0.8, 0, -0.6]} growthProgress={Math.max(0.3, aeroGrowth - 0.05)} plantType="peanut" />
+          <AeroponicTower position={[-0.8, 0, 0.3]} growthProgress={Math.max(0.4, aeroGrowth + 0.05)} plantType="potato" />
+          <AeroponicTower position={[0, 0, 0.3]} growthProgress={aeroGrowth} plantType="potato" />
+          <AeroponicTower position={[0.8, 0, 0.3]} growthProgress={Math.max(0.15, aeroGrowth - 0.15)} plantType="peanut" />
+          <AeroponicTower position={[-0.8, 0, 1.2]} growthProgress={Math.max(0.5, aeroGrowth - 0.02)} plantType="potato" />
+          <AeroponicTower position={[0, 0, 1.2]} growthProgress={Math.max(0.35, aeroGrowth + 0.08)} plantType="peanut" />
+          <AeroponicTower position={[0.8, 0, 1.2]} growthProgress={aeroGrowth} plantType="potato" />
+
+          <mesh position={[0, -1.15, 0.3]} rotation={[-Math.PI / 2, 0, 0]}>
+            <planeGeometry args={[2.4, 2.4]} />
+            <meshStandardMaterial color="#0a1a0a" transparent opacity={0.4} emissive="#22c55e" emissiveIntensity={0.02} />
+          </mesh>
+        </group>
+
+        <group position={[0.3, -0.2, 0]}>
+          <NFTRack position={[0, -0.05, -0.5]} tiers={5} growthProgress={nftGrowth} />
+          <NFTRack position={[0, -0.05, 0.5]} tiers={5} growthProgress={Math.max(0.3, nftGrowth - 0.1)} />
+        </group>
+
+        <FloorGrid />
+
+        <Particles count={60} color="#34d399" radius={4} speed={0.15} />
+        <Particles count={30} color="#4a9caa" radius={3} speed={0.1} />
+        <Particles count={200} color="#ffffff" radius={18} speed={0.03} />
+
+        <OrbitControls
+          enablePan={true}
+          enableZoom={true}
+          enableRotate={true}
+          minDistance={3}
+          maxDistance={20}
+          autoRotate
+          autoRotateSpeed={0.3}
+          maxPolarAngle={Math.PI / 1.6}
+          target={[0, 0.5, 0]}
+        />
+      </Canvas>
+    </div>
+  );
+}
+
+function HabitatHUD({ simState, scenario }) {
+  const hab = simState?.compartments?.habitat;
+  const res = simState?.resources;
+  const pwr = simState?.power;
+  const therm = simState?.thermal;
+  const water = simState?.waterProcessing;
+  const deg = simState?.degradation;
+  const isLedFailure = scenario?.active === 'led_failure';
+  const isCo2Spike = scenario?.active === 'co2_spike';
+  const activeScenario = isLedFailure || isCo2Spike;
+
+  const statusDot = (ok) => (
+    <span className={`inline-block w-1.5 h-1.5 rounded-full ${ok ? 'bg-green-400' : 'bg-red-400 animate-pulse'}`} />
+  );
+
+  return (
+    <div className="absolute inset-0 pointer-events-none z-10 p-3 flex flex-col justify-between">
+      {/* Top */}
+      <div className="flex items-start justify-between gap-2">
+        {/* Atmosphere */}
+        <div className="bg-black/60 backdrop-blur-sm border border-green-500/30 rounded-lg px-3 py-2 pointer-events-auto">
+          <div className="flex items-center gap-1.5 text-[10px] text-green-400 font-semibold uppercase tracking-wider mb-1">
+            {statusDot(!isCo2Spike)} Atmosfer
           </div>
-        </Html>
-
-        <AeroponicTower position={[-0.8, 0, -0.6]} growthProgress={aeroGrowth} plantType="potato" />
-        <AeroponicTower position={[0, 0, -0.6]} growthProgress={Math.max(0.2, aeroGrowth - 0.1)} plantType="wheat" />
-        <AeroponicTower position={[0.8, 0, -0.6]} growthProgress={Math.max(0.3, aeroGrowth - 0.05)} plantType="soybean" />
-        <AeroponicTower position={[-0.8, 0, 0.3]} growthProgress={Math.max(0.4, aeroGrowth + 0.05)} plantType="potato" />
-        <AeroponicTower position={[0, 0, 0.3]} growthProgress={aeroGrowth} plantType="wheat" />
-        <AeroponicTower position={[0.8, 0, 0.3]} growthProgress={Math.max(0.15, aeroGrowth - 0.15)} plantType="soybean" />
-        <AeroponicTower position={[-0.8, 0, 1.2]} growthProgress={Math.max(0.5, aeroGrowth - 0.02)} plantType="potato" />
-        <AeroponicTower position={[0, 0, 1.2]} growthProgress={Math.max(0.35, aeroGrowth + 0.08)} plantType="wheat" />
-        <AeroponicTower position={[0.8, 0, 1.2]} growthProgress={aeroGrowth} plantType="potato" />
-
-        <mesh position={[0, -1.15, 0.3]} rotation={[-Math.PI / 2, 0, 0]}>
-          <planeGeometry args={[2.4, 2.4]} />
-          <meshStandardMaterial color="#0a1a0a" transparent opacity={0.4} emissive="#22c55e" emissiveIntensity={0.02} />
-        </mesh>
-      </group>
-
-      <group position={[0.3, -0.2, 0]}>
-        <NFTRack position={[0, -0.05, -0.5]} tiers={5} growthProgress={nftGrowth} />
-        <NFTRack position={[0, -0.05, 0.5]} tiers={5} growthProgress={Math.max(0.3, nftGrowth - 0.1)} />
-
-        <Html position={[0, 1.8, 0]} center distanceFactor={10}>
-          <div className="px-2 py-0.5 rounded text-[9px] whitespace-nowrap pointer-events-none bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 font-semibold">
-            NFT HIDROPONIK &mdash; 7 m²
+          <div className="grid grid-cols-2 gap-x-4 gap-y-0.5 text-[9px] font-mono">
+            <span className="text-gray-400">O₂</span><span className="text-green-300">%{hab?.o2Level?.toFixed(1) ?? '—'}</span>
+            <span className="text-gray-400">CO₂</span><span className={isCo2Spike ? 'text-red-400 font-bold' : 'text-green-300'}>%{hab?.co2Level?.toFixed(3) ?? '—'}</span>
+            <span className="text-gray-400">Sıcaklık</span><span className="text-green-300">{hab?.temperature?.toFixed(1) ?? '—'}°C</span>
+            <span className="text-gray-400">Nem</span><span className="text-green-300">%{hab?.humidity?.toFixed(0) ?? '—'}</span>
           </div>
-        </Html>
-      </group>
+        </div>
 
-      <SpirulinaBioreactor position={[3, -0.1, -0.8]} />
-      <MushroomCabinet position={[3, -0.7, 1.0]} />
-      <FloorGrid />
+        {/* Power */}
+        <div className="bg-black/60 backdrop-blur-sm border border-blue-500/30 rounded-lg px-3 py-2 pointer-events-auto">
+          <div className="flex items-center gap-1.5 text-[10px] text-blue-400 font-semibold uppercase tracking-wider mb-1">
+            {statusDot(!pwr?.powerDeficit)} Güç
+          </div>
+          <div className="grid grid-cols-2 gap-x-4 gap-y-0.5 text-[9px] font-mono">
+            <span className="text-gray-400">Üretim</span><span className="text-blue-300">{pwr?.generation?.toFixed(1) ?? '—'} kW</span>
+            <span className="text-gray-400">Tüketim</span><span className="text-blue-300">{pwr?.totalConsumption?.toFixed(1) ?? '—'} kW</span>
+            <span className="text-gray-400">Kullanım</span><span className="text-blue-300">%{pwr?.utilizationPercent?.toFixed(0) ?? '—'}</span>
+          </div>
+        </div>
+      </div>
 
-      <Particles count={60} color="#34d399" radius={4} speed={0.15} />
-      <Particles count={30} color="#4a9caa" radius={3} speed={0.1} />
-      <Particles count={200} color="#ffffff" radius={18} speed={0.03} />
+      {/* Scenario alert */}
+      {activeScenario && (
+        <div className="self-center bg-red-900/70 backdrop-blur-sm border border-red-500/50 rounded-lg px-4 py-1.5 pointer-events-auto">
+          <div className="text-[11px] text-red-400 font-bold uppercase tracking-wider flex items-center gap-2">
+            <FiAlertTriangle size={12} />
+            {isLedFailure ? 'LED ARIZASI AKTİF' : isCo2Spike ? 'CO₂ SEVİYESİ KRİTİK' : 'SPİRULİNA ÇÖKÜŞÜ'}
+          </div>
+        </div>
+      )}
 
-      <OrbitControls
-        enablePan={true}
-        enableZoom={true}
-        enableRotate={true}
-        minDistance={3}
-        maxDistance={20}
-        autoRotate
-        autoRotateSpeed={0.3}
-        maxPolarAngle={Math.PI / 1.6}
-        target={[0, 0.5, 0]}
-      />
-    </Canvas>
+      {/* Bottom */}
+      <div className="flex items-end justify-between gap-2">
+        {/* Water & Thermal */}
+        <div className="bg-black/60 backdrop-blur-sm border border-cyan-500/30 rounded-lg px-3 py-2 pointer-events-auto">
+          <div className="text-[10px] text-cyan-400 font-semibold uppercase tracking-wider mb-1">Su & Isıl</div>
+          <div className="grid grid-cols-2 gap-x-4 gap-y-0.5 text-[9px] font-mono">
+            <span className="text-gray-400">Su Rez.</span><span className="text-cyan-300">{formatNumber(hab?.waterReserve || 0)} L</span>
+            <span className="text-gray-400">Geri Kaz.</span><span className="text-cyan-300">{formatPercent((water?.overallRecovery || 0.987) * 100)}</span>
+            <span className="text-gray-400">Kabin</span><span className="text-cyan-300">{therm?.currentTemp?.toFixed(1) ?? '—'}°C</span>
+            <span className="text-gray-400">Radyatör</span><span className="text-cyan-300">%{therm?.heatRejection?.utilizationPercent?.toFixed(0) ?? '—'}</span>
+          </div>
+        </div>
+
+        {/* O2 balance & Health */}
+        <div className="bg-black/60 backdrop-blur-sm border border-purple-500/30 rounded-lg px-3 py-2 pointer-events-auto">
+          <div className="text-[10px] text-purple-400 font-semibold uppercase tracking-wider mb-1">Sistem Sağlığı</div>
+          <div className="grid grid-cols-2 gap-x-4 gap-y-0.5 text-[9px] font-mono">
+            <span className="text-gray-400">O₂ Denge</span>
+            <span className={res?.oxygen?.balance > 0 ? 'text-green-400' : 'text-red-400'}>
+              {res?.oxygen?.balance > 0 ? '+' : ''}{formatNumber(res?.oxygen?.balance || 0)} L
+            </span>
+            <span className="text-gray-400">Sağlık</span><span className="text-purple-300">{formatPercent(deg?.averageHealth || 100)}</span>
+            <span className="text-gray-400">Mürettebat</span><span className="text-purple-300">{hab?.crewCount || 1} kişi</span>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
 
 function MiniHabitat3D({ scenario, simState }) {
-  const calorieRatio = simState?.resources?.calories
-    ? Math.min(1, (simState.resources.calories.dailyProduction || 0) / Math.max(1, simState.resources.calories.dailyTarget || 15000))
-    : 0.7;
   const o2Balance = simState?.resources?.oxygen?.balance || 0;
   const growthProgress = simState?.ndvi?.aeroponic?.average || 0.7;
   const isLedFailure = scenario?.active === 'led_failure';
   const isCo2Spike = scenario?.active === 'co2_spike';
-  const isSpirCrash = scenario?.active === 'spirulina_crash';
-
   const o2ParticleCount = Math.max(15, Math.min(80, 40 + Math.round(o2Balance / 50)));
   const co2ParticleCount = isCo2Spike ? 60 : 25;
 
   return (
-    <Canvas camera={{ position: [6, 4, 6], fov: 45 }} style={{ background: '#060a12' }}>
-      <color attach="background" args={['#060a12']} />
-      <fog attach="fog" args={['#060a12', 10, 25]} />
+    <div className="relative w-full h-full">
+      <HabitatHUD simState={simState} scenario={scenario} />
+      <Canvas camera={{ position: [6, 4, 6], fov: 45 }} style={{ background: '#060a12' }}>
+        <color attach="background" args={['#060a12']} />
+        <fog attach="fog" args={['#060a12', 10, 25]} />
 
-      <ambientLight intensity={isLedFailure ? 0.1 : 0.2} />
-      <directionalLight position={[10, 10, 5]} intensity={isLedFailure ? 0.35 : 0.7} color="#ffffff" />
-      <pointLight position={[-5, 5, -5]} intensity={isSpirCrash ? 0.15 : 0.4} color="#4a9caa" distance={15} />
-      <pointLight position={[5, -3, 3]} intensity={0.2} color="#22c55e" distance={10} />
+        <ambientLight intensity={isLedFailure ? 0.1 : 0.2} />
+        <directionalLight position={[10, 10, 5]} intensity={isLedFailure ? 0.35 : 0.7} color="#ffffff" />
+        <pointLight position={[-5, 5, -5]} intensity={isSpirCrash ? 0.15 : 0.4} color="#4a9caa" distance={15} />
+        <pointLight position={[5, -3, 3]} intensity={0.2} color="#22c55e" distance={10} />
 
-      <HabitatShell />
+        <HabitatShell />
 
-      <CompSection position={[0, 0, -3]} color="#d4903a" label="Atık İşleme" isWarning={false} />
-      <CompSection position={[0, 0, -1]} color="#c084fc" label="Besin Çözeltisi" isWarning={false} />
-      <CompSection position={[0, 0, 1]} color="#22c55e" label="Bitki Modülü" isWarning={isLedFailure} emissiveIntensity={isLedFailure ? 0.04 : 0.12} />
-      <CompSection position={[0, 0, 3]} color="#3b82f6" label="Habitat" isWarning={isCo2Spike} />
+        <CompSection position={[0, 0, -3]} color="#d4903a" label="Atık İşleme" isWarning={false} />
+        <CompSection position={[0, 0, -1]} color="#c084fc" label="Besin Çözeltisi" isWarning={false} />
+        <CompSection position={[0, 0, 1]} color="#22c55e" label="Bitki Modülü" isWarning={isLedFailure} emissiveIntensity={isLedFailure ? 0.04 : 0.12} />
+        <CompSection position={[0, 0, 3]} color="#3b82f6" label="Habitat" isWarning={isCo2Spike} />
 
-      <PlantRow position={[0, -1.2, 0.8]} count={8} color="#22c55e" growthProgress={growthProgress} />
-      <PlantRow position={[0, -1.2, 1.2]} count={6} color="#34d399" growthProgress={Math.max(0.3, growthProgress - 0.1)} />
+        <PlantRow position={[0, -1.2, 0.8]} count={8} color="#22c55e" growthProgress={growthProgress} />
+        <PlantRow position={[0, -1.2, 1.2]} count={6} color="#34d399" growthProgress={Math.max(0.3, growthProgress - 0.1)} />
 
-      <SpirulinaOrb />
+        <Particles count={o2ParticleCount} color="#34d399" radius={1.8} speed={0.3} />
+        <Particles count={co2ParticleCount} color={isCo2Spike ? '#ef4444' : '#3b82f6'} radius={1.5} speed={isCo2Spike ? 0.5 : 0.2} />
+        <Particles count={150} color="#ffffff" radius={15} speed={0.05} />
 
-      <Particles count={o2ParticleCount} color="#34d399" radius={1.8} speed={0.3} />
-      <Particles count={co2ParticleCount} color={isCo2Spike ? '#ef4444' : '#3b82f6'} radius={1.5} speed={isCo2Spike ? 0.5 : 0.2} />
-      <Particles count={150} color="#ffffff" radius={15} speed={0.05} />
+        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -2, 0]}>
+          <planeGeometry args={[20, 20]} />
+          <meshStandardMaterial color="#0a0e1a" transparent opacity={0.3} />
+        </mesh>
 
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -2, 0]}>
-        <planeGeometry args={[20, 20]} />
-        <meshStandardMaterial color="#0a0e1a" transparent opacity={0.3} />
-      </mesh>
-
-      <OrbitControls
-        enablePan={false}
-        enableZoom={true}
-        enableRotate={true}
-        minDistance={4}
-        maxDistance={18}
-        autoRotate
-        autoRotateSpeed={0.4}
-        maxPolarAngle={Math.PI / 1.8}
-      />
-    </Canvas>
+        <OrbitControls
+          enablePan={false}
+          enableZoom={true}
+          enableRotate={true}
+          minDistance={4}
+          maxDistance={18}
+          autoRotate
+          autoRotateSpeed={0.4}
+          maxPolarAngle={Math.PI / 1.8}
+        />
+      </Canvas>
+    </div>
   );
 }
 
@@ -558,7 +686,6 @@ function SystemSchematic({ state }) {
   const { compartments, resources, power, thermal, degradation, waterProcessing } = state;
   const aero = compartments.growth?.modules?.aeroponic;
   const nft = compartments.growth?.modules?.nft;
-  const spir = compartments.growth?.modules?.spirulina;
   const hab = compartments.habitat;
 
   const statusDot = (status) => {
@@ -612,15 +739,7 @@ function SystemSchematic({ state }) {
         <text x="133" y="136" fill="#4a9caa" fontSize="7" fontWeight="600">NFT Hidroponik</text>
         <text x="133" y="148" fill="#94a3b8" fontSize="6.5" fontFamily="monospace">{nft?.temperature?.toFixed(1)}°C | pH {nft?.pH?.toFixed(1)}</text>
 
-        <rect x="30" y="162" width="90" height="35" rx="4" fill="#0f0a1a" stroke="#8b7fc725" strokeWidth="0.7" />
-        <text x="38" y="176" fill="#8b7fc7" fontSize="7" fontWeight="600">Spirulina</text>
-        <text x="38" y="188" fill="#94a3b8" fontSize="6.5" fontFamily="monospace">{spir?.density?.toFixed(1)} g/L | O2: {spir?.o2Production?.toFixed(0)}</text>
-
-        <rect x="125" y="162" width="90" height="35" rx="4" fill="#1a150a" stroke="#d4903a25" strokeWidth="0.7" />
-        <text x="133" y="176" fill="#d4903a" fontSize="7" fontWeight="600">Mantar</text>
-        <text x="133" y="188" fill="#94a3b8" fontSize="6.5" fontFamily="monospace">Sub: %{(compartments.growth?.modules?.mushroom?.substrateLevel || 0).toFixed(0)}</text>
-
-        <text x="35" y="215" fill="#94a3b8" fontSize="7" fontFamily="monospace">
+        <text x="35" y="180" fill="#94a3b8" fontSize="7" fontFamily="monospace">
           Kalori: {formatNumber(resources.calories.dailyProduction)} / {formatNumber(resources.calories.dailyTarget)} kcal
         </text>
       </g>
@@ -686,7 +805,7 @@ function SystemSchematic({ state }) {
         <rect x="460" y="245" width="200" height="55" rx="8" fill="#0f172a" stroke="#d4555540" strokeWidth="1" />
         <text x="475" y="265" fill="#d45555" fontSize="10" fontWeight="600">Mürettebat</text>
         <text x="475" y="280" fill="#94a3b8" fontSize="8" fontFamily="monospace">
-          {hab?.crewCount || 6} kişi
+          {hab?.crewCount || 1} kişi
         </text>
         <text x="475" y="292" fill="#94a3b8" fontSize="7" fontFamily="monospace">
           Su: {formatNumber(hab?.waterReserve || 0)} L | Nem: %{hab?.humidity?.toFixed(0)}

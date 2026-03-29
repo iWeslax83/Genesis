@@ -256,9 +256,8 @@ function BiodiversityScore({ score }) {
 }
 
 const PLANT_NAMES = {
-  potato: 'Patates', sweetPotato: 'T. Patates', wheat: 'Buğday',
-  soybean: 'Soya', peanut: 'Fıstık', lettuce: 'Marul',
-  tomato: 'Domates', spinach: 'Ispanak', pepper: 'Biber', radish: 'Turp',
+  potato: 'Patates', peanut: 'Fıstık', lettuce: 'Marul',
+  spinach: 'Ispanak', basil: 'Fesleğen', mint: 'Nane',
 };
 
 function HarvestLog({ harvestLog }) {

@@ -6,7 +6,7 @@ import { MISSION, MODULE_AREAS } from './constants';
  */
 export function calculateMissionStatus(state) {
   const missionDay = state.time.day;
-  const crewCount = state.compartments.habitat.crewCount || 6;
+  const crewCount = state.compartments.habitat.crewCount || 1;
 
   // Görev fazı belirleme
   let cumulativeDay = 0;

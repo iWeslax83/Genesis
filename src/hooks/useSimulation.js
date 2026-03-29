@@ -9,7 +9,7 @@ import {
 } from '../simulation/resourceFlowEngine';
 import { detectAnomalies, generateAIInsights } from '../simulation/anomalyDetector';
 import { calculatePlantGrowth } from '../simulation/plantGrowthModel';
-import { PLANTS, HABITAT_VOLUME, SPIRULINA, CREW } from '../simulation/constants';
+import { PLANTS, HABITAT_VOLUME, CREW } from '../simulation/constants';
 import { calculatePowerSystem } from '../simulation/powerSystem';
 import { calculateThermalBalance } from '../simulation/thermalSystem';
 import { calculateDegradation } from '../simulation/degradationModel';
@@ -54,28 +54,6 @@ function evaluateCompartmentStatus(sensors) {
     }
   }
 
-  if (sensors.spirulina) {
-    const sp = sensors.spirulina;
-    if (sp.temperature < 22 || sp.temperature > 38 || sp.density < 0.1) {
-      statuses.spirulina = 'critical';
-    } else if (sp.temperature < 26 || sp.temperature > 34 || sp.density < 0.3) {
-      statuses.spirulina = 'warning';
-    } else {
-      statuses.spirulina = 'nominal';
-    }
-  }
-
-  if (sensors.mushroom) {
-    const m = sensors.mushroom;
-    if (m.temperature < 10 || m.temperature > 28 || m.humidity < 65) {
-      statuses.mushroom = 'critical';
-    } else if (m.temperature < 14 || m.temperature > 22 || m.humidity < 80) {
-      statuses.mushroom = 'warning';
-    } else {
-      statuses.mushroom = 'nominal';
-    }
-  }
-
   if (sensors.habitat) {
     const h = sensors.habitat;
     if (h.o2 < 18.0 || h.co2 > 0.15) {
@@ -87,7 +65,7 @@ function evaluateCompartmentStatus(sensors) {
     }
   }
 
-  const growthModules = ['aeroponic', 'nft', 'spirulina', 'mushroom'];
+  const growthModules = ['aeroponic', 'nft'];
   const severityOrder = { critical: 2, warning: 1, nominal: 0 };
   let worstGrowth = 'nominal';
   for (const mod of growthModules) {
@@ -138,23 +116,6 @@ function checkHarvests(state) {
   }
 
   return harvests;
-}
-
-// ======================================================
-// Spirulina kontaminasyon riski hesaplama
-// ======================================================
-function calculateContaminationRisk(spirulinaModule) {
-  const phDeviation = Math.abs((spirulinaModule.pH || 9.5) - SPIRULINA.optimalPH);
-  const tempDeviation = Math.abs((spirulinaModule.temperature || 30) - SPIRULINA.optimalTemp);
-
-  // pH sapması >1.5 veya sıcaklık sapması >5°C → risk artar
-  if (phDeviation > 1.5 || tempDeviation > 5) {
-    return 3; // Yüksek risk artışı
-  } else if (phDeviation > 0.8 || tempDeviation > 3) {
-    return 1; // Orta risk artışı
-  } else {
-    return -2; // Koşullar iyi → risk azalır
-  }
 }
 
 // ======================================================
@@ -233,22 +194,7 @@ export default function useSimulation() {
         payload: { o2Delta: o2DeltaPercent, co2Delta: co2DeltaPercent },
       });
 
-      // 6. Mantar substrat güncelleme
-      const substrateDeltaPerTick = flow.substrate.delta * TICK_FRACTION;
-      dispatch({
-        type: 'UPDATE_SUBSTRATE',
-        payload: { delta: substrateDeltaPerTick },
-      });
-
-      // 7. Spirulina kontaminasyon riski
-      const contRiskDelta = calculateContaminationRisk(s.compartments.growth.modules.spirulina);
-      const contRiskDeltaPerTick = contRiskDelta * TICK_FRACTION * 50; // Günlük risk değişiminin tick oranı
-      dispatch({
-        type: 'UPDATE_CONTAMINATION',
-        payload: { riskDelta: contRiskDeltaPerTick },
-      });
-
-      // 8. Otomatik hasat kontrolü — her saat (dakika=0)
+      // 6. Otomatik hasat kontrolü — her saat (dakika=0)
       if (s.time.minute === 0) {
         const harvests = checkHarvests(s);
         if (harvests.length > 0) {
@@ -256,36 +202,36 @@ export default function useSimulation() {
         }
       }
 
-      // 9. Mürettebat aktivite modeli (güç ve ısıl sistemden ÖNCE — onlar crew heat'e bağımlı)
-      const crewMembers = CREW.members || Array.from({ length: s.compartments.habitat.crewCount || 6 }, (_, i) => ({ id: i+1, name: `Crew ${i+1}`, role: 'Genel' }));
+      // 7. Mürettebat aktivite modeli (güç ve ısıl sistemden ÖNCE — onlar crew heat'e bağımlı)
+      const crewMembers = CREW.members || Array.from({ length: s.compartments.habitat.crewCount || 1 }, (_, i) => ({ id: i+1, name: `Crew ${i+1}`, role: 'Genel' }));
       const crewMetabolics = calculateCrewMetabolics(crewMembers, s.time.hour, s.time.minute);
       dispatch({ type: 'UPDATE_CREW_ACTIVITY', payload: crewMetabolics });
 
-      // 10. Güç sistemi hesaplama
+      // 8. Güç sistemi hesaplama
       const powerData = calculatePowerSystem(s);
       dispatch({ type: 'UPDATE_POWER', payload: powerData });
 
-      // 11. Isıl denge hesaplama
+      // 9. Isıl denge hesaplama
       const thermalData = calculateThermalBalance(s, powerData);
       dispatch({ type: 'UPDATE_THERMAL', payload: thermalData });
 
-      // 12. Radyasyon modeli
+      // 10. Radyasyon modeli
       const radiationData = calculateRadiation(s, s.radiation);
       dispatch({ type: 'UPDATE_RADIATION', payload: radiationData });
 
-      // 13. Eser kirletici kontrol (her 5. tick'te — performans)
+      // 11. Eser kirletici kontrol (her 5. tick'te — performans)
       if (s.time.minute % 5 === 0) {
         const carbonHealth = s.degradation?.components?.carbonBed?.adsorptionEfficiency || 1.0;
         const contaminantData = calculateTraceContaminants(
           s.traceContaminants?.levels || {},
-          s.compartments.habitat.crewCount || 6,
+          s.compartments.habitat.crewCount || 1,
           carbonHealth,
           s.time.day
         );
         dispatch({ type: 'UPDATE_TRACE_CONTAMINANTS', payload: contaminantData });
       }
 
-      // 14. AI, vitamin, NDVI, patojen, görev — her 30 dakikada bir
+      // 12. AI, vitamin, NDVI, patojen, görev — her 30 dakikada bir
       if (s.time.minute % 30 === 0) {
         const anomalies = detectAnomalies(s.sensorHistory, sensors, s.time);
         const insights = generateAIInsights(flow, s.compartments, s.time, s.sensorHistory);

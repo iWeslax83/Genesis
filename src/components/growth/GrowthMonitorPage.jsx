@@ -11,8 +11,6 @@ import { FiActivity } from 'react-icons/fi';
 const MODULE_TABS = [
   { id: 'aeroponic', label: 'Aeroponik', color: '#4ead5b' },
   { id: 'nft', label: 'NFT Hidroponik', color: '#4a9caa' },
-  { id: 'spirulina', label: 'Spirulina', color: '#5b8def' },
-  { id: 'mushroom', label: 'Mantar', color: '#8b7fc7' },
 ];
 
 function SensorGauges({ module }) {

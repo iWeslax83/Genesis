@@ -1,4 +1,4 @@
-import { PLANTS, SPIRULINA, MUSHROOM, PHOTOPERIOD, DISSOLVED_OXYGEN } from './constants';
+import { PLANTS, PHOTOPERIOD, DISSOLVED_OXYGEN } from './constants';
 
 /**
  * Gaussian faktör — optimum değerden sapma cezası
@@ -230,49 +230,3 @@ export function calculateModuleCalories(plants, conditions, currentDay) {
   return { totalCalories, totalProtein, totalCarbs, totalFat, totalWater, totalO2, totalCO2 };
 }
 
-/**
- * Spirulina günlük üretim
- */
-export function calculateSpirulinaProduction(density, temperature, contaminationRisk = 0) {
-  const tempFactor = gaussianFactor(temperature, SPIRULINA.optimalTemp, 4);
-  const densityFactor = Math.min(density / 1.0, 1.5);
-  const contaminationFactor = contaminationRisk > 50
-    ? 1 - (contaminationRisk - 50) / 100
-    : 1.0;
-
-  const dailyBiomass = SPIRULINA.productivityPerM2Day * SPIRULINA.surfaceArea * tempFactor * densityFactor * contaminationFactor;
-  const dailyCalories = (dailyBiomass / 100) * SPIRULINA.caloriesPer100g;
-  const dailyProtein = (dailyBiomass / 100) * SPIRULINA.proteinPer100g;
-  const dailyO2 = (dailyBiomass / 1000) * SPIRULINA.o2ProductionPerKg;
-  const dailyCO2consumed = (dailyBiomass / 1000) * SPIRULINA.co2ConsumptionPerKg;
-
-  return {
-    biomass: dailyBiomass,
-    calories: dailyCalories,
-    protein: dailyProtein,
-    carbs: (dailyBiomass / 100) * SPIRULINA.carbsPer100g,
-    fat: (dailyBiomass / 100) * SPIRULINA.fatPer100g,
-    o2Production: dailyO2,
-    co2Consumption: dailyCO2consumed,
-  };
-}
-
-/**
- * Mantar günlük üretim
- */
-export function calculateMushroomProduction(temperature, humidity, substrateLevel) {
-  const tempFactor = gaussianFactor(temperature, MUSHROOM.optimalTemp, 3);
-  const humFactor = gaussianFactor(humidity, MUSHROOM.optimalHumidity, 8);
-  const substrateFactor = Math.min(substrateLevel / 50, 1);
-
-  const dailyYield = MUSHROOM.dailyYield * tempFactor * humFactor * substrateFactor;
-  const dailyCalories = (dailyYield / 100) * MUSHROOM.caloriesPer100g;
-
-  return {
-    yield: dailyYield,
-    calories: dailyCalories,
-    protein: (dailyYield / 100) * MUSHROOM.proteinPer100g,
-    carbs: (dailyYield / 100) * MUSHROOM.carbsPer100g,
-    fat: (dailyYield / 100) * MUSHROOM.fatPer100g,
-  };
-}

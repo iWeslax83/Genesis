@@ -5,7 +5,7 @@ import { THERMAL, TICK_FRACTION } from './constants';
  */
 export function calculateThermalBalance(state, powerData) {
   const { compartments } = state;
-  const crewCount = compartments.habitat.crewCount || 6;
+  const crewCount = compartments.habitat.crewCount || 1;
   const currentTemp = compartments.habitat.temperature || 22;
 
   // 1. Isı kaynakları (kW)

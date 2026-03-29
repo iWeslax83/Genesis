@@ -1,24 +1,9 @@
-import { createContext, useContext, useReducer, useCallback, useEffect, useRef } from 'react';
+import { createContext, useContext, useReducer, useCallback } from 'react';
 import { INITIAL_PLANTS, SCENARIOS } from '../simulation/constants';
 
 const GenesisContext = createContext(null);
 
 const STORAGE_KEY = 'genesis_simulation_state';
-const SAVE_DEBOUNCE_MS = 2000;
-
-/** Try to load previously saved state from localStorage */
-function loadSavedState() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) {
-      return JSON.parse(raw);
-    }
-  } catch (_err) {
-    // Corrupted or unreadable data — fall back to default
-    localStorage.removeItem(STORAGE_KEY);
-  }
-  return null;
-}
 
 const MAX_HISTORY = 288; // 24 saat × 12 tick/saat (5 dk aralık)
 
@@ -56,46 +41,35 @@ const initialState = {
           temperature: 22, humidity: 60, co2: 750, lightPAR: 350,
           pH: 5.8, ec: 1.8, waterUsage: 8, status: 'nominal',
         },
-        spirulina: {
-          temperature: 30, pH: 9.5, density: 1.2,
-          lightIntensity: 200, harvestRate: 60, o2Production: 96,
-          contaminationRisk: 0,
-          status: 'nominal',
-        },
-        mushroom: {
-          temperature: 18, humidity: 90, co2: 1200,
-          substrateLevel: 85, harvestRate: 714, status: 'nominal',
-        },
       },
     },
     habitat: {
-      crewCount: 6, o2Level: 21.0, co2Level: 0.04,
-      temperature: 22, humidity: 50, waterReserve: 1000,
+      crewCount: 1, o2Level: 21.0, co2Level: 0.04,
+      temperature: 22, humidity: 50, waterReserve: 170,
       status: 'nominal',
     },
   },
 
   resources: {
     water: {
-      total: 2000, inPlants: 400, inNutrient: 500,
-      inHabitat: 1000, inProcessing: 100,
-      recycleRate: 0.98, dailyLoss: 0.4,
+      total: 350, inPlants: 70, inNutrient: 85,
+      inHabitat: 170, inProcessing: 25,
+      recycleRate: 0.98, dailyLoss: 0.07,
     },
     oxygen: {
-      production: 5200, consumption: 5040, balance: 160,
-      spirulinaContribution: 96,
+      production: 870, consumption: 840, balance: 30,
     },
     co2: {
-      production: 6000, absorption: 5800, balance: 200,
+      production: 1000, absorption: 970, balance: 30,
     },
     nutrients: {
-      nitrogen: 100, phosphorus: 50, potassium: 200,
-      recycledFromWaste: 78,
+      nitrogen: 20, phosphorus: 10, potassium: 35,
+      recycledFromWaste: 13,
     },
     calories: {
-      dailyTarget: 15000, dailyProduction: 13500,
-      bySource: { aeroponic: 7200, nft: 1600, spirulina: 2100, mushroom: 1500, mealworm: 1100 },
-      protein: 420, carbs: 1350, fat: 190,
+      dailyTarget: 2500, dailyProduction: 2250,
+      bySource: { aeroponic: 1200, nft: 270 },
+      protein: 70, carbs: 225, fat: 32,
     },
     vitaminStatus: {},
     biodiversityScore: 0,
@@ -109,7 +83,7 @@ const initialState = {
     plantHealth: {
       overallScore: 95,
       issues: [
-        { plant: 'Patates-3', issue: 'Hafif N eksikliği', confidence: 82, severity: 'warning' },
+        { plant: 'T.Patates-3', issue: 'Hafif N eksikliği', confidence: 82, severity: 'warning' },
       ],
     },
     optimizations: [],
@@ -118,10 +92,10 @@ const initialState = {
   // Güç ve enerji sistemi
   power: {
     subsystems: {},
-    totalConsumption: 34,
-    generation: 40,
-    balance: 6,
-    utilizationPercent: 85,
+    totalConsumption: 8.3,
+    generation: 10,
+    balance: 1.7,
+    utilizationPercent: 83,
     sourceType: 'solar',
     location: 'marsSurface',
     lightingFactor: 1,
@@ -131,8 +105,8 @@ const initialState = {
 
   // Isıl kontrol
   thermal: {
-    heatSources: { crew: 0.75, avionics: 2, electrical: 30, total: 32.75 },
-    heatRejection: { radiatorCapacity: 25, actualRejection: 25, utilizationPercent: 80 },
+    heatSources: { crew: 0.125, avionics: 2, electrical: 8, total: 10.125 },
+    heatRejection: { radiatorCapacity: 6, actualRejection: 6, utilizationPercent: 80 },
     netHeatFlux: 0,
     deltaTemp: 0,
     currentTemp: 22,
@@ -220,8 +194,6 @@ const initialState = {
   sensorHistory: {
     aeroponic: { temp: [], humidity: [], co2: [], ph: [], ec: [], par: [], ethylene: [] },
     nft: { temp: [], humidity: [], co2: [], ph: [], ec: [], par: [], ethylene: [] },
-    spirulina: { temp: [], ph: [], density: [], o2: [] },
-    mushroom: { temp: [], humidity: [], co2: [] },
     habitat: { o2: [], co2: [], temp: [], humidity: [], ethylene: [] },
   },
 
@@ -311,17 +283,6 @@ function genesisReducer(state, action) {
         addHistory('nft', 'par', sensors.nft.par);
         addHistory('nft', 'ethylene', sensors.nft.ethylene);
       }
-      if (sensors.spirulina) {
-        addHistory('spirulina', 'temp', sensors.spirulina.temperature);
-        addHistory('spirulina', 'ph', sensors.spirulina.pH);
-        addHistory('spirulina', 'density', sensors.spirulina.density);
-        addHistory('spirulina', 'o2', sensors.spirulina.o2);
-      }
-      if (sensors.mushroom) {
-        addHistory('mushroom', 'temp', sensors.mushroom.temperature);
-        addHistory('mushroom', 'humidity', sensors.mushroom.humidity);
-        addHistory('mushroom', 'co2', sensors.mushroom.co2);
-      }
       if (sensors.habitat) {
         addHistory('habitat', 'o2', sensors.habitat.o2);
         addHistory('habitat', 'co2', sensors.habitat.co2);
@@ -361,8 +322,6 @@ function genesisReducer(state, action) {
               ...growth.modules,
               aeroponic: { ...growth.modules.aeroponic, ...mapGrowthModule(sensors.aeroponic) },
               nft: { ...growth.modules.nft, ...mapGrowthModule(sensors.nft) },
-              spirulina: { ...growth.modules.spirulina, ...sensors.spirulina },
-              mushroom: { ...growth.modules.mushroom, ...sensors.mushroom },
             },
           },
           habitat: { ...habitat, ...mapHabitat(sensors.habitat) },
@@ -411,8 +370,6 @@ function genesisReducer(state, action) {
               ...state.compartments.growth.modules,
               aeroponic: { ...state.compartments.growth.modules.aeroponic, status: statuses.aeroponic || 'nominal' },
               nft: { ...state.compartments.growth.modules.nft, status: statuses.nft || 'nominal' },
-              spirulina: { ...state.compartments.growth.modules.spirulina, status: statuses.spirulina || 'nominal' },
-              mushroom: { ...state.compartments.growth.modules.mushroom, status: statuses.mushroom || 'nominal' },
             },
           },
           habitat: { ...state.compartments.habitat, status: statuses.habitat || state.compartments.habitat.status },
@@ -468,48 +425,6 @@ function genesisReducer(state, action) {
         compartments: {
           ...state.compartments,
           growth: { ...growth, modules: newModules, harvestLog: trimmedLog },
-        },
-      };
-    }
-
-    // Mantar substrat güncelleme
-    case 'UPDATE_SUBSTRATE': {
-      const { delta } = action.payload;
-      const mushroom = state.compartments.growth.modules.mushroom;
-      return {
-        ...state,
-        compartments: {
-          ...state.compartments,
-          growth: {
-            ...state.compartments.growth,
-            modules: {
-              ...state.compartments.growth.modules,
-              mushroom: {
-                ...mushroom,
-                substrateLevel: Math.max(0, Math.min(100, mushroom.substrateLevel + delta)),
-              },
-            },
-          },
-        },
-      };
-    }
-
-    // Spirulina kontaminasyon risk güncelleme
-    case 'UPDATE_CONTAMINATION': {
-      const { riskDelta } = action.payload;
-      const spirulina = state.compartments.growth.modules.spirulina;
-      const newRisk = Math.max(0, Math.min(100, (spirulina.contaminationRisk || 0) + riskDelta));
-      return {
-        ...state,
-        compartments: {
-          ...state.compartments,
-          growth: {
-            ...state.compartments.growth,
-            modules: {
-              ...state.compartments.growth.modules,
-              spirulina: { ...spirulina, contaminationRisk: newRisk },
-            },
-          },
         },
       };
     }
@@ -585,37 +500,13 @@ export function GenesisProvider({ children }) {
   const [state, dispatch] = useReducer(
     genesisReducer,
     initialState,
-    // Lazy initializer: use saved state if available, otherwise initialState
-    () => loadSavedState() || initialState,
+    // Always start fresh on page load
+    () => initialState,
   );
 
   // dispatch from useReducer is already stable — no wrapper needed
 
-  // --- Debounced auto-save to localStorage ---
-  const saveTimerRef = useRef(null);
-
-  useEffect(() => {
-    // Clear any pending save timer
-    if (saveTimerRef.current) {
-      clearTimeout(saveTimerRef.current);
-    }
-
-    // Schedule a save after the debounce period
-    saveTimerRef.current = setTimeout(() => {
-      try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-      } catch (_err) {
-        // localStorage full or unavailable — silently ignore
-      }
-    }, SAVE_DEBOUNCE_MS);
-
-    // Cleanup on unmount or before next effect run
-    return () => {
-      if (saveTimerRef.current) {
-        clearTimeout(saveTimerRef.current);
-      }
-    };
-  }, [state]);
+  // Auto-save disabled: simulation resets on every page refresh
 
   // Reset simulation: clear saved state and dispatch reset action
   const resetSimulation = useCallback(() => {

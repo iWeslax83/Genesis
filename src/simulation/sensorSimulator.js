@@ -46,9 +46,6 @@ export function generateModuleSensors(moduleId, time, scenario = null) {
       if (moduleId === 'habitat' && sensorName === 'co2' && scenario.effects?.habitatCO2) {
         multiplier = scenario.effects.habitatCO2;
       }
-      if (moduleId === 'spirulina' && sensorName === 'density' && scenario.effects?.spirulinaDensity) {
-        multiplier = scenario.effects.spirulinaDensity;
-      }
     }
 
     result[sensorName] = Math.max(0, generateSensorValue(config, time, multiplier));
@@ -64,8 +61,6 @@ export function generateAllSensors(time, scenario = null) {
   return {
     aeroponic: generateModuleSensors('aeroponic', time, scenario),
     nft: generateModuleSensors('nft', time, scenario),
-    spirulina: generateModuleSensors('spirulina', time, scenario),
-    mushroom: generateModuleSensors('mushroom', time, scenario),
     habitat: generateModuleSensors('habitat', time, scenario),
   };
 }
@@ -77,15 +72,6 @@ export function generateAllSensors(time, scenario = null) {
 export function getSensorStatus(value, sensorType, moduleId = null) {
   // Modül bazlı limitler
   const moduleLimits = {
-    spirulina: {
-      pH: { warn: [8.5, 10.5], crit: [7.5, 11.0] },
-      temperature: { warn: [26, 34], crit: [22, 38] },
-    },
-    mushroom: {
-      temperature: { warn: [14, 22], crit: [10, 28] },
-      humidity: { warn: [80, 95], crit: [65, 100] },
-      co2: { warn: [800, 2000], crit: [500, 3000] },
-    },
     habitat: {
       o2: { warn: [19.5, 23.0], crit: [18.0, 25.0] },
       co2: { warn: [0.02, 0.08], crit: [0.01, 0.15] },

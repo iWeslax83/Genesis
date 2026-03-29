@@ -243,33 +243,13 @@ function AIInsights({ optimizations }) {
 }
 
 function SystemRiskPanel({ compartments }) {
-  const spirulina = compartments.growth?.modules?.spirulina || {};
-  const mushroom = compartments.growth?.modules?.mushroom || {};
-  const contRisk = spirulina.contaminationRisk || 0;
-  const subLevel = mushroom.substrateLevel || 85;
-
-  const riskColor = (v, inv = false) => {
-    const val = inv ? 100 - v : v;
-    return val > 80 ? '#d45555' : val > 50 ? '#d4903a' : val > 20 ? '#e6c84a' : '#4ead5b';
-  };
-
   return (
     <div className="bg-nexus-card rounded-lg border border-nexus-border p-4">
       <h3 className="text-xs text-nexus-text-dim uppercase tracking-wider mb-3 flex items-center gap-1.5">
         <FiAlertTriangle size={12} style={{ color: '#d45555' }} /> Risk Göstergeleri <InfoTooltip metricKey="riskIndicators" size={11} />
       </h3>
       <div className="space-y-3">
-        <RiskItem
-          icon={<FiActivity size={13} />} label="Spirulina Kontaminasyon" value={contRisk}
-          color={riskColor(contRisk)}
-          desc={contRisk > 50 ? 'pH ve sıcaklık stabilize edilmeli' : 'Normal aralıkta'}
-        />
-        <RiskItem
-          icon={<FiDisc size={13} />} label="Mantar Substrat" value={subLevel}
-          color={riskColor(subLevel, true)}
-          desc={subLevel < 40 ? 'Atık işleme hızı artırılmalı' : 'Yeterli seviye'}
-        />
-        <div className="pt-2 border-t border-nexus-border space-y-1">
+        <div className="space-y-1">
           <div className="flex justify-between items-center text-xs">
             <span className="text-nexus-text flex items-center gap-1"><FiShield size={11} /> Habitat O2 <InfoTooltip metricKey="o2" size={9} /></span>
             <span className="font-mono" style={{ color: compartments.habitat?.o2Level < 19.5 ? '#d45555' : '#4ead5b' }}>

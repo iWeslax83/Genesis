@@ -27,46 +27,21 @@ export const PHOTOPERIOD = {
 // Seçim kriterleri (NASA CELSS): cüce boy, yüksek hasat indeksi,
 // yüksek verim/m², kısa döngü, besin değeri, kendi kendine tozlaşma
 export const PLANTS = {
-  // ═══════ AEROPONİK MODÜL — Kök/yumru ve tahıl ═══════
+  // ═══════ AEROPONİK MODÜL — Kök/yumru ═══════
   potato: {
-    id: 'potato', name: 'Patates', cultivar: 'Norland', growthDays: 105,
-    caloriesPer100g: 77, proteinPer100g: 2.0, carbsPer100g: 17, fatPer100g: 0.1,
-    yieldPerPlant: 800, waterPerDay: 0.5, area: 0.09,
-    harvestIndex: 0.68,  // CELSS BPC: %68
-    edibleYieldPerM2Day: 20.8, // g/m²/gün (CELSS BPC verisi)
-    module: 'aeroponic', icon: '🥔',
-    optimalTemp: 20, optimalPH: 5.8, optimalEC: 2.0,
-    o2PerDay: 25, co2PerDay: 20,
-    pollination: 'self',
-    ethyleneSensitivity: 'low',
-    reference: 'CELSS BPC: 4 döngü 90-105 gün, 18.4-20.8 g/m²/gün yenilebilir',
-    spaceHistory: 'Yuegong-1 temel mahsul',
-    // İklim Reçetesi (OpenAg konsepti)
-    growthPhases: [
-      { name: 'Çimlenme',       dayStart: 0,   dayEnd: 10,  temp: 22, humidity: 80, ppfd: 0,   co2: 400,  ph: 5.8, ec: 0.5 },
-      { name: 'Fide',           dayStart: 10,  dayEnd: 25,  temp: 22, humidity: 70, ppfd: 300, co2: 800,  ph: 5.8, ec: 1.2 },
-      { name: 'Vejetatif',      dayStart: 25,  dayEnd: 55,  temp: 20, humidity: 65, ppfd: 450, co2: 1000, ph: 5.8, ec: 2.0 },
-      { name: 'Yumru Oluşumu',  dayStart: 55,  dayEnd: 85,  temp: 18, humidity: 60, ppfd: 400, co2: 800,  ph: 5.8, ec: 2.2 },
-      { name: 'Olgunlaşma',     dayStart: 85,  dayEnd: 105, temp: 16, humidity: 55, ppfd: 300, co2: 600,  ph: 5.8, ec: 1.8 },
-    ],
-    gddBase: 7, gddToMaturity: 1800, // GDD taban sıcaklığı ve toplam ihtiyaç
-    dliOptimal: 18, dliMin: 12, dliMax: 25, // mol/m²/gün
-    nutrientCategory: 'root',
-    successionInterval: 21, // gün — ardışık ekim aralığı
-  },
-  sweetPotato: {
-    id: 'sweetPotato', name: 'Tatlı Patates', cultivar: 'Beauregard', growthDays: 120,
-    caloriesPer100g: 86, proteinPer100g: 1.6, carbsPer100g: 20, fatPer100g: 0.1,
+    id: 'potato', name: 'Patates', cultivar: 'Kennebec Compact', growthDays: 120,
+    caloriesPer100g: 86, proteinPer100g: 1.6, carbsPer100g: 20, fatPer100g: 0.1, fiberPer100g: 3,
     yieldPerPlant: 600, waterPerDay: 0.4, area: 0.09,
     harvestIndex: 0.72,
     edibleYieldPerM2Day: 15.0,
-    module: 'aeroponic', icon: '🍠',
+    module: 'aeroponic', icon: '🥔',
     optimalTemp: 24, optimalPH: 5.8, optimalEC: 2.0,
     o2PerDay: 22, co2PerDay: 18,
     pollination: 'vegetative',
     ethyleneSensitivity: 'low',
-    reference: 'CELSS aday bitki — A vitamini kaynağı (beta-karoten: 709µg/100g)',
-    spaceHistory: 'Yuegong-1 temel mahsul',
+    propagation: 'tuber',  // Yumru ile çoğalır — genetik sürekliliği korur
+    reference: 'CELSS aday bitki — A vitamini kaynağı (beta-karoten). Aeroponik sisleme: 30sn püskürtme / 3dk bekleme döngüsü. B6 vitamini: 0.2mg/100g, Manganez: 0.275mg/100g',
+    spaceHistory: 'Yuegong-1 temel mahsul. NASA CELSS uzay tarımı ilk aday',
     growthPhases: [
       { name: 'Çimlenme',       dayStart: 0,   dayEnd: 12,  temp: 26, humidity: 85, ppfd: 0,   co2: 400,  ph: 5.8, ec: 0.5 },
       { name: 'Fide',           dayStart: 12,  dayEnd: 30,  temp: 26, humidity: 70, ppfd: 300, co2: 800,  ph: 5.8, ec: 1.2 },
@@ -79,61 +54,9 @@ export const PLANTS = {
     nutrientCategory: 'root',
     successionInterval: 25,
   },
-  wheat: {
-    id: 'wheat', name: 'Cüce Buğday', cultivar: 'USU-Apogee', growthDays: 86,
-    caloriesPer100g: 340, proteinPer100g: 13.2, carbsPer100g: 72, fatPer100g: 2.5,
-    yieldPerPlant: 50, waterPerDay: 0.3, area: 0.04,
-    harvestIndex: 0.42,
-    edibleYieldPerM2Day: 15.8,
-    module: 'aeroponic', icon: '🌾',
-    optimalTemp: 22, optimalPH: 6.0, optimalEC: 1.8,
-    o2PerDay: 18, co2PerDay: 15,
-    pollination: 'self',
-    ethyleneSensitivity: 'critical',
-    reference: 'USU-Apogee: 40cm boy, etilen toleranslı. CELSS BPC: 5 döngü 64-86 gün',
-    spaceHistory: 'BIOS-3 ana mahsul (63m²), Mir Super Dwarf (sterilite!), APH PH-02',
-    growthPhases: [
-      { name: 'Çimlenme',       dayStart: 0,  dayEnd: 7,   temp: 24, humidity: 75, ppfd: 200, co2: 800,  ph: 6.0, ec: 1.0 },
-      { name: 'Fide',           dayStart: 7,  dayEnd: 21,  temp: 22, humidity: 65, ppfd: 400, co2: 1000, ph: 6.0, ec: 1.4 },
-      { name: 'Kardeşlenme',    dayStart: 21, dayEnd: 42,  temp: 22, humidity: 60, ppfd: 500, co2: 1200, ph: 6.0, ec: 1.8 },
-      { name: 'Başaklanma',     dayStart: 42, dayEnd: 56,  temp: 20, humidity: 55, ppfd: 500, co2: 1000, ph: 6.0, ec: 2.0 },
-      { name: 'Tane Dolum',     dayStart: 56, dayEnd: 75,  temp: 18, humidity: 50, ppfd: 450, co2: 800,  ph: 6.0, ec: 1.8 },
-      { name: 'Olgunlaşma',     dayStart: 75, dayEnd: 86,  temp: 16, humidity: 45, ppfd: 300, co2: 600,  ph: 6.0, ec: 1.5 },
-    ],
-    gddBase: 4.4, gddToMaturity: 1500,
-    dliOptimal: 22, dliMin: 16, dliMax: 30,
-    nutrientCategory: 'grain',
-    successionInterval: 14,
-  },
-  soybean: {
-    id: 'soybean', name: 'Soya Fasulyesi', cultivar: 'Hoyt', growthDays: 97,
-    caloriesPer100g: 446, proteinPer100g: 36.5, carbsPer100g: 30, fatPer100g: 20,
-    yieldPerPlant: 40, waterPerDay: 0.3, area: 0.04,
-    harvestIndex: 0.40,
-    edibleYieldPerM2Day: 6.9,
-    module: 'aeroponic', icon: '🫘',
-    optimalTemp: 25, optimalPH: 6.0, optimalEC: 2.2,
-    o2PerDay: 20, co2PerDay: 16,
-    pollination: 'self',
-    ethyleneSensitivity: 'moderate',
-    reference: 'CELSS BPC: 3 döngü 90-97 gün. Yağ kaynağı (%20 yağ) — kritik',
-    spaceHistory: 'Yuegong-1, BIOS-3. Azot fiksasyonu yeteneği',
-    growthPhases: [
-      { name: 'Çimlenme',    dayStart: 0,  dayEnd: 8,   temp: 26, humidity: 75, ppfd: 0,   co2: 400,  ph: 6.0, ec: 0.5 },
-      { name: 'Fide',        dayStart: 8,  dayEnd: 25,  temp: 25, humidity: 65, ppfd: 350, co2: 800,  ph: 6.0, ec: 1.5 },
-      { name: 'Vejetatif',   dayStart: 25, dayEnd: 50,  temp: 25, humidity: 60, ppfd: 450, co2: 1000, ph: 6.0, ec: 2.0 },
-      { name: 'Çiçeklenme',  dayStart: 50, dayEnd: 70,  temp: 24, humidity: 55, ppfd: 500, co2: 1000, ph: 6.0, ec: 2.2 },
-      { name: 'Bakla Dolum', dayStart: 70, dayEnd: 90,  temp: 22, humidity: 50, ppfd: 400, co2: 800,  ph: 6.0, ec: 2.0 },
-      { name: 'Olgunlaşma',  dayStart: 90, dayEnd: 97,  temp: 20, humidity: 45, ppfd: 300, co2: 600,  ph: 6.0, ec: 1.5 },
-    ],
-    gddBase: 10, gddToMaturity: 1700,
-    dliOptimal: 20, dliMin: 14, dliMax: 28,
-    nutrientCategory: 'grain',
-    successionInterval: 20,
-  },
   peanut: {
     id: 'peanut', name: 'Yer Fıstığı', cultivar: 'Pronto', growthDays: 100,
-    caloriesPer100g: 567, proteinPer100g: 25.8, carbsPer100g: 16, fatPer100g: 49,
+    caloriesPer100g: 446, proteinPer100g: 38, carbsPer100g: 30, fatPer100g: 19.5, fiberPer100g: 12,
     yieldPerPlant: 30, waterPerDay: 0.25, area: 0.04,
     harvestIndex: 0.35,
     edibleYieldPerM2Day: 5.5,
@@ -142,7 +65,7 @@ export const PLANTS = {
     o2PerDay: 15, co2PerDay: 12,
     pollination: 'self',
     ethyleneSensitivity: 'low',
-    reference: 'En yüksek kalorili uzay bitkisi (567 kcal/100g). %49 yağ — kritik yağ kaynağı',
+    reference: 'En yüksek kalorili uzay bitkisi (446 kcal/100g). Omega-6: ~9.5g, Omega-3: ~1.4g. Folat: 375µg/100g, Magnezyum: 270mg/100g',
     spaceHistory: 'Yuegong-1, CELSS aday',
     growthPhases: [
       { name: 'Çimlenme',    dayStart: 0,  dayEnd: 10,  temp: 28, humidity: 75, ppfd: 0,   co2: 400,  ph: 6.0, ec: 0.5 },
@@ -160,7 +83,7 @@ export const PLANTS = {
   // ═══════ NFT MODÜL — Yapraklı sebzeler ve meyveler ═══════
   lettuce: {
     id: 'lettuce', name: 'Kırmızı Marul', cultivar: 'Outredgeous', growthDays: 28,
-    caloriesPer100g: 15, proteinPer100g: 1.4, carbsPer100g: 2.9, fatPer100g: 0.2,
+    caloriesPer100g: 15, proteinPer100g: 1.4, carbsPer100g: 2.9, fatPer100g: 0.2, fiberPer100g: 1.3,
     yieldPerPlant: 200, waterPerDay: 0.15, area: 0.06,
     harvestIndex: 0.92,  // En yüksek — neredeyse tamamı yenilebilir
     edibleYieldPerM2Day: 11.8, // CELSS BPC verisi (kes-ve-tekrar-hasat)
@@ -182,210 +105,83 @@ export const PLANTS = {
     nutrientCategory: 'leafy',
     successionInterval: 7,
   },
-  mizuna: {
-    id: 'mizuna', name: 'Mizuna Hardalı', cultivar: 'Miz America', growthDays: 21,
-    caloriesPer100g: 21, proteinPer100g: 2.3, carbsPer100g: 3.0, fatPer100g: 0.2,
-    yieldPerPlant: 180, waterPerDay: 0.12, area: 0.04,
-    harvestIndex: 0.90,
-    edibleYieldPerM2Day: 194.0, // Eden ISS: İKİNCİ en verimli bitki!
-    module: 'nft', icon: '🌿',
-    optimalTemp: 20, optimalPH: 6.0, optimalEC: 1.8,
-    o2PerDay: 7, co2PerDay: 5,
+  // ═══════ NFT MODÜL — Yapraklı sebzeler ve Aromatik Bitkiler (Uzay Aromatikleri) ═══════
+  // Dokümantasyon: Mikrogravitede koku duyusu azalan astronotlar için
+  // güçlü aromalar iştah artırıcıdır. K vitamini kaynağı.
+  // Uçucu yağlar sindirimi kolaylaştırır, ağız içi bakteri dengesini korur.
+  // Ödem kontrolü: uzayda sıvı kayması (fluid shift) kaynaklı ödem azaltma.
+  basil: {
+    id: 'basil', name: 'Fesleğen', cultivar: 'Genovese Compact', growthDays: 28,
+    caloriesPer100g: 23, proteinPer100g: 3.2, carbsPer100g: 2.7, fatPer100g: 0.6, fiberPer100g: 1.6,
+    yieldPerPlant: 80, waterPerDay: 0.08, area: 0.03,
+    harvestIndex: 0.85,
+    edibleYieldPerM2Day: 6.0,
+    module: 'nft', icon: '🪴',
+    optimalTemp: 22, optimalPH: 6.0, optimalEC: 1.6,
+    o2PerDay: 5, co2PerDay: 4,
     pollination: 'none',
-    ethyleneSensitivity: 'low',
-    reference: 'Eden ISS\'te 194 g/m²/gün — en verimli yapraklı sebze. Hızlı büyüme',
-    spaceHistory: 'VEGGIE VEG-03/04, VEGGIE-PONDS. ISS\'te düzenli olarak yetiştiriliyor',
+    ethyleneSensitivity: 'moderate',
+    reference: 'Hidroponik sistemde hızlı gelişim ve dar alanda yüksek verim. K vitamini şampiyonu (414µg/100g)',
+    spaceHistory: 'VEGGIE VEG-03 aday. Astronot morali için kritik aromatik bitki',
     growthPhases: [
-      { name: 'Çimlenme',  dayStart: 0,  dayEnd: 3,   temp: 22, humidity: 85, ppfd: 0,   co2: 400, ph: 6.0, ec: 0.5 },
-      { name: 'Fide',      dayStart: 3,  dayEnd: 7,   temp: 20, humidity: 70, ppfd: 200, co2: 800, ph: 6.0, ec: 1.0 },
-      { name: 'Vejetatif', dayStart: 7,  dayEnd: 18,  temp: 20, humidity: 65, ppfd: 350, co2: 1000, ph: 6.0, ec: 1.5 },
-      { name: 'Hasat',     dayStart: 18, dayEnd: 21,  temp: 18, humidity: 60, ppfd: 300, co2: 800, ph: 6.0, ec: 1.2 },
+      { name: 'Çimlenme',  dayStart: 0,  dayEnd: 5,   temp: 24, humidity: 85, ppfd: 0,   co2: 400, ph: 6.0, ec: 0.5 },
+      { name: 'Fide',      dayStart: 5,  dayEnd: 12,  temp: 22, humidity: 70, ppfd: 200, co2: 800, ph: 6.0, ec: 1.0 },
+      { name: 'Vejetatif', dayStart: 12, dayEnd: 24,  temp: 22, humidity: 65, ppfd: 300, co2: 1000, ph: 6.0, ec: 1.4 },
+      { name: 'Hasat',     dayStart: 24, dayEnd: 28,  temp: 20, humidity: 60, ppfd: 250, co2: 800, ph: 6.0, ec: 1.2 },
     ],
-    gddBase: 4, gddToMaturity: 350,
-    dliOptimal: 16, dliMin: 10, dliMax: 20,
-    nutrientCategory: 'leafy',
-    successionInterval: 5,
+    gddBase: 5, gddToMaturity: 450,
+    dliOptimal: 14, dliMin: 10, dliMax: 20,
+    nutrientCategory: 'aromatic',
+    successionInterval: 7,
   },
-  tomato: {
-    id: 'tomato', name: 'Cüce Domates', cultivar: 'Red Robin', growthDays: 65,
-    caloriesPer100g: 18, proteinPer100g: 0.9, carbsPer100g: 3.9, fatPer100g: 0.2,
-    yieldPerPlant: 1200, waterPerDay: 0.8, area: 0.16,
-    harvestIndex: 0.50,
-    edibleYieldPerM2Day: 11.4, // CELSS BPC verisi
-    module: 'nft', icon: '🍅',
-    optimalTemp: 24, optimalPH: 5.8, optimalEC: 3.49,
-    o2PerDay: 30, co2PerDay: 24,
-    pollination: 'self', // Titreşimle — mikro yerçekiminde hava akımı ile
-    ethyleneSensitivity: 'high', // Etilen olgunlaşmayı hızlandırır
-    reference: '20-30cm boy. Eden ISS: 46-52 g/m²/gün. Astronot Frank Rubio kayıp domates!',
-    spaceHistory: 'VEGGIE VEG-05 (2023). Kayıp domates 8 ay sonra bulundu (Aralık 2023)',
+  mint: {
+    id: 'mint', name: 'Nane', cultivar: 'Spearmint Compact', growthDays: 25,
+    caloriesPer100g: 70, proteinPer100g: 3.8, carbsPer100g: 14, fatPer100g: 0.9, fiberPer100g: 8,
+    yieldPerPlant: 60, waterPerDay: 0.06, area: 0.02,
+    harvestIndex: 0.88,
+    edibleYieldPerM2Day: 5.0,
+    module: 'nft', icon: '🍀',
+    optimalTemp: 20, optimalPH: 6.0, optimalEC: 1.4,
+    o2PerDay: 4, co2PerDay: 3,
+    pollination: 'vegetative',  // Stolon ile çoğalır
+    ethyleneSensitivity: 'low',
+    reference: 'Düşük su ihtiyacı, yüksek antibakteriyel özellik. Sindirimi kolaylaştırır. Demir: 11.87mg/100g, Kalsiyum: 199mg/100g',
+    spaceHistory: 'CELSS aday aromatik — düşük bakım, hızlı yayılım',
     growthPhases: [
-      { name: 'Çimlenme',    dayStart: 0,  dayEnd: 8,   temp: 26, humidity: 80, ppfd: 0,   co2: 400,  ph: 5.8, ec: 0.5 },
-      { name: 'Fide',        dayStart: 8,  dayEnd: 20,  temp: 24, humidity: 70, ppfd: 300, co2: 800,  ph: 5.8, ec: 1.5 },
-      { name: 'Vejetatif',   dayStart: 20, dayEnd: 35,  temp: 24, humidity: 65, ppfd: 450, co2: 1000, ph: 5.8, ec: 2.0 },
-      { name: 'Çiçeklenme',  dayStart: 35, dayEnd: 50,  temp: 22, humidity: 60, ppfd: 500, co2: 1000, ph: 5.8, ec: 2.5 },
-      { name: 'Meyve Olum',  dayStart: 50, dayEnd: 65,  temp: 22, humidity: 55, ppfd: 500, co2: 800,  ph: 5.8, ec: 3.0 },
+      { name: 'Köklendirme', dayStart: 0,  dayEnd: 5,   temp: 22, humidity: 85, ppfd: 0,   co2: 400, ph: 6.0, ec: 0.5 },
+      { name: 'Fide',        dayStart: 5,  dayEnd: 10,  temp: 20, humidity: 70, ppfd: 200, co2: 800, ph: 6.0, ec: 1.0 },
+      { name: 'Vejetatif',   dayStart: 10, dayEnd: 22,  temp: 20, humidity: 65, ppfd: 250, co2: 1000, ph: 6.0, ec: 1.2 },
+      { name: 'Hasat',       dayStart: 22, dayEnd: 25,  temp: 18, humidity: 60, ppfd: 200, co2: 800, ph: 6.0, ec: 1.0 },
     ],
-    gddBase: 10, gddToMaturity: 1200,
-    dliOptimal: 25, dliMin: 18, dliMax: 32,
-    nutrientCategory: 'fruiting',
-    successionInterval: 14,
+    gddBase: 5, gddToMaturity: 380,
+    dliOptimal: 12, dliMin: 8, dliMax: 18,
+    nutrientCategory: 'aromatic',
+    successionInterval: 6,
   },
   spinach: {
-    id: 'spinach', name: 'Ispanak', cultivar: 'Space Spinach', growthDays: 25,
-    caloriesPer100g: 23, proteinPer100g: 2.9, carbsPer100g: 3.6, fatPer100g: 0.4,
-    yieldPerPlant: 150, waterPerDay: 0.1, area: 0.04,
-    harvestIndex: 0.88,
-    edibleYieldPerM2Day: 8.5,
-    module: 'nft', icon: '🍃',
+    id: 'spinach', name: 'Ispanak', cultivar: 'Space Spinach Compact', growthDays: 35,
+    caloriesPer100g: 23, proteinPer100g: 2.9, carbsPer100g: 3.6, fatPer100g: 0.4, fiberPer100g: 2.2,
+    yieldPerPlant: 80, waterPerDay: 0.08, area: 0.04,
+    harvestIndex: 0.85,
+    edibleYieldPerM2Day: 5.5,
+    module: 'nft', icon: '🥬',
     optimalTemp: 18, optimalPH: 6.2, optimalEC: 1.8,
     o2PerDay: 6, co2PerDay: 5,
     pollination: 'none',
     ethyleneSensitivity: 'moderate',
-    reference: 'Demir (2.7mg/100g), kalsiyum (99mg/100g), A vitamini kaynağı',
-    spaceHistory: 'Yuegong-1 sebze listesinde',
+    reference: 'K vitamini şampiyonu (482.9µg/100g). Folat: 194µg/100g, Demir: 2.7mg/100g, Kalsiyum: 99mg/100g, Magnezyum: 79mg/100g',
+    spaceHistory: 'CELSS aday yapraklı sebze — yüksek besin yoğunluğu, hızlı büyüme',
     growthPhases: [
-      { name: 'Çimlenme',  dayStart: 0,  dayEnd: 4,   temp: 22, humidity: 85, ppfd: 0,   co2: 400, ph: 6.2, ec: 0.5 },
-      { name: 'Fide',      dayStart: 4,  dayEnd: 10,  temp: 20, humidity: 70, ppfd: 250, co2: 800, ph: 6.2, ec: 1.2 },
-      { name: 'Vejetatif', dayStart: 10, dayEnd: 22,  temp: 18, humidity: 65, ppfd: 350, co2: 1000, ph: 6.2, ec: 1.6 },
-      { name: 'Hasat',     dayStart: 22, dayEnd: 25,  temp: 16, humidity: 60, ppfd: 300, co2: 800, ph: 6.2, ec: 1.4 },
+      { name: 'Çimlenme',  dayStart: 0,  dayEnd: 5,   temp: 20, humidity: 85, ppfd: 0,   co2: 400, ph: 6.2, ec: 0.5 },
+      { name: 'Fide',      dayStart: 5,  dayEnd: 12,  temp: 18, humidity: 70, ppfd: 200, co2: 800, ph: 6.2, ec: 1.0 },
+      { name: 'Vejetatif', dayStart: 12, dayEnd: 30,  temp: 18, humidity: 65, ppfd: 300, co2: 1000, ph: 6.2, ec: 1.6 },
+      { name: 'Hasat',     dayStart: 30, dayEnd: 35,  temp: 16, humidity: 60, ppfd: 250, co2: 800, ph: 6.2, ec: 1.4 },
     ],
-    gddBase: 4, gddToMaturity: 400,
-    dliOptimal: 14, dliMin: 8, dliMax: 18,
+    gddBase: 4, gddToMaturity: 500,
+    dliOptimal: 14, dliMin: 10, dliMax: 18,
     nutrientCategory: 'leafy',
-    successionInterval: 7,
+    successionInterval: 8,
   },
-  pepper: {
-    id: 'pepper', name: 'Hatch Biber', cultivar: 'NuMex Espanola Improved', growthDays: 137,
-    caloriesPer100g: 20, proteinPer100g: 0.9, carbsPer100g: 4.6, fatPer100g: 0.2,
-    yieldPerPlant: 400, waterPerDay: 0.5, area: 0.09,
-    harvestIndex: 0.45,
-    edibleYieldPerM2Day: 4.5,
-    module: 'nft', icon: '🌶️',
-    optimalTemp: 24, optimalPH: 5.8, optimalEC: 2.2,
-    o2PerDay: 20, co2PerDay: 16,
-    pollination: 'self',
-    ethyleneSensitivity: 'moderate',
-    reference: 'ISS\'te en uzun meyve deneyi (137 gün). C vitamini kaynağı (128mg/100g)',
-    spaceHistory: 'APH PH-04 (2021) — mürettebat space taco yaptı! Roy Nakayama (NMSU 1984)',
-    growthPhases: [
-      { name: 'Çimlenme',    dayStart: 0,   dayEnd: 12,  temp: 28, humidity: 80, ppfd: 0,   co2: 400,  ph: 5.8, ec: 0.5 },
-      { name: 'Fide',        dayStart: 12,  dayEnd: 30,  temp: 26, humidity: 70, ppfd: 300, co2: 800,  ph: 5.8, ec: 1.5 },
-      { name: 'Vejetatif',   dayStart: 30,  dayEnd: 55,  temp: 24, humidity: 65, ppfd: 450, co2: 1000, ph: 5.8, ec: 2.0 },
-      { name: 'Çiçeklenme',  dayStart: 55,  dayEnd: 80,  temp: 24, humidity: 60, ppfd: 500, co2: 1000, ph: 5.8, ec: 2.5 },
-      { name: 'Meyve Olum',  dayStart: 80,  dayEnd: 120, temp: 22, humidity: 55, ppfd: 500, co2: 800,  ph: 5.8, ec: 2.8 },
-      { name: 'Hasat',       dayStart: 120, dayEnd: 137, temp: 20, humidity: 50, ppfd: 400, co2: 600,  ph: 5.8, ec: 2.2 },
-    ],
-    gddBase: 10, gddToMaturity: 2400,
-    dliOptimal: 22, dliMin: 16, dliMax: 30,
-    nutrientCategory: 'fruiting',
-    successionInterval: 30,
-  },
-  radish: {
-    id: 'radish', name: 'Turp', cultivar: 'Cherry Belle', growthDays: 27,
-    caloriesPer100g: 16, proteinPer100g: 0.7, carbsPer100g: 3.4, fatPer100g: 0.1,
-    yieldPerPlant: 100, waterPerDay: 0.08, area: 0.02,
-    harvestIndex: 0.65,
-    edibleYieldPerM2Day: 78.0, // Eden ISS Raxe çeşidi
-    module: 'nft', icon: '📍',
-    optimalTemp: 18, optimalPH: 6.0, optimalEC: 1.2,
-    o2PerDay: 4, co2PerDay: 3,
-    pollination: 'none', // Kök aşamasında hasat
-    ethyleneSensitivity: 'low',
-    reference: 'APH PH-02: 27 günde olgunlaştı. Eden ISS Raxe/Lennox: 59-78 g/m²/gün',
-    spaceHistory: 'APH PH-02 (2020) — astronot Kate Rubins 20 turp hasat etti',
-    growthPhases: [
-      { name: 'Çimlenme',    dayStart: 0,  dayEnd: 3,   temp: 22, humidity: 80, ppfd: 0,   co2: 400, ph: 6.0, ec: 0.5 },
-      { name: 'Fide',        dayStart: 3,  dayEnd: 8,   temp: 20, humidity: 70, ppfd: 250, co2: 800, ph: 6.0, ec: 0.8 },
-      { name: 'Kök Gelişim', dayStart: 8,  dayEnd: 22,  temp: 18, humidity: 65, ppfd: 350, co2: 1000, ph: 6.0, ec: 1.2 },
-      { name: 'Hasat',       dayStart: 22, dayEnd: 27,  temp: 16, humidity: 60, ppfd: 300, co2: 800, ph: 6.0, ec: 1.0 },
-    ],
-    gddBase: 4, gddToMaturity: 400,
-    dliOptimal: 14, dliMin: 10, dliMax: 20,
-    nutrientCategory: 'root',
-    successionInterval: 7,
-  },
-  strawberry: {
-    id: 'strawberry', name: 'Çilek', cultivar: 'Albion', growthDays: 60,
-    caloriesPer100g: 32, proteinPer100g: 0.7, carbsPer100g: 7.7, fatPer100g: 0.3,
-    yieldPerPlant: 300, waterPerDay: 0.3, area: 0.06,
-    harvestIndex: 0.85, // Meyvenin çoğu yenilebilir
-    edibleYieldPerM2Day: 3.5,
-    module: 'nft', icon: '🍓',
-    optimalTemp: 22, optimalPH: 5.8, optimalEC: 1.5,
-    o2PerDay: 10, co2PerDay: 8,
-    pollination: 'self', // Kendi kendine tozlaşabilir
-    ethyleneSensitivity: 'high',
-    reference: 'Yuegong-1\'de tek meyve — yüksek hasat indeksi. Psikolojik fayda',
-    spaceHistory: 'Yuegong-1 (2017). CELSS aday meyve',
-    growthPhases: [
-      { name: 'Çimlenme',    dayStart: 0,  dayEnd: 7,   temp: 24, humidity: 85, ppfd: 0,   co2: 400,  ph: 5.8, ec: 0.5 },
-      { name: 'Fide',        dayStart: 7,  dayEnd: 20,  temp: 22, humidity: 70, ppfd: 250, co2: 800,  ph: 5.8, ec: 1.0 },
-      { name: 'Vejetatif',   dayStart: 20, dayEnd: 35,  temp: 22, humidity: 65, ppfd: 350, co2: 1000, ph: 5.8, ec: 1.5 },
-      { name: 'Çiçeklenme',  dayStart: 35, dayEnd: 45,  temp: 20, humidity: 60, ppfd: 400, co2: 1000, ph: 5.8, ec: 1.8 },
-      { name: 'Meyve Olum',  dayStart: 45, dayEnd: 60,  temp: 20, humidity: 55, ppfd: 400, co2: 800,  ph: 5.8, ec: 2.0 },
-    ],
-    gddBase: 6, gddToMaturity: 900,
-    dliOptimal: 16, dliMin: 10, dliMax: 22,
-    nutrientCategory: 'fruiting',
-    successionInterval: 14,
-  },
-};
-
-// Spirulina sabitleri (ESA MELiSSA Compartment 4a referans)
-// Organizma: Limnospira indica PCC8005 (eski adı Arthrospira platensis)
-export const SPIRULINA = {
-  productivityPerM2Day: 6.0,   // g/m²/gün kuru biyokütle
-  proteinPercent: 0.65,        // %60-70 protein (MELiSSA)
-  caloriesPer100g: 290,
-  proteinPer100g: 57,
-  carbsPer100g: 24,
-  fatPer100g: 8,
-  // Stokiyometrik hesap (biyokütle mol formülü: CO₀.₄₈H₁.₈₃N₀.₁₁P₀.₀₁):
-  //   1 kg biyokütle → 1.37 kg O₂ üretimi = 42.7 mol = ~960 L (@21°C)
-  //   1 kg biyokütle ← 1.88 kg CO₂ fiksasyonu = 42.7 mol = ~960 L (@21°C)
-  o2ProductionPerKg: 960,      // L O₂ / kg biyokütle (stokiyometrik)
-  co2ConsumptionPerKg: 960,    // L CO₂ / kg (stokiyometrik — mol bazında 1:1 O₂:CO₂)
-  tankVolume: 15,              // m³ (MELiSSA pilot: 83L, ölçeklenmiş)
-  surfaceArea: 10,             // m²
-  optimalTemp: 30,
-  optimalPH: 9.5,
-  photonFlux: 930,             // µmol/m²/s (MELiSSA pilot)
-  dilutionRate: 0.025,         // /saat (MELiSSA pilot)
-  reference: 'ESA MELiSSA C4a — Limnospira indica PCC8005',
-};
-
-// Mantar sabitleri
-export const MUSHROOM = {
-  growthDays: 14,
-  caloriesPer100g: 22,
-  proteinPer100g: 3.1,
-  carbsPer100g: 3.3,
-  fatPer100g: 0.3,
-  yieldPerBatch: 5000,
-  batchesPerMonth: 4,
-  dailyYield: 714,
-  substrateFromWaste: true,
-  lightRequired: false,
-  optimalTemp: 18,
-  optimalHumidity: 90,
-};
-
-// Böcek protein modülü (Yuegong-1 referans — Tenebrio molitor / sarı un kurdu)
-export const MEALWORM = {
-  caloriesPer100g: 206,
-  proteinPer100g: 25.0,       // Tam amino asit profili
-  carbsPer100g: 5.4,
-  fatPer100g: 12.0,
-  feedConversionRatio: 3.3,   // kg yem → 1 kg böcek (en iyi yayınlanmış: 3.26, PLOS ONE)
-  yieldPerKgWaste: 450,       // g böcek / kg bitki atığı
-  dailyCapacity: 0.8,         // kg bitki atığı / gün işleme
-  waterPerDay: 0.1,           // L
-  growthDays: 45,             // Larva evresi
-  vitaminB12Per100g: 0.47,    // µg — böcek proteini B12 kaynağı (EFSA, 2021)
-  ironPer100g: 3.8,           // mg
-  calciumPer100g: 43,         // mg
-  reference: 'Yuegong-1 — yenilenemeyen bitki kısımları ile beslenir. B12 kaynağı (EFSA)',
 };
 
 // Mürettebat sabitleri (NASA BVAD Rev2 — NASA/TP-2015-218570)
@@ -395,19 +191,14 @@ export const MEALWORM = {
 //   Hesap: 1.00kg / 0.044kg/mol = 22.73 mol × 24.04 L/mol(@21°C) = 547 L
 // RQ (solunum katsayısı): 0.87 (NASA BVAD)
 export const CREW = {
-  count: 6,
+  count: 1,
   o2PerPersonPerDay: 630,      // litre (kabin basıncında — 101.3 kPa, 21°C)
   co2PerPersonPerDay: 550,     // litre
   waterPerPersonPerDay: 3.8,   // litre (içme + yemek)
   caloriePerPersonPerDay: 2500, // kcal (uzay görevi ortalaması — NASA: 2500-3000)
   wastePerPersonPerDay: 1.8,   // kg (dışkı + idrar + gıda atığı)
   members: [
-    { id: 1, name: 'Cmdr. Yıldız',  role: 'Komutan',   calorie: 2700 },
-    { id: 2, name: 'Plt. Demir',     role: 'Pilot',     calorie: 2500 },
-    { id: 3, name: 'Müh. Kaya',      role: 'Mühendis',  calorie: 2600 },
-    { id: 4, name: 'Müh. Aras',      role: 'Mühendis',  calorie: 2500 },
-    { id: 5, name: 'Dr. Işık',       role: 'Doktor',    calorie: 2300 },
-    { id: 6, name: 'Bot. Toprak',    role: 'Botanikçi', calorie: 2400 },
+    { id: 1, name: 'Cmdr. Yıldız',  role: 'Komutan',   calorie: 2500 },
   ],
 };
 
@@ -432,13 +223,10 @@ export const ETHYLENE = {
   scrubberRate: 0.85,   // scrubber verimlilik oranı
 };
 
-// Modül alanları (Yuegong-1 ölçeğine yakın: 58 m² bitki alanı)
+// Modül alanları (Tek Kişilik Kompakt Dikey Sistem — toplam ~2.4 m² üretim alanı)
 export const MODULE_AREAS = {
-  aeroponic: 15,    // m² (Eden ISS: 12.5 m²)
-  nft: 7,           // m²
-  spirulina: 10,    // m² yüzey (MELiSSA fotobiyoreaktör)
-  mushroom: 2,      // m³
-  mealworm: 0.5,    // m² (kompakt ünite)
+  aeroponic: 1.6,   // m² (Patates 1.1 + Yer Fıstığı 0.5)
+  nft: 0.8,         // m² (Marul + Ispanak + Aromatik)
 };
 
 // Sensör konfigürasyonları (simülasyon için)
@@ -461,17 +249,6 @@ export const SENSOR_CONFIGS = {
     ec: { base: 2.21, amplitude: 0.12, period: 72, noiseLevel: 0.06, trend: 0 },
     par: { base: 400, amplitude: 300, period: 24, noiseLevel: 8, trend: 0, nightZero: true },
     ethylene: { base: 15, amplitude: 6, period: 24, noiseLevel: 2.5, trend: 0 },
-  },
-  spirulina: {
-    temperature: { base: 30, amplitude: 0.8, period: 24, noiseLevel: 0.2, trend: 0 },
-    pH: { base: 9.5, amplitude: 0.15, period: 36, noiseLevel: 0.05, trend: 0 },
-    density: { base: 1.2, amplitude: 0.1, period: 72, noiseLevel: 0.03, trend: 0 },
-    o2: { base: 8.0, amplitude: 1.5, period: 24, noiseLevel: 0.3, trend: 0 }, // Çözünmüş O₂ (mg/L)
-  },
-  mushroom: {
-    temperature: { base: 18, amplitude: 0.5, period: 24, noiseLevel: 0.2, trend: 0 },
-    humidity: { base: 90, amplitude: 2, period: 24, noiseLevel: 0.8, trend: 0 },
-    co2: { base: 1200, amplitude: 100, period: 24, noiseLevel: 30, trend: 0 },
   },
   habitat: {
     o2: { base: 21.0, amplitude: 0.15, period: 24, noiseLevel: 0.05, trend: 0 },
@@ -521,21 +298,12 @@ export const SCENARIOS = [
     duration: 3,
   },
   {
-    id: 'spirulina_crash',
-    name: 'Spirulina Çöküşü',
-    icon: '🧬',
-    description: 'Kontaminasyon: Spirulina üretimi durdu (MELiSSA C4a kontaminasyon senaryosu)',
-    severity: 'warning',
-    effects: { spirulinaDensity: 0.1, spirulinaO2: 0.1 },
-    duration: 21,
-  },
-  {
     id: 'crew_increase',
     name: 'Mürettebat Artışı',
     icon: '👨‍🚀',
-    description: 'Acil durum: 2 ek mürettebat üyesi (kaynak yükü artışı)',
+    description: 'Acil durum: 1 ek mürettebat üyesi — kaynak yükü 2 katına çıkıyor',
     severity: 'warning',
-    effects: { crewCount: 8 },
+    effects: { crewCount: 2 },
     duration: 30,
   },
   {
@@ -549,68 +317,38 @@ export const SCENARIOS = [
   },
 ];
 
-// Başlangıçta ekili bitkiler (karma strateji — CELSS seçim kriterlerine dayalı)
-// Seçim: kısa boy, yüksek hasat indeksi, yüksek verim/m², besleyici değer
+// Başlangıçta ekili bitkiler (Tek Kişilik Kompakt Sistem — ~2.4 m²)
 //
 // Alan hesabı:
-//   Aeroponik 15 m²: patates 4.5m²(50×0.09) + tatlıPatates 2.0m²(22×0.09) +
-//     buğday 4.8m²(120×0.04) + soya 2.0m²(50×0.04) + fıstık 1.6m²(40×0.04) ≈ 14.9 m²
-//   NFT 7 m²: marul 1.8m²(30×0.06) + mizuna 1.0m²(25×0.04) + domates 1.28m²(8×0.16) +
-//     ıspanak 0.8m²(20×0.04) + biber 0.72m²(8×0.09) + turp 0.4m²(20×0.02) +
-//     çilek 0.9m²(15×0.06) ≈ 6.9 m²
+//   Aeroponik 1.6 m²: patates 1.08m²(12×0.09) + fıstık 0.44m²(11×0.04) ≈ 1.52 m²
+//   NFT 0.8 m²: marul 0.48m²(8×0.06) + ıspanak 0.16m²(4×0.04) + fesleğen 0.06m²(2×0.03) +
+//     nane 0.02m²(1×0.02) ≈ 0.72 m²
 //
-// Ardışık ekim: farklı plantedDay değerleri ile sürekli hasat garantisi
-// Kademeli ekim: aynı türden birden fazla grup, farklı ekim günleri
-// Bu sayede tüm bitkiler aynı anda hasat edilmez, sürekli üretim sağlanır
+// Kademeli ekim: sürekli hasat garantisi
 export const INITIAL_PLANTS = {
   aeroponic: [
-    // Patates: 3 kademe (105 gün döngü → ~35 gün aralık)
-    { type: 'potato', plantedDay: -95, count: 40 },
-    { type: 'potato', plantedDay: -60, count: 40 },
-    { type: 'potato', plantedDay: -25, count: 40 },
-    // Tatlı patates: 2 kademe (120 gün döngü → 60 gün aralık)
-    { type: 'sweetPotato', plantedDay: -100, count: 28 },
-    { type: 'sweetPotato', plantedDay: -40, count: 27 },
-    // Buğday: 4 kademe (86 gün döngü → ~22 gün aralık)
-    { type: 'wheat', plantedDay: -80, count: 70 },
-    { type: 'wheat', plantedDay: -58, count: 70 },
-    { type: 'wheat', plantedDay: -36, count: 70 },
-    { type: 'wheat', plantedDay: -14, count: 70 },
-    // Soya: 3 kademe (97 gün döngü → ~32 gün aralık)
-    { type: 'soybean', plantedDay: -90, count: 40 },
-    { type: 'soybean', plantedDay: -58, count: 40 },
-    { type: 'soybean', plantedDay: -26, count: 40 },
-    // Yer fıstığı: 3 kademe (100 gün döngü → ~33 gün aralık)
-    { type: 'peanut', plantedDay: -90, count: 30 },
-    { type: 'peanut', plantedDay: -57, count: 30 },
-    { type: 'peanut', plantedDay: -24, count: 30 },
+    // Patates: 3 kademe (120 gün döngü → 40 gün aralık) — 1.1 m²
+    { type: 'potato', plantedDay: -110, count: 4 },
+    { type: 'potato', plantedDay: -70, count: 4 },
+    { type: 'potato', plantedDay: -30, count: 4 },
+    // Yer fıstığı: 3 kademe (100 gün döngü → ~33 gün aralık) — 0.44 m²
+    { type: 'peanut', plantedDay: -90, count: 4 },
+    { type: 'peanut', plantedDay: -57, count: 4 },
+    { type: 'peanut', plantedDay: -24, count: 3 },
   ],
   nft: [
-    // Marul: 3 kademe (28 gün döngü → ~9 gün aralık)
-    { type: 'lettuce', plantedDay: -24, count: 24 },
-    { type: 'lettuce', plantedDay: -15, count: 23 },
-    { type: 'lettuce', plantedDay: -6, count: 23 },
-    // Mizuna: 3 kademe (21 gün döngü → 7 gün aralık)
-    { type: 'mizuna', plantedDay: -18, count: 20 },
-    { type: 'mizuna', plantedDay: -11, count: 20 },
-    { type: 'mizuna', plantedDay: -4, count: 20 },
-    // Domates: 2 kademe (65 gün döngü → ~32 gün aralık)
-    { type: 'tomato', plantedDay: -55, count: 10 },
-    { type: 'tomato', plantedDay: -23, count: 10 },
-    // Ispanak: 3 kademe (25 gün döngü → ~8 gün aralık)
-    { type: 'spinach', plantedDay: -22, count: 17 },
-    { type: 'spinach', plantedDay: -14, count: 17 },
-    { type: 'spinach', plantedDay: -6, count: 16 },
-    // Biber: 2 kademe (137 gün döngü → ~68 gün aralık)
-    { type: 'pepper', plantedDay: -120, count: 8 },
-    { type: 'pepper', plantedDay: -52, count: 8 },
-    // Turp: 3 kademe (27 gün döngü → 9 gün aralık)
-    { type: 'radish', plantedDay: -24, count: 17 },
-    { type: 'radish', plantedDay: -15, count: 17 },
-    { type: 'radish', plantedDay: -6, count: 16 },
-    // Çilek: 2 kademe (60 gün döngü → 30 gün aralık)
-    { type: 'strawberry', plantedDay: -50, count: 18 },
-    { type: 'strawberry', plantedDay: -20, count: 17 },
+    // Marul (Outredgeous): 2 kademe (28 gün döngü → ~14 gün aralık) — 0.48 m²
+    { type: 'lettuce', plantedDay: -24, count: 4 },
+    { type: 'lettuce', plantedDay: -10, count: 4 },
+    // Ispanak: 2 kademe (35 gün döngü → ~17 gün aralık) — 0.16 m²
+    { type: 'spinach', plantedDay: -30, count: 2 },
+    { type: 'spinach', plantedDay: -13, count: 2 },
+    // ═══ Aromatik Bitkiler ═══
+    // Fesleğen: 2 kademe (28 gün döngü → 14 gün aralık)
+    { type: 'basil', plantedDay: -24, count: 1 },
+    { type: 'basil', plantedDay: -10, count: 1 },
+    // Nane: 1 kademe (25 gün, stolon ile sürekli yayılım)
+    { type: 'mint', plantedDay: -20, count: 1 },
   ],
 };
 
@@ -654,8 +392,8 @@ export const COMPARTMENTS = {
   },
 };
 
-// Habitat hacmi (gaz simülasyonu için)
-export const HABITAT_VOLUME = 200000; // litre (200 m³)
+// Habitat hacmi (gaz simülasyonu için — tek kişilik kompakt modül)
+export const HABITAT_VOLUME = 40000; // litre (40 m³)
 
 // Simülasyon zaman dilimi: 1 tick = 5 dakika = 1/288 gün
 export const TICK_FRACTION = 1 / 288;
@@ -669,28 +407,21 @@ export const NUTRIENT_RECIPES = {
     N: 180, P: 40, K: 220, Ca: 180, Mg: 50, S: 65, Fe: 3,
     B: 0.5, Mn: 0.5, Zn: 0.05, Cu: 0.02, Mo: 0.01,
     pH: 6.0, EC: 1.4, unit: 'ppm',
-    crops: ['lettuce', 'mizuna', 'spinach'],
-  },
-  fruiting: {
-    label: 'Meyve Bitkileri',
-    N: 160, P: 50, K: 300, Ca: 220, Mg: 50, S: 70, Fe: 4,
-    B: 0.7, Mn: 0.8, Zn: 0.1, Cu: 0.05, Mo: 0.01,
-    pH: 5.8, EC: 2.5, unit: 'ppm',
-    crops: ['tomato', 'pepper', 'strawberry'],
+    crops: ['lettuce', 'spinach'],
   },
   root: {
     label: 'Kök/Yumru Bitkileri',
     N: 140, P: 60, K: 250, Ca: 150, Mg: 40, S: 55, Fe: 3,
     B: 0.5, Mn: 0.5, Zn: 0.05, Cu: 0.02, Mo: 0.01,
     pH: 5.8, EC: 2.0, unit: 'ppm',
-    crops: ['potato', 'sweetPotato', 'radish', 'peanut'],
+    crops: ['potato', 'peanut'],
   },
-  grain: {
-    label: 'Tahıl ve Baklagil',
-    N: 120, P: 40, K: 180, Ca: 100, Mg: 30, S: 45, Fe: 2,
-    B: 0.3, Mn: 0.4, Zn: 0.05, Cu: 0.02, Mo: 0.01,
-    pH: 6.0, EC: 1.8, unit: 'ppm',
-    crops: ['wheat', 'soybean'],
+  aromatic: {
+    label: 'Aromatik Bitkiler',
+    N: 150, P: 45, K: 200, Ca: 160, Mg: 45, S: 55, Fe: 3,
+    B: 0.5, Mn: 0.5, Zn: 0.05, Cu: 0.02, Mo: 0.01,
+    pH: 6.0, EC: 1.4, unit: 'ppm',
+    crops: ['basil', 'mint'],
   },
 };
 
@@ -717,39 +448,36 @@ export const SUCCESSION = {
   staggerPercent: 0.2,        // Her yeni partide %20 bitki sayısı azaltma
 };
 
-// Mantar substrat sabitleri
-export const SUBSTRATE = {
-  depletionRatePerDay: 2.86,
-  replenishRatePerKgWaste: 0.2,
-};
-
 // Vitamin/mineral veritabanı
 export const VITAMINS = {
-  A:       { name: 'A Vitamini',   unit: 'µg', dailyNeed: 900,  sources: { spinach: 469, sweetPotato: 709, lettuce: 370, pepper: 157, mizuna: 198 } },
-  B12:     { name: 'B12 Vitamini', unit: 'µg', dailyNeed: 2.4,  sources: { spirulina: 0.1, mealworm: 0.47 } },  // Un kurdu birincil B12 kaynağı
-  C:       { name: 'C Vitamini',   unit: 'mg', dailyNeed: 90,   sources: { pepper: 128, strawberry: 59, tomato: 14, spinach: 28, potato: 20 } },
-  iron:    { name: 'Demir',        unit: 'mg', dailyNeed: 8,    sources: { spinach: 2.7, soybean: 15.7, spirulina: 28.5, peanut: 4.6, mealworm: 3.8 } },
-  calcium: { name: 'Kalsiyum',     unit: 'mg', dailyNeed: 1000, sources: { spinach: 99, soybean: 277, spirulina: 120, mizuna: 210, mealworm: 43 } },
+  A:       { name: 'A Vitamini',   unit: 'µg', dailyNeed: 900,  sources: { potato: 4200, basil: 527, spinach: 469, mint: 424, lettuce: 370 } },
+  C:       { name: 'C Vitamini',   unit: 'mg', dailyNeed: 90,   sources: { mint: 31, spinach: 28, basil: 18, lettuce: 9, potato: 2.5 } },
+  K:       { name: 'K Vitamini',   unit: 'µg', dailyNeed: 120,  sources: { spinach: 482.9, mint: 458, basil: 414, lettuce: 126 } },
+  iron:    { name: 'Demir',        unit: 'mg', dailyNeed: 8,    sources: { peanut: 15, mint: 5, basil: 3.2, spinach: 2.7 } },
+  calcium: { name: 'Kalsiyum',     unit: 'mg', dailyNeed: 1000, sources: { peanut: 275, mint: 243, basil: 177, spinach: 99 } },
+  folat:   { name: 'Folat (B9)',   unit: 'µg', dailyNeed: 400,  sources: { peanut: 375, spinach: 194, mint: 152, lettuce: 38 } },
+  magnesium: { name: 'Magnezyum', unit: 'mg', dailyNeed: 420,  sources: { peanut: 270, mint: 80, spinach: 79, basil: 64 } },
+  potassium: { name: 'Potasyum',  unit: 'mg', dailyNeed: 2600, sources: { peanut: 1750, mint: 569, spinach: 558, potato: 335, lettuce: 194 } },
 };
 
 // ============================================================
 // GÜÇ VE ENERJİ SİSTEMİ (NASA BVAD, Kilopower, Eden ISS)
 // ============================================================
 export const POWER = {
-  // Alt sistem güç tüketimi (kW) — Eden ISS ölçeğine dayalı
+  // Alt sistem güç tüketimi (kW) — Tek kişilik kompakt habitat
   subsystems: {
-    ledLighting:    { base: 18.0, label: 'LED Aydınlatma',         priority: 3 },
-    thermalHVAC:    { base: 6.0,  label: 'Isıl Kontrol / HVAC',    priority: 1 },
-    waterProcessing:{ base: 2.5,  label: 'Su İşleme',              priority: 2 },
-    atmosphere:     { base: 3.5,  label: 'Atmosfer Yönetimi',       priority: 1 },
-    sensors:        { base: 1.2,  label: 'Sensör ve Kontrol',       priority: 1 },
-    wasteProcessing:{ base: 1.5,  label: 'Atık İşleme',            priority: 3 },
-    crewSupport:    { base: 1.3,  label: 'Mürettebat Desteği',     priority: 2 },
+    ledLighting:    { base: 3.0,  label: 'LED Aydınlatma',         priority: 3 },
+    thermalHVAC:    { base: 2.0,  label: 'Isıl Kontrol / HVAC',    priority: 1 },
+    waterProcessing:{ base: 0.8,  label: 'Su İşleme',              priority: 2 },
+    atmosphere:     { base: 1.2,  label: 'Atmosfer Yönetimi',       priority: 1 },
+    sensors:        { base: 0.5,  label: 'Sensör ve Kontrol',       priority: 1 },
+    wasteProcessing:{ base: 0.5,  label: 'Atık İşleme',            priority: 3 },
+    crewSupport:    { base: 0.3,  label: 'Mürettebat Desteği',     priority: 2 },
   },
-  // Güç kaynakları
+  // Güç kaynakları (küçük ölçek: 1 güneş paneli + 1 Kilopower)
   sources: {
-    solar:   { capacity: 40, efficiency: 0.30, area: 260, degradationPerYear: 0.02, label: 'Güneş Paneli' },
-    nuclear: { capacity: 10, units: 4, totalCapacity: 40, mass: 6000, lifetime: 15, label: 'Kilopower Reaktör' },
+    solar:   { capacity: 8, efficiency: 0.30, area: 52, degradationPerYear: 0.02, label: 'Güneş Paneli' },
+    nuclear: { capacity: 10, units: 1, totalCapacity: 10, mass: 1500, lifetime: 15, label: 'Kilopower Reaktör' },
   },
   // Konum bazlı güneş verimi (W/m²)
   solarByLocation: {
@@ -787,17 +515,17 @@ export const THERMAL = {
     dailyAverage: 125,  // W/kişi (NASA HIDH)
   },
   avionicsHeat: 2.0,     // kW
-  // Radyatör
+  // Radyatör (küçük ölçek)
   radiator: {
-    area: 120,            // m²
+    area: 25,             // m²
     emissivity: 0.88,
     operatingTemp: 300,   // K
     sinkTemp: 220,        // K (Mars çevresi)
-    maxRejection: 25,     // kW (Stefan-Boltzmann hesabı)
+    maxRejection: 6,      // kW (Stefan-Boltzmann hesabı)
   },
   // Kabin
   cabin: {
-    thermalMass: 250000,  // J/K (hava ~200m³ + yapı/ekipman)
+    thermalMass: 50000,   // J/K (hava ~40m³ + yapı/ekipman)
     targetTemp: 22,       // °C
     minSafe: 15,
     maxSafe: 30,
@@ -930,11 +658,11 @@ export const WATER_PROCESSING = {
 // ESER KİRLETİCİ KONTROL (ISS TCCS referans)
 // ============================================================
 export const TRACE_CONTAMINANTS = {
-  ammonia:      { name: 'Amonyak',       unit: 'mg/m³', smac180: 7.0,  baseRate: 0.3,  scrubberEff: 0.90, source: 'Mürettebat metabolizması' },
-  formaldehyde: { name: 'Formaldehit',   unit: 'mg/m³', smac180: 0.05, baseRate: 0.01, scrubberEff: 0.95, source: 'Polimer gaz salımı' },
-  co:           { name: 'Karbon Monoksit',unit: 'mg/m³', smac180: 17.0, baseRate: 0.5,  scrubberEff: 0.95, source: 'Ekipman, metabolizma' },
-  methane:      { name: 'Metan',         unit: 'mg/m³', smac180: 3800, baseRate: 1.0,  scrubberEff: 0.80, source: 'Mürettebat, malzeme' },
-  voc:          { name: 'Toplam VOC',    unit: 'mg/m³', smac180: 25.0, baseRate: 0.5,  scrubberEff: 0.85, source: 'Yapıştırıcılar, contalar' },
+  ammonia:      { name: 'Amonyak',       unit: 'mg/m³', smac180: 7.0,  baseRate: 0.05,  scrubberEff: 0.90, source: 'Mürettebat metabolizması' },
+  formaldehyde: { name: 'Formaldehit',   unit: 'mg/m³', smac180: 0.05, baseRate: 0.002, scrubberEff: 0.95, source: 'Polimer gaz salımı' },
+  co:           { name: 'Karbon Monoksit',unit: 'mg/m³', smac180: 17.0, baseRate: 0.083, scrubberEff: 0.95, source: 'Ekipman, metabolizma' },
+  methane:      { name: 'Metan',         unit: 'mg/m³', smac180: 3800, baseRate: 0.167, scrubberEff: 0.80, source: 'Mürettebat, malzeme' },
+  voc:          { name: 'Toplam VOC',    unit: 'mg/m³', smac180: 25.0, baseRate: 0.083, scrubberEff: 0.85, source: 'Yapıştırıcılar, contalar' },
 };
 export const TCCS = {
   carbonBedMass: 22,        // kg
@@ -959,10 +687,9 @@ export const RADIATION = {
     durationDays: 2,
   },
   cropSensitivity: {
-    lettuce: 0.3,   spinach: 0.3,   mizuna: 0.2,  // Düşük LD50 → hassas
-    wheat: 0.8,     potato: 0.6,    soybean: 0.5,  // Yüksek LD50 → dayanıklı
-    tomato: 0.4,    pepper: 0.4,    radish: 0.5,
-    sweetPotato: 0.6, peanut: 0.5, strawberry: 0.3,
+    potato: 0.6, peanut: 0.5,        // Aeroponik — yüksek dayanıklılık
+    lettuce: 0.3, spinach: 0.3,      // NFT — düşük dayanıklılık
+    basil: 0.3, mint: 0.3,           // Aromatik — orta-düşük dayanıklılık
   },
   seedTolerance: 100,      // Gy — kuru tohumlar çok dayanıklı
 };
@@ -998,7 +725,7 @@ export const MORALE = {
     gardeningTime:   { weight: 0.15, label: 'Bahçecilik Süresi' },
     luxuryCrops:     { weight: 0.10, label: 'Lüks Ürünler' },
   },
-  luxuryCrops: ['strawberry', 'tomato', 'pepper'],
+  luxuryCrops: ['basil', 'mint', 'spinach'],
   lowMoraleThreshold: 40,    // 0-100 — altında verimlilik düşer
   efficiencyPenalty: 0.15,   // Düşük moralde %15 verimlilik kaybı
 };
@@ -1028,15 +755,120 @@ export const REFERENCE_PROJECTS = [
 export const SOURCE_COLORS = {
   aeroponic: '#4ead5b',
   nft: '#4a9caa',
-  spirulina: '#5b8def',
-  mushroom: '#8b7fc7',
-  mealworm: '#d4903a',
 };
 
 export const SOURCE_LABELS = {
   aeroponic: 'Aeroponik',
   nft: 'NFT Sebze',
-  spirulina: 'Spirulina',
-  mushroom: 'Mantar',
-  mealworm: 'Böcek Protein',
+};
+
+// ============================================================
+// AEROPONİK SİSLEME DÖNGÜSÜ (Patates optimizasyonu)
+// Köklerin kurumadan maksimum oksijen almasını sağlar, çürümeyi engeller
+// ============================================================
+export const AEROPONIC_MISTING = {
+  sprayDuration: 30,    // saniye — püskürtme süresi
+  waitDuration: 180,    // saniye (3 dakika) — bekleme süresi
+  cycleTotal: 210,      // saniye — toplam döngü
+  cyclesPerHour: 17.1,  // döngü/saat
+  purpose: 'Köklerin kurumadan maksimum oksijen almasını sağlayarak çürümeyi engeller',
+};
+
+// ============================================================
+// DÖNER SANTRİFÜJ FİLİZLENDİRME SİSTEMİ (Centrifuge Germination)
+// Mikrogravitede bitkinin yerçekimi yönünü algılaması için
+// Statolitler (nişasta tanecikleri) merkezkaç kuvvetiyle hücre dış çeperine çöker
+// Kökler dışa (merkezkaç yönüne), gövde içe (merkeze doğru) büyür
+// ============================================================
+export const CENTRIFUGE_GERMINATION = {
+  drumRadius: 0.30,       // m (30 cm yarıçap)
+  rotationSpeed: 40,      // RPM
+  medium: 'rockwool',     // Taş yünü (Rockwool)
+  mediumLabel: 'Taş Yünü (Rockwool)',
+  humidity: { min: 70, max: 90, unit: '%' },
+  temperature: { min: 18, max: 24, unit: '°C' },
+  airflow: true,          // Taze hava akışı gerekli
+  mechanism: 'Hücre içindeki statolitler (nişasta tanecikleri) merkezkaç kuvvetiyle dış çepere çöker → bitki yön algılar',
+  rootDirection: 'outward',   // Merkezkaç yönüne (dışa)
+  shootDirection: 'inward',   // Merkeze doğru (içe)
+};
+
+// ============================================================
+// TOHUM YÖNETİMİ VE DÖNGÜSÜ
+// Sürdürülebilir uzay tarımı için tohum üretim protokolü
+// ============================================================
+export const SEED_MANAGEMENT = {
+  separation: {
+    method: 'airBlown',          // Hava üflemeli ayrıştırma
+    label: 'Hava Üflemeli Ayrıştırma',
+    description: 'Hasat sonrası çekirdekler hava akımıyla bitkiden ayrılır',
+  },
+  drying: {
+    targetMoisture: { min: 8, max: 10, unit: '%' },   // Nem oranı
+    temperature: { min: 20, max: 25, unit: '°C' },
+  },
+  storage: {
+    temperature: { min: 4, max: 10, unit: '°C' },
+    light: 'dark',               // Karanlık ortam
+    humidity: 'dry',             // Kuru ortam
+    label: 'Karanlık ve kuru, 4-10°C',
+  },
+  wasteRecycling: {
+    method: 'compost',
+    label: 'Kompost',
+    description: 'Hasat edilen bitki artıkları kompost yapılarak döngüye geri kazandırılır',
+  },
+};
+
+// ============================================================
+// MİKRO FİLİZLER (Microgreens) — Nutrasötik Değer
+// Yetişkin bitkilere oranla çok daha yüksek besin yoğunluğu
+// ============================================================
+export const MICROGREENS = {
+  antiCarcinogenMultiplier: { min: 40, max: 100 },  // Yetişkin bitkiye oranla kat
+  vitaminCMultiplier: 10,     // Yetişkin bitkiye oranla 10 kat daha yoğun
+  growthDays: { min: 7, max: 14 },   // Hasat süresi
+  suitableCrops: ['lettuce', 'basil'],
+  reference: 'Mikro filizler, yetişkin bitkilere oranla 40-100 kat daha fazla anti-kanserojen madde ve 10 kat daha yoğun C vitamini içerir',
+};
+
+// ============================================================
+// LED BİYOLOJİK ETKİLERİ (Işık Modülasyonu ve Bitki Stresi)
+// Farklı dalga boylarının bitki metabolizması üzerindeki etkileri
+// ============================================================
+export const LED_BIO_EFFECTS = {
+  blue: {
+    wavelength: 455,
+    primaryEffect: 'Aroma yoğunluğunu ve antioksidan üretimini maksimize eder',
+    targets: ['aromatic'],    // Aromatik bitkiler için özellikle kritik
+    metaboliteBoost: 1.3,     // Sekonder metabolit artış çarpanı
+  },
+  red: {
+    wavelength: 630,
+    primaryEffect: 'Biyokütle artışını ve hızlı boy uzamasını tetikler',
+    targets: ['root'],
+    biomassBoost: 1.2,
+  },
+  controlledStress: {
+    description: 'Hafif su kısıtlaması ve sıcaklık değişimleri bitkinin savunma mekanizmalarını (sekonder metabolitleri) artırarak daha besleyici olmasını sağlar',
+    waterReduction: 0.85,     // %15 su kısıtlaması
+    tempVariation: 3,         // ±3°C sıcaklık değişimi
+    nutrientDensityBoost: 1.15, // %15 besin yoğunluğu artışı
+    psychologicalBenefit: 'Bitki bakımı astronotların psikolojik sağlığını olumlu etkiler',
+  },
+};
+
+// ============================================================
+// DİKEY ÇİFTLİK ALAN PLANLAMASI (3 Katlı Dikey Sistem)
+// Toplam 14 m² üretim alanının stratejik dağılımı
+// ============================================================
+export const VERTICAL_FARM_PLAN = {
+  totalArea: 14,     // m²
+  layers: 3,
+  zones: [
+    { id: 'potato',      label: 'Patates',              area: 6.7, role: 'Ana karbonhidrat ve A vitamini kaynağı',   crops: ['potato'] },
+    { id: 'peanut',      label: 'Yer Fıstığı',        area: 2.7, role: 'Protein ve sağlıklı yağ kaynağı',         crops: ['peanut'] },
+    { id: 'greens',      label: 'Yeşillik',            area: 4.2, role: 'Vitamin ve hacimli gıda',                crops: ['lettuce', 'spinach'] },
+    { id: 'aromatic',    label: 'Baharat / Aromatik',  area: 0.4, role: 'Tat, sindirim ve antioksidan',            crops: ['basil', 'mint'] },
+  ],
 };

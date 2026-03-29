@@ -16,7 +16,7 @@ function generateNarrative(state) {
   });
 
   // Crew status
-  const crew = compartments.habitat?.crewCount || 6;
+  const crew = compartments.habitat?.crewCount || 1;
   const o2 = compartments.habitat?.o2Level || 21;
   const co2val = compartments.habitat?.co2Level || 0.04;
 

@@ -22,16 +22,6 @@ const MODULE_LIMITS = {
     ec:          { warn: [0.8, 3.0], crit: [0.3, 4.5], unit: 'mS/cm' },
     ethylene:    { warn: [0, 25], crit: [0, 50], unit: 'ppb' },
   },
-  spirulina: {
-    temperature: { warn: [26, 34], crit: [22, 38], unit: '°C' },
-    pH:          { warn: [8.5, 10.5], crit: [7.5, 11.0], unit: '' },
-    density:     { warn: [0.3, 2.0], crit: [0.1, 3.0], unit: 'g/L' },
-  },
-  mushroom: {
-    temperature: { warn: [14, 22], crit: [10, 28], unit: '°C' },
-    humidity:    { warn: [80, 95], crit: [65, 100], unit: '%' },
-    co2:         { warn: [800, 2000], crit: [500, 3000], unit: 'ppm' },
-  },
   habitat: {
     o2:          { warn: [19.5, 23.0], crit: [18.0, 25.0], unit: '%' },
     co2:         { warn: [0.02, 0.08], crit: [0.01, 0.15], unit: '%' },
@@ -103,8 +93,6 @@ export function detectAnomalies(sensorHistory, currentValues, time) {
   const checks = [
     { module: 'aeroponic', sensors: ['temperature', 'humidity', 'co2', 'pH', 'ec', 'ethylene'] },
     { module: 'nft', sensors: ['temperature', 'humidity', 'co2', 'pH', 'ec', 'ethylene'] },
-    { module: 'spirulina', sensors: ['temperature', 'pH', 'density'] },
-    { module: 'mushroom', sensors: ['temperature', 'humidity', 'co2'] },
     { module: 'habitat', sensors: ['o2', 'co2', 'temperature', 'humidity', 'ethylene'] },
   ];
 
@@ -223,7 +211,7 @@ export function generateAIInsights(flow, compartments, time, sensorHistory) {
   if (time.day % 15 === 0) {
     insights.push({
       id: `plant_${time.day}`, type: 'planting', icon: '🌱',
-      suggestion: 'Ardışık ekim takvimi: Yeni marul ve ıspanak partisi öneriliyor (sürekli hasat garantisi).',
+      suggestion: 'Ardışık ekim takvimi: Yeni marul ve fesleğen partisi öneriliyor (sürekli hasat garantisi).',
       impact: '25-30 gün içinde ek vitamin kaynağı', confidence: 95,
     });
   }
@@ -256,44 +244,13 @@ export function generateAIInsights(flow, compartments, time, sensorHistory) {
   }
 
   // Protein dengesi
-  const crewCount = flow.crew?.count || 6;
+  const crewCount = flow.crew?.count || 1;
   const proteinPerPerson = flow.calories.protein / crewCount;
   if (proteinPerPerson < 50) {
     insights.push({
       id: `prot_${time.day}`, type: 'optimization', icon: '🥩',
-      suggestion: `Kişi başı protein ${proteinPerPerson.toFixed(0)}g — önerilen min 56g. Soya ve spirulina üretimini artırın.`,
+      suggestion: `Kişi başı protein ${proteinPerPerson.toFixed(0)}g — önerilen min 56g. Yer fıstığı üretimini artırın.`,
       impact: 'Kas kaybı riski azalır', confidence: 82,
-    });
-  }
-
-  // Spirulina kontaminasyon riski
-  const contRisk = compartments.growth?.modules?.spirulina?.contaminationRisk || 0;
-  if (contRisk > 30) {
-    insights.push({
-      id: `cont_${time.day}`,
-      type: contRisk > 70 ? 'critical' : 'warning', icon: '🧬',
-      suggestion: `Spirulina kontaminasyon riski %${contRisk.toFixed(0)}. ${
-        contRisk > 70
-          ? 'Acil: Kültür yenilenmeli ve pH/sıcaklık normale döndürülmeli.'
-          : 'pH ve sıcaklık parametrelerini optimize edin.'
-      }`,
-      impact: contRisk > 70 ? 'O₂ üretimi ve protein kaynağı tehlikede' : 'Erken müdahale kayıpları önler',
-      confidence: 78,
-    });
-  }
-
-  // Mantar substrat
-  const subLevel = compartments.growth?.modules?.mushroom?.substrateLevel || 85;
-  if (subLevel < 40) {
-    insights.push({
-      id: `sub_${time.day}`,
-      type: subLevel < 20 ? 'critical' : 'warning', icon: '🍄',
-      suggestion: `Mantar substratı %${subLevel.toFixed(0)}. ${
-        subLevel < 20
-          ? 'Kritik düşük! Atık kompartmanından acil substrat aktarımı yapın.'
-          : 'Atık işleme hızını artırarak substrat seviyesini yükseltin.'
-      }`,
-      impact: 'Mantar üretimi ve besin çeşitliliği etkilenir', confidence: 90,
     });
   }
 
