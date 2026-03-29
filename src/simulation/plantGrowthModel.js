@@ -202,17 +202,17 @@ export function calculateModuleCalories(plants, conditions, currentDay) {
     // edibleYieldPerM2Day → birim alan başına günlük verim (g/m²/gün) — gerçek deney verisi
     // area → bitki başına alan (m²)
     // count → bitki sayısı
-    // progressFactor → büyüme aşamasına bağlı üretim çarpanı
-    //   - Çimlenme (0-15%): 0 (henüz hasat yok)
-    //   - Fide (15-30%): lineer ramp 0→0.3
-    //   - Vejetatif (30-60%): lineer ramp 0.3→0.8
-    //   - Üretim/Olgunluk (60-100%): 0.8→1.0
+    // progressFactor → büyüme aşamasına bağlı üretim çarpanı (erken üretken eğri)
+    //   - Çimlenme (0-10%): 0 (henüz hasat yok)
+    //   - Fide (10-25%): lineer ramp 0→0.4
+    //   - Vejetatif (25-50%): lineer ramp 0.4→0.85
+    //   - Üretim/Olgunluk (50-100%): 0.85→1.0
     const p = growth.progress;
     let progressFactor;
-    if (p < 0.15) progressFactor = 0;
-    else if (p < 0.30) progressFactor = ((p - 0.15) / 0.15) * 0.3;
-    else if (p < 0.60) progressFactor = 0.3 + ((p - 0.30) / 0.30) * 0.5;
-    else progressFactor = 0.8 + ((p - 0.60) / 0.40) * 0.2;
+    if (p < 0.10) progressFactor = 0;
+    else if (p < 0.25) progressFactor = ((p - 0.10) / 0.15) * 0.4;
+    else if (p < 0.50) progressFactor = 0.4 + ((p - 0.25) / 0.25) * 0.45;
+    else progressFactor = 0.85 + ((p - 0.50) / 0.50) * 0.15;
 
     const cropArea = plantDef.area * plantGroup.count; // toplam alan (m²)
     const refYield = plantDef.edibleYieldPerM2Day || 10; // g/m²/gün referans

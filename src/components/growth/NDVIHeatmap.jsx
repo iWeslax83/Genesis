@@ -55,7 +55,7 @@ function PlantHealthCell({ type, ndviValue, count, moduleKey }) {
         <div className="text-[10px] font-semibold text-nexus-text mb-1">{plant.icon} {plant.name}</div>
         <div className="text-[9px] text-nexus-text-dim space-y-0.5">
           <div>NDVI: <span className="font-mono" style={{ color }}>{ndviValue.toFixed(3)}</span></div>
-          <div>Modül: <span className="text-nexus-accent">{moduleKey === 'aeroponic' ? 'Aeroponik' : 'NFT'}</span></div>
+          <div>Modül: <span className="text-nexus-accent">{moduleKey === 'aeroponic' ? 'Aeroponik Kök' : 'Aeroponik Yaprak'}</span></div>
           <div>Durum: <span style={{ color }}>{NDVI_COLORS.find(c => ndviValue <= c.threshold)?.label || 'Mükemmel'}</span></div>
         </div>
       </div>
@@ -117,10 +117,10 @@ export default function NDVIHeatmap() {
         </div>
       </div>
 
-      {/* NFT module */}
+      {/* Aeroponik Yaprak module */}
       <div>
         <div className="flex items-center gap-2 mb-2">
-          <span className="text-[10px] text-nexus-text-dim uppercase tracking-wider">NFT Hidroponik</span>
+          <span className="text-[10px] text-nexus-text-dim uppercase tracking-wider">Aeroponik Yaprak</span>
           <div className="flex-1 h-px bg-nexus-border" />
           <span className="text-[10px] font-mono font-semibold" style={{ color: getNDVIColor(nftNDVI.average) }}>
             Ort: {nftNDVI.average?.toFixed(2)}

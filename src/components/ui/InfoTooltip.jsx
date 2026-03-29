@@ -70,8 +70,8 @@ const METRIC_GLOSSARY = {
     desc: 'Bitki köklerini havada asılı tutup besin çözeltisi püskürten sistem. Toprak yok, %95 daha az su kullanır.',
   },
   nft: {
-    title: 'NFT (Besin Filmi Tekniği)',
-    desc: 'İnce bir besin çözeltisi tabakası üzerinde bitki yetiştirme. Yapraklı sebzeler için ideal.',
+    title: 'Aeroponik Yaprak (Sisleme Tekniği)',
+    desc: 'Bitki köklerini havada asılı tutup besin çözeltisi püskürten sistem. Yapraklı sebzeler ve aromatik bitkiler için optimize edilmiştir.',
   },
 
   // Power & thermal

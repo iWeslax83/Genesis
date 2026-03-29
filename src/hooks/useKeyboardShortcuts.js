@@ -7,8 +7,9 @@ const PAGE_KEYS = {
   '3': 'nutrition',
   '4': 'power',
   '5': 'mission',
-  '6': 'digital-twin',
-  '7': 'ai',
+  '6': 'design',
+  '7': 'digital-twin',
+  '8': 'ai',
 };
 
 export default function useKeyboardShortcuts() {
@@ -100,7 +101,7 @@ export default function useKeyboardShortcuts() {
 }
 
 export const SHORTCUT_LIST = [
-  { key: '1-7', desc: 'Sayfa navigasyonu' },
+  { key: '1-8', desc: 'Sayfa navigasyonu' },
   { key: 'Space', desc: 'Simülasyonu durdur/başlat' },
   { key: '+/-', desc: 'Hızı artır/azalt' },
   { key: 'B', desc: 'Kenar çubuğunu daralt/genişlet' },

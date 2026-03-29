@@ -216,49 +216,34 @@ export default function OverviewPage() {
   const { resources, ai } = state;
 
   return (
-    <div className="h-full flex flex-col gap-3 animate-fade-in">
+    <div className="min-h-full flex flex-col gap-3 animate-fade-in">
+      
       {/* 1. Narrative Hero */}
       <NarrativeHero state={state} />
 
       {/* 2. Key Metrics */}
       <KeyMetrics state={state} />
 
-      {/* 3. Main content: 3 columns */}
-      <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-3 min-h-0">
-
+      {/* 3. Side panels */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-3">
         {/* LEFT COLUMN */}
-        <div className="col-span-12 lg:col-span-3 space-y-3 overflow-y-auto">
+        <div className="col-span-12 lg:col-span-4 space-y-3">
           <WhatsHappening />
-
-          <Section title="Alarmlar" icon={<FiAlertCircle size={13} />} badge={ai.anomalies.length > 0 ? `${ai.anomalies.length}` : null}>
-            <AlertPanel anomalies={ai.anomalies} />
-          </Section>
-
-          <Section title="Kompartıman Durumu" icon={<FiLayers size={13} />} defaultOpen={true}>
-            <CompartmentStatusGrid />
-          </Section>
         </div>
 
-        {/* CENTER: MELiSSA Diagram */}
-        <div className="col-span-12 lg:col-span-6 bg-nexus-card rounded-lg border border-nexus-border p-3 flex flex-col overflow-hidden">
-          <div className="flex items-center gap-2 mb-1 flex-shrink-0">
-            <h3 className="text-[11px] text-nexus-text-dim uppercase tracking-wider">
-              MELiSSA Kapalı Döngü Kaynak Akışı
-            </h3>
-            <InfoTooltip metricKey="melissa" size={12} />
-          </div>
-          <div className="flex-1 min-h-0 flex items-center justify-center">
-            <ClosedLoopDiagram />
-          </div>
-        </div>
 
         {/* RIGHT COLUMN */}
-        <div className="col-span-12 lg:col-span-3 space-y-3 overflow-y-auto">
+        <div className="col-span-12 lg:col-span-8 space-y-3">
           <Section title="BLSS Kapalılık Oranları" icon={<FiRefreshCw size={13} />} defaultOpen={true}>
             <ClosureRatesPanel closure={resources.closure} />
           </Section>
+                    <Section title="Kompartıman Durumu" icon={<FiLayers size={13} />} defaultOpen={true}>
+            <CompartmentStatusGrid />
+          </Section>
         </div>
       </div>
+
+
     </div>
   );
 }

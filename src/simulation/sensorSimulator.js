@@ -78,7 +78,7 @@ export function getSensorStatus(value, sensorType, moduleId = null) {
     },
   };
 
-  // Genel limitler (aeroponic, nft vb.)
+  // Genel limitler (aeroponik kök, aeroponik yaprak vb.)
   const defaultLimits = {
     temperature: { warn: [16, 32], crit: [12, 38] },
     humidity: { warn: [35, 85], crit: [20, 95] },

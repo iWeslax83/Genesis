@@ -12,31 +12,35 @@ https://genesis-nu-flame.vercel.app/
 ## Ekran Görüntüleri
 
 ### Genel Bakış
-![Genel Bakış](public/screenshots/overview.jpeg)
+![Genel Bakış](public/screenshots/overview.png)
 Sisteme ilk girişte karşınıza çıkan ana panel. Görevin kaçıncı gününde olduğunuz, günlük kalori üretimi, oksijen dengesi ve güç durumu bir bakışta görülür. Ortadaki MELiSSA diyagramı habitatın kapalı döngü kaynak akışını — yani atıktan besine, CO2'den oksijene giden süreci — gerçek zamanlı olarak çizer. Soldaki "Neler Oluyor?" akışı, o an simülasyonda dikkat edilmesi gereken durumları (enerji açığı, düşük oksijen, hasat zamanı vb.) anlaşılır bir dille özetler.
 
 ### Bitki İzleme
-![Bitki İzleme](public/screenshots/growth.jpeg)
+![Bitki İzleme](public/screenshots/growth.png)
 Yetiştirme modüllerinin kontrol paneli. Sıcaklık, nem, CO2, pH, EC ve PAR gibi ortam koşullarını anlık gauge'lardan takip edebilir, seçtiğiniz bitkinin "iklim reçetesi" ile gerçek koşulları karşılaştırabilirsiniz. Her bitkinin büyüme yüzdesi, hasat durumu ve kalan gün sayısı görülür. Aeroponik, NFT, Spirulina ve Mantar modülleri arasında geçiş yaparak farklı yetiştirme birimlerini ayrı ayrı izleyebilirsiniz.
 
 ### Beslenme Analizi
-![Beslenme Analizi](public/screenshots/beslenme.jpeg)
+![Beslenme Analizi](public/screenshots/beslenme.png)
 6 kişilik mürettebatın günlük 15.000 kcal ihtiyacının ne kadarının karşılandığını gösteren sayfa. Kalori üretim gauge'u, protein-karbonhidrat-yağ dağılımı ve hangi kaynağın (patates, buğday, spirulina vb.) ne kadar kalori sağladığı grafiklerle takip edilir. Vitamin ve mineral paneli eksiklikleri renkli etiketlerle uyarır — örneğin B12 ve demir eksikliği varsa "Eksik" olarak işaretlenir. Günün menüsü ve son hasat kayıtları da bu sayfada listelenir.
 
 ### Güç ve Enerji Yönetimi
-![Güç ve Enerji Yönetimi](public/screenshots/güçveenerji.jpeg)
+![Güç ve Enerji Yönetimi](public/screenshots/güçvenerji.png)
 Habitatın enerji bütçesini yöneten panel. Güneş panellerinin veya nükleer reaktörün ne kadar enerji ürettiğini, LED aydınlatmadan su işlemeye kadar her alt sistemin ne kadar tükettiğini gösterir. Isıl denge bölümünde radyatörlerin kapasitesi ve anlık ısı akışı izlenir. Alttaki bileşen sağlık kartları pompalar, filtreler ve LED panellerin yıpranma durumunu ve tahmini kalan ömürlerini gösterir — bakım zamanı yaklaşan parçalar uyarı rengiyle vurgulanır.
 
 ### Görev Planlama ve Çevre
-![Görev Planlama](public/screenshots/görevplanlama.jpeg)
+![Görev Planlama](public/screenshots/görevplanlama.png)
 980 günlük Mars görevinin büyük resmini sunar. Üstteki zaman çizelgesinde kalkış, BLSS devreye alma, tam kapasite ve dönüş gibi kilometre taşları yer alır. Her mürettebat üyesinin o anki aktivitesi (uyku, bakım, bilim, egzersiz), oksijen tüketimi ve ısı çıkışı kişi kartlarında gösterilir. Sağ taraftaki eser kirletici paneli havadaki amonyak, formaldehit ve VOC seviyelerini NASA SMAC limitleriyle karşılaştırır. Radyasyon izleme ve su arıtma aşamaları da bu sayfada takip edilir.
 
 ### Dijital İkiz
-![Dijital İkiz](public/screenshots/dijitalikiz.jpeg)
+![Dijital İkiz](public/screenshots/dijitalikiz.png)
 Habitatın tüm alt sistemlerini tek bir şematik harita üzerinde gösteren görünüm. Atmosfer kontrolünden bitki modüllerine, güç sisteminden su işlemeye kadar her birimin durumu ve birbirleriyle bağlantısı görülür. Sağ taraftaki what-if panelinden arıza senaryoları (LED bozulması, su kaçağı, spirulina çöküşü vb.) tetiklenebilir ve sistemin nasıl tepki verdiği gözlemlenebilir. Ayrıca 3D habitat modeli ve çiftlik görünümlerine de bu sayfadan geçiş yapılabilir.
 
+### Donanım Tasarımı
+![Donanım Tasarımı](public/screenshots/tasarım.png)
+Aeroponik dikey çiftlik modülünün SolidWorks CAD modeli ve 3D baskı prototipleri. Sistemin fiziksel tasarım detayları — toplam üretim alanı, sütun ölçüleri, sulama düzeni ve boru hatları — teknik özellikler panelinde gösterilir.
+
 ### AI Tahmin ve Analiz
-![AI Tahmin ve Analiz](public/screenshots/aitahmin.jpeg)
+![AI Tahmin ve Analiz](public/screenshots/aitahmin.png)
 Simülasyonun "beyni" olan analiz sayfası. Sistem, bitki ve bileşen sağlığını birleştiren genel skor gauge'u ile görevin genel durumu tek bir sayıda özetlenir. 30 günlük kaynak projeksiyonu su, oksijen ve besin trendlerini önceden gösterir. Her bitkinin tahmini hasat tarihi ve güven oranı listelenir. Anomali tespit motoru sensör verilerindeki anormallikleri yakalar, AI önerileri paneli ise "spirulina üretimini artır" veya "scrubber devreye al" gibi somut aksiyon önerileri sunar.
 
 ---

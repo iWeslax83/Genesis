@@ -158,11 +158,11 @@ function SpirulinaOrb() {
 
 /* ========================================================
    DETAYLI DİKEY TARIM 3D SAHNESİ
-   Aeroponik kuleler, NFT rafları, Spirulina biyoreaktör,
+   Aeroponik kuleler, Aeroponik raflar, Spirulina biyoreaktör,
    Mantar kabineti, LED paneller, boru hatları
    ======================================================== */
 
-function AeroponicTower({ position, growthProgress = 0.7, plantType = 'potato' }) {
+function AeroponicTower({ position, growthProgress = 0.7, plantType = 'sweet_potato' }) {
   const groupRef = useRef();
   useFrame((_, delta) => {
     if (groupRef.current) {
@@ -440,7 +440,7 @@ function FarmHUD({ simState }) {
       {/* Top bar */}
       <div className="flex items-start justify-between gap-2">
         <div className="bg-black/60 backdrop-blur-sm border border-green-500/30 rounded-lg px-3 py-2 pointer-events-auto">
-          <div className="text-[10px] text-green-400 font-semibold uppercase tracking-wider mb-1">Aeroponik — 15 m²</div>
+          <div className="text-[10px] text-green-400 font-semibold uppercase tracking-wider mb-1">Aeroponik Kök — 42 m²</div>
           <div className="grid grid-cols-2 gap-x-4 gap-y-0.5 text-[9px] font-mono">
             <span className="text-gray-400">Sıcaklık</span><span className="text-green-300">{aero?.temperature?.toFixed(1) ?? '—'}°C</span>
             <span className="text-gray-400">pH</span><span className="text-green-300">{aero?.pH?.toFixed(1) ?? '—'}</span>
@@ -451,7 +451,7 @@ function FarmHUD({ simState }) {
         </div>
 
         <div className="bg-black/60 backdrop-blur-sm border border-emerald-500/30 rounded-lg px-3 py-2 pointer-events-auto">
-          <div className="text-[10px] text-emerald-400 font-semibold uppercase tracking-wider mb-1">NFT Hidroponik — 7 m²</div>
+          <div className="text-[10px] text-emerald-400 font-semibold uppercase tracking-wider mb-1">Aeroponik Yaprak — 5 m²</div>
           <div className="grid grid-cols-2 gap-x-4 gap-y-0.5 text-[9px] font-mono">
             <span className="text-gray-400">Sıcaklık</span><span className="text-emerald-300">{nft?.temperature?.toFixed(1) ?? '—'}°C</span>
             <span className="text-gray-400">pH</span><span className="text-emerald-300">{nft?.pH?.toFixed(1) ?? '—'}</span>
@@ -498,15 +498,15 @@ function VerticalFarm3D({ simState }) {
         <pointLight position={[0, 1, 4]} intensity={0.25} color="#4a9caa" distance={8} />
 
         <group position={[-3, -0.2, 0]}>
-          <AeroponicTower position={[-0.8, 0, -0.6]} growthProgress={aeroGrowth} plantType="potato" />
-          <AeroponicTower position={[0, 0, -0.6]} growthProgress={Math.max(0.2, aeroGrowth - 0.1)} plantType="potato" />
+          <AeroponicTower position={[-0.8, 0, -0.6]} growthProgress={aeroGrowth} plantType="sweet_potato" />
+          <AeroponicTower position={[0, 0, -0.6]} growthProgress={Math.max(0.2, aeroGrowth - 0.1)} plantType="sweet_potato" />
           <AeroponicTower position={[0.8, 0, -0.6]} growthProgress={Math.max(0.3, aeroGrowth - 0.05)} plantType="peanut" />
-          <AeroponicTower position={[-0.8, 0, 0.3]} growthProgress={Math.max(0.4, aeroGrowth + 0.05)} plantType="potato" />
-          <AeroponicTower position={[0, 0, 0.3]} growthProgress={aeroGrowth} plantType="potato" />
+          <AeroponicTower position={[-0.8, 0, 0.3]} growthProgress={Math.max(0.4, aeroGrowth + 0.05)} plantType="sweet_potato" />
+          <AeroponicTower position={[0, 0, 0.3]} growthProgress={aeroGrowth} plantType="sweet_potato" />
           <AeroponicTower position={[0.8, 0, 0.3]} growthProgress={Math.max(0.15, aeroGrowth - 0.15)} plantType="peanut" />
-          <AeroponicTower position={[-0.8, 0, 1.2]} growthProgress={Math.max(0.5, aeroGrowth - 0.02)} plantType="potato" />
+          <AeroponicTower position={[-0.8, 0, 1.2]} growthProgress={Math.max(0.5, aeroGrowth - 0.02)} plantType="sweet_potato" />
           <AeroponicTower position={[0, 0, 1.2]} growthProgress={Math.max(0.35, aeroGrowth + 0.08)} plantType="peanut" />
-          <AeroponicTower position={[0.8, 0, 1.2]} growthProgress={aeroGrowth} plantType="potato" />
+          <AeroponicTower position={[0.8, 0, 1.2]} growthProgress={aeroGrowth} plantType="sweet_potato" />
 
           <mesh position={[0, -1.15, 0.3]} rotation={[-Math.PI / 2, 0, 0]}>
             <planeGeometry args={[2.4, 2.4]} />
@@ -591,7 +591,7 @@ function HabitatHUD({ simState, scenario }) {
         <div className="self-center bg-red-900/70 backdrop-blur-sm border border-red-500/50 rounded-lg px-4 py-1.5 pointer-events-auto">
           <div className="text-[11px] text-red-400 font-bold uppercase tracking-wider flex items-center gap-2">
             <FiAlertTriangle size={12} />
-            {isLedFailure ? 'LED ARIZASI AKTİF' : isCo2Spike ? 'CO₂ SEVİYESİ KRİTİK' : 'SPİRULİNA ÇÖKÜŞÜ'}
+            {isLedFailure ? 'LED ARIZASI AKTİF' : isCo2Spike ? 'CO₂ SEVİYESİ KRİTİK' : 'SENARYO AKTİF'}
           </div>
         </div>
       )}
@@ -643,7 +643,7 @@ function MiniHabitat3D({ scenario, simState }) {
 
         <ambientLight intensity={isLedFailure ? 0.1 : 0.2} />
         <directionalLight position={[10, 10, 5]} intensity={isLedFailure ? 0.35 : 0.7} color="#ffffff" />
-        <pointLight position={[-5, 5, -5]} intensity={isSpirCrash ? 0.15 : 0.4} color="#4a9caa" distance={15} />
+        <pointLight position={[-5, 5, -5]} intensity={0.4} color="#4a9caa" distance={15} />
         <pointLight position={[5, -3, 3]} intensity={0.2} color="#22c55e" distance={10} />
 
         <HabitatShell />
@@ -736,7 +736,7 @@ function SystemSchematic({ state }) {
         <text x="38" y="148" fill="#94a3b8" fontSize="6.5" fontFamily="monospace">{aero?.temperature?.toFixed(1)}°C | pH {aero?.pH?.toFixed(1)}</text>
 
         <rect x="125" y="122" width="90" height="35" rx="4" fill="#0a1520" stroke="#4a9caa25" strokeWidth="0.7" />
-        <text x="133" y="136" fill="#4a9caa" fontSize="7" fontWeight="600">NFT Hidroponik</text>
+        <text x="133" y="136" fill="#4a9caa" fontSize="7" fontWeight="600">Aeroponik Yaprak</text>
         <text x="133" y="148" fill="#94a3b8" fontSize="6.5" fontFamily="monospace">{nft?.temperature?.toFixed(1)}°C | pH {nft?.pH?.toFixed(1)}</text>
 
         <text x="35" y="180" fill="#94a3b8" fontSize="7" fontFamily="monospace">

@@ -12,6 +12,7 @@ import useNotificationWatcher from '../../hooks/useNotificationWatcher';
 // Lazy load sayfalar
 const OverviewPage = React.lazy(() => import('../overview/OverviewPage'));
 const GrowthMonitorPage = React.lazy(() => import('../growth/GrowthMonitorPage'));
+const DesignPage = React.lazy(() => import('../design/DesignPage'));
 const DigitalTwinPage = React.lazy(() => import('../digital-twin/DigitalTwinPage'));
 const AIPredictionPage = React.lazy(() => import('../ai/AIPredictionPage'));
 const NutritionPage = React.lazy(() => import('../nutrition/NutritionPage'));
@@ -27,6 +28,7 @@ function PageContent() {
       case 'growth': return <GrowthMonitorPage />;
       case 'power': return <PowerPage />;
       case 'mission': return <MissionPage />;
+      case 'design': return <DesignPage />;
       case 'digital-twin': return <DigitalTwinPage />;
       case 'ai': return <AIPredictionPage />;
       case 'nutrition': return <NutritionPage />;

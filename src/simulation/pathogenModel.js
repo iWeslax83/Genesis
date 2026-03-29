@@ -200,7 +200,7 @@ export function calculateCrossContamination(aeroponicInfections, nftInfections, 
     const aeroInf = aeroponicInfections[pathId];
     const nftInf = nftInfections[pathId];
 
-    // Aeroponikten NFT'ye
+    // Aeroponik Kök'ten Aeroponik Yaprak'a
     if (aeroInf?.active && aeroInf.affectedPercent > 30 && (!nftInf?.active)) {
       if (Math.random() < crossRate * tickFraction * aeroInf.affectedPercent / 100) {
         nftInfections[pathId] = {
@@ -212,7 +212,7 @@ export function calculateCrossContamination(aeroponicInfections, nftInfections, 
       }
     }
 
-    // NFT'den aeroponike
+    // Aeroponik Yaprak'tan Aeroponik Kök'e
     if (nftInf?.active && nftInf.affectedPercent > 30 && (!aeroInf?.active)) {
       if (Math.random() < crossRate * tickFraction * nftInf.affectedPercent / 100) {
         aeroponicInfections[pathId] = {

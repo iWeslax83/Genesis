@@ -133,7 +133,7 @@ export default function ClosedLoopDiagram() {
         color="#d4903a"
         speed="3s"
       />
-      <FlowLabel x={cx} y={45} text="Organik Atık" value={`${formatNumber(10.8)} kg/gün`} color="#d4903a" />
+      <FlowLabel x={cx} y={45} text="Organik Atık" value={`${formatNumber(1.8)} kg/gün`} color="#d4903a" />
 
       {/* Waste -> Nutrient: Nitrification */}
       <AnimatedFlow

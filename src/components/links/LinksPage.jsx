@@ -1,4 +1,5 @@
-import { FiExternalLink, FiGithub, FiMonitor, FiFilm, FiFileText, FiArrowLeft } from 'react-icons/fi';
+import { FiExternalLink, FiGithub, FiMonitor, FiFileText, FiArrowLeft} from 'react-icons/fi';
+import { FaGoogleDrive } from "react-icons/fa6";
 
 const LINKS = [
   {
@@ -10,6 +11,14 @@ const LINKS = [
     url: 'https://genesis-nu-flame.vercel.app/',
   },
   {
+    id: 'pptx',
+    title: 'PowerPoint Sunumu',
+    description: 'Proje tanıtım sunumu — PPTX',
+    icon: FiFileText,
+    gradient: 'from-[#d4903a] to-[#c07e2e]',
+    url: null,
+  },
+    {
     id: 'github',
     title: 'GitHub Deposu',
     description: 'Kaynak kod ve dokümantasyon',
@@ -18,20 +27,12 @@ const LINKS = [
     url: 'https://github.com/iWeslax83/genesis',
   },
   {
-    id: 'pptx',
-    title: 'PowerPoint Sunumu',
-    description: 'Proje tanıtım sunumu — PPTX',
-    icon: FiFileText,
-    gradient: 'from-[#d4903a] to-[#c07e2e]',
-    url: null,
-  },
-  {
-    id: 'slideshow',
-    title: 'HTML Slayt Gösterisi',
+    id: 'drive',
+    title: 'Google Drive Klasörü',
     description: 'Tarayıcıda interaktif sunum',
-    icon: FiFilm,
+    icon: FaGoogleDrive,
     gradient: 'from-[#4a9caa] to-[#3d8a97]',
-    url: null,
+    url: 'https://drive.google.com/drive/folders/1hF8gZKVExMpuf0qPAkp4gXFx5NZzfVkm?usp=drive_link',
   },
 ];
 
@@ -105,7 +106,7 @@ function LinkButton({ link, index }) {
         <div className="text-[11px] text-white/40 truncate">{link.description}</div>
       </div>
       {isPlaceholder ? (
-        <span className="text-[10px] text-white/20 italic whitespace-nowrap">Yakında</span>
+        <span className="text-[14px] text-white/20 italic whitespace-nowrap">Yakında</span>
       ) : (
         <FiExternalLink size={14} className="text-white/20 group-hover:text-white/50 transition-colors flex-shrink-0" />
       )}

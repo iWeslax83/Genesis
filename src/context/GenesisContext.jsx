@@ -52,30 +52,30 @@ const initialState = {
 
   resources: {
     water: {
-      total: 350, inPlants: 70, inNutrient: 85,
-      inHabitat: 170, inProcessing: 25,
-      recycleRate: 0.98, dailyLoss: 0.07,
+      total: 600, inPlants: 220, inNutrient: 180,
+      inHabitat: 170, inProcessing: 20,
+      recycleRate: 0.98, dailyLoss: 0.02,
     },
     oxygen: {
-      production: 870, consumption: 840, balance: 30,
+      production: 5500, consumption: 630, balance: 4870,
     },
     co2: {
-      production: 1000, absorption: 970, balance: 30,
+      production: 550, absorption: 4200, balance: -3650,
     },
     nutrients: {
       nitrogen: 20, phosphorus: 10, potassium: 35,
       recycledFromWaste: 13,
     },
     calories: {
-      dailyTarget: 2500, dailyProduction: 2250,
-      bySource: { aeroponic: 1200, nft: 270 },
-      protein: 70, carbs: 225, fat: 32,
+      dailyTarget: 2500, dailyProduction: 2249,
+      bySource: { aeroponic: 2173, nft: 76 },
+      protein: 143, carbs: 226, fat: 107,
     },
     vitaminStatus: {},
     biodiversityScore: 0,
     healthScore: 94,
     healthIssues: [],
-    closure: { o2: 95, co2: 92, water: 98, food: 72, material: 89 },
+    closure: { o2: 100, co2: 100, water: 98, food: 90, material: 97 },
   },
 
   ai: {
@@ -83,7 +83,7 @@ const initialState = {
     plantHealth: {
       overallScore: 95,
       issues: [
-        { plant: 'T.Patates-3', issue: 'Hafif N eksikliği', confidence: 82, severity: 'warning' },
+        { plant: 'TatlıPatates-3', issue: 'Hafif N eksikliği', confidence: 82, severity: 'warning' },
       ],
     },
     optimizations: [],
@@ -92,10 +92,10 @@ const initialState = {
   // Güç ve enerji sistemi
   power: {
     subsystems: {},
-    totalConsumption: 8.3,
-    generation: 10,
-    balance: 1.7,
-    utilizationPercent: 83,
+    totalConsumption: 22.3,
+    generation: 32,
+    balance: 9.7,
+    utilizationPercent: 70,
     sourceType: 'solar',
     location: 'marsSurface',
     lightingFactor: 1,
@@ -175,7 +175,7 @@ const initialState = {
     missionProgress: 4.8,
     storedFood: { total: 10584, consumed: 500, remaining: 10084, daysRemaining: 900, emergencyReserve: 972 },
     blss: { rampUpProgress: 39, operational: false, closurePercent: 0, contribution: 0 },
-    growingArea: { total: 52, perPerson: 8.7, targetPerPerson: 8, adequate: true },
+    growingArea: { total: 47, perPerson: 47, targetPerPerson: 40, adequate: true },
     status: 'nominal',
   },
 

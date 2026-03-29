@@ -218,7 +218,7 @@ function Env({ icon, label, value }) {
 
 const ZONES = [
   { id: 'aeroponic', label: 'Aeroponik Modül', icon: <FiFeather size={14} />, color: '#4ead5b', borderColor: '#4ead5b' },
-  { id: 'nft',       label: 'NFT Hidroponik',  icon: <FiDroplet size={14} />, color: '#4a9caa', borderColor: '#4a9caa' },
+  { id: 'nft',       label: 'Aeroponik Yaprak', icon: <FiDroplet size={14} />, color: '#4a9caa', borderColor: '#4a9caa' },
   { id: 'habitat',   label: 'Mürettebat Alanı', icon: <FiHome size={14} />, color: '#d45555', borderColor: '#d45555' },
 ];
 
@@ -274,7 +274,7 @@ function FacilityMap({ selected, onSelect, modules, state }) {
       {/* ---- Boru hatları (zone'lar arası) ---- */}
       {/* Su hattı: Habitat -> Aeroponik */}
       <line x1="590" y1="200" x2="340" y2="120" stroke="url(#waterGrad)" strokeWidth="3" className="flow-line" />
-      {/* Besin hattı: Aeroponik -> NFT */}
+      {/* Besin hattı: Aeroponik Kök -> Aeroponik Yaprak */}
       <line x1="190" y1="250" x2="190" y2="340" stroke="url(#pipeGrad)" strokeWidth="3" className="flow-line" />
 
       {/* Akış etiketleri */}
@@ -336,7 +336,7 @@ function FacilityMap({ selected, onSelect, modules, state }) {
         </text>
       </g>
 
-      {/* ---- ZONE: NFT Hidroponik ---- */}
+      {/* ---- ZONE: Aeroponik Yaprak ---- */}
       <g className="cursor-pointer" onClick={() => onSelect('nft')}>
         <rect x="60" y="280" width="280" height="200" rx="12"
           fill={selected === 'nft' ? '#4a9caa10' : '#0f172a'}
@@ -348,10 +348,10 @@ function FacilityMap({ selected, onSelect, modules, state }) {
             <animate attributeName="opacity" values="0.2;0.6;0.2" dur="3s" repeatCount="indefinite" />
           </rect>
         </>}
-        <text x="80" y="310" fill="#4a9caa" fontSize="13" fontWeight="600" fontFamily="sans-serif">NFT Hidroponik</text>
+        <text x="80" y="310" fill="#4a9caa" fontSize="13" fontWeight="600" fontFamily="sans-serif">Aeroponik Yaprak</text>
         <g transform="translate(274, 298)">{dot(nft?.status)}</g>
 
-        {/* NFT kanalları + bitkiler */}
+        {/* Aeroponik yaprak kanalları + bitkiler */}
         {(nft?.plants || []).map((p, i) => {
           const info = PLANTS[p.type];
           if (!info) return null;

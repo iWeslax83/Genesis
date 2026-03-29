@@ -189,7 +189,7 @@ export function generateAIInsights(flow, compartments, time, sensorHistory) {
   if (calorieRatio < 0.9) {
     insights.push({
       id: `cal_${time.day}`, type: 'optimization', icon: '💡',
-      suggestion: `Kalori üretimi hedefin %${(calorieRatio * 100).toFixed(0)}'inde. Spirulina hasat sıklığını %15 artırın.`,
+      suggestion: `Kalori üretimi hedefin %${(calorieRatio * 100).toFixed(0)}'inde. Aeroponik modülde LED yoğunluğunu ve CO₂ seviyesini artırın.`,
       impact: `Günlük +${Math.round(flow.calories.target * 0.05)} kcal`,
       confidence: 85,
     });
@@ -201,7 +201,7 @@ export function generateAIInsights(flow, compartments, time, sensorHistory) {
     if (nftPH < 5.5 || nftPH > 6.2) {
       insights.push({
         id: `ph_${time.day}`, type: 'maintenance', icon: '🔧',
-        suggestion: `NFT modülü pH ${nftPH.toFixed(2)} — kalibrasyon gerektiriyor (optimum: 5.8).`,
+        suggestion: `Aeroponik Yaprak modülü pH ${nftPH.toFixed(2)} — kalibrasyon gerektiriyor (optimum: 5.8).`,
         impact: 'Besin alımı %12 artacak', confidence: 92,
       });
     }
@@ -220,7 +220,7 @@ export function generateAIInsights(flow, compartments, time, sensorHistory) {
   if (flow.oxygen.balance < -100) {
     insights.push({
       id: `o2_${time.day}`, type: 'critical', icon: '⚠️',
-      suggestion: `O₂ üretimi yetersiz! Açık: ${Math.abs(Math.round(flow.oxygen.balance))} L/gün. Spirulina reaktör sıcaklığını optimize edin.`,
+      suggestion: `O₂ üretimi yetersiz! Açık: ${Math.abs(Math.round(flow.oxygen.balance))} L/gün. Bitki modüllerinde ışık ve CO₂ seviyelerini kontrol edin.`,
       impact: 'O₂ üretimi %20 artabilir', confidence: 88,
     });
   }

@@ -1,5 +1,5 @@
 import { useGenesis } from '../../context/GenesisContext';
-import { FiGrid, FiActivity, FiBox, FiCpu, FiHeart, FiZap, FiEye, FiChevronLeft, FiChevronRight, FiDownload, FiFileText, FiDatabase, FiBarChart2 } from 'react-icons/fi';
+import { FiGrid, FiActivity, FiBox, FiCpu, FiHeart, FiZap, FiEye, FiChevronLeft, FiChevronRight, FiDownload, FiFileText, FiDatabase, FiBarChart2, FiTool } from 'react-icons/fi';
 import { exportSimulationJSON, exportSensorHistoryCSV, generateReport } from '../../utils/exportData';
 import { TourResetButton } from '../ui/OnboardingTour';
 import { useState } from 'react';
@@ -10,8 +10,9 @@ const NAV_ITEMS = [
   { id: 'nutrition', label: 'Beslenme', icon: FiHeart, group: 'izleme', key: '3' },
   { id: 'power', label: 'Güç & Enerji', icon: FiZap, group: 'sistem', key: '4' },
   { id: 'mission', label: 'Görev Planlama', icon: FiEye, group: 'sistem', key: '5' },
-  { id: 'digital-twin', label: 'Dijital İkiz', icon: FiBox, group: 'analiz', key: '6' },
-  { id: 'ai', label: 'AI Tahmin', icon: FiCpu, group: 'analiz', key: '7' },
+  { id: 'design', label: 'Donanım Tasarımı', icon: FiTool, group: 'analiz', key: '6' },
+  { id: 'digital-twin', label: 'Dijital İkiz', icon: FiBox, group: 'analiz', key: '7' },
+  { id: 'ai', label: 'AI Tahmin', icon: FiCpu, group: 'analiz', key: '8' },
 ];
 
 const GROUP_LABELS = {
@@ -195,24 +196,6 @@ export default function Sidebar() {
                 </button>
               </div>
             )}
-          </div>
-        )}
-
-        {!collapsed && (
-          <div>
-            <div className="flex justify-between text-[9px] text-nexus-text-dim mb-1">
-              <span>Görev İlerlemesi</span>
-              <span className="font-mono">%{(state.mission?.missionProgress || 0).toFixed(1)}</span>
-            </div>
-            <div className="h-1 bg-nexus-bg rounded-full overflow-hidden">
-              <div
-                className="h-full rounded-full bg-nexus-accent transition-all duration-1000"
-                style={{ width: `${Math.min(100, state.mission?.missionProgress || 0)}%` }}
-              />
-            </div>
-            <div className="text-[8px] text-nexus-text-dim/40 mt-0.5">
-              {state.mission?.missionDay || state.time.day} / {state.mission?.totalMissionDays || 980} gün
-            </div>
           </div>
         )}
 

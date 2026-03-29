@@ -17,7 +17,7 @@ const TOUR_STEPS = [
   {
     icon: FiSun,
     title: 'Bitkiler — Hayat Kaynağı',
-    body: '12 farklı bitki türü 4 farklı sistemde yetişir: Aeroponik (kökler havada), NFT (ince su tabakası), Spirulina (alg tankı) ve Mantar odası.',
+    body: '6 farklı bitki türü tam aeroponik sistemde yetişir: Kök aeroponik (tatlı patates, yer fıstığı) ve Yaprak aeroponik (marul, ıspanak, fesleğen, nane). Kökler havada asılı, besin çözeltisi püskürtülür.',
     hint: 'Bitkiler hem oksijen üretir hem gıda sağlar — görev başarısının anahtarı.',
   },
   {

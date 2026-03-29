@@ -38,7 +38,7 @@ export function calculateResourceFlow(state) {
     growth.modules.aeroponic.plants, aeroConditions, time.day
   );
 
-  // ====== 3. NFT Üretim ======
+  // ====== 3. Aeroponik Yaprak Üretim ======
   const nftConditions = {
     temperature: growth.modules.nft.temperature,
     lightPAR: growth.modules.nft.lightPAR,
