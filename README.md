@@ -7,6 +7,7 @@ GENESIS, uzun süreli uzay görevleri için biyorejeneratif yaşam destek sistem
 Simülasyon NASA VEGGIE/APH, ESA MELiSSA, BIOS-3, Yuegong-1 ve Eden ISS deneylerinden elde edilen gerçek verilere dayanır.
 
 ---
+https://genesis-nu-flame.vercel.app/
 
 ## Ekran Görüntüleri
 
